@@ -1,0 +1,11 @@
+# SAMPLE ALBUM for Phase 0. Its photos are drawn placeholders (no image files).
+# Replace or delete this album once the first real album is ingested.
+slug: 2026-reunion-campus-walk
+era: 2026-30th
+date: 2026-09-12
+title:    { en: "Campus walk (sample)", ta: "" }
+summary:  { en: "Sample album to test the layout. The real photos will replace these placeholders.", ta: "" }
+location: { en: "NIT Trichy campus", ta: "" }
+visibility: public
+cover: 20260912-101533_saran_014
+places: [main-building, hostel]

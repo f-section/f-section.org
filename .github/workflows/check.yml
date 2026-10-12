@@ -1,0 +1,34 @@
+name: check
+
+on:
+  push:
+    branches: [staging, main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  site:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      # Type and schema check, i18n keys, no media in git, no phone numbers, contrast
+      - run: npm run check
+      - run: npm run build
+      - run: npm run check:links
+
+  ingest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: pip install -r scripts/ingest/requirements.txt
+      - run: python -m unittest discover -s scripts/ingest/tests -v

@@ -1,0 +1,110 @@
+@import "tailwindcss";
+
+/* Fonts are self-hosted from @fontsource (no Google Fonts request at runtime).
+   English body: IBM Plex Sans. Tamil body: Noto Sans Tamil (as on ief-global.org).
+   Headings: Caveat (English) and Kavivanar (Tamil), large sizes only. */
+@import "@fontsource/ibm-plex-sans/latin-400.css";
+@import "@fontsource/ibm-plex-sans/latin-600.css";
+@import "@fontsource/noto-sans-tamil/tamil-400.css";
+@import "@fontsource/noto-sans-tamil/tamil-600.css";
+@import "@fontsource/caveat/latin-700.css";
+@import "@fontsource/kavivanar/tamil-400.css";
+
+/* Design tokens (DESIGN.md §6.2). Contrast is checked by scripts/checks/contrast.mjs. */
+:root {
+  --paper: #f6f1e7;
+  --ink: #1e2a3a;
+  --ink-red: #a23b2a;
+  --sepia: #846541;
+  --marigold: #e0a100; /* decoration only, never text */
+  --card: #fffdf8;
+  --rule: #d9cdb6;
+}
+
+@theme {
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-ink-red: var(--ink-red);
+  --color-sepia: var(--sepia);
+  --color-marigold: var(--marigold);
+  --color-card: var(--card);
+  --color-rule: var(--rule);
+
+  --font-sans: "IBM Plex Sans", "Noto Sans Tamil", system-ui, sans-serif;
+  --font-hand: "Caveat", "Kavivanar", "Noto Sans Tamil", cursive;
+}
+
+@layer base {
+  html {
+    font-size: 112.5%; /* 18 px base for older readers */
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+  }
+  /* Tamil script is taller: give it more line height. */
+  :lang(ta) body,
+  body:lang(ta) {
+    line-height: 1.8;
+  }
+  a {
+    color: var(--ink-red);
+    text-underline-offset: 0.2em;
+  }
+  a:hover {
+    text-decoration-thickness: 2px;
+  }
+  :focus-visible {
+    outline: 3px solid var(--ink-red);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* At least 44 × 44 px tap target (DESIGN.md §6.2). */
+  .tap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    min-width: 44px;
+    padding-inline: 0.75rem;
+  }
+  .hand {
+    font-family: var(--font-hand);
+    font-weight: 700;
+    line-height: 1.15;
+  }
+  /* Tamil handwriting font has one weight and is smaller per em. */
+  :lang(ta) .hand {
+    font-weight: 400;
+    font-size: 0.85em;
+    line-height: 1.4;
+  }
+  /* 1992–96 "ink then" frame: sepia border on paper. */
+  .frame-then {
+    border: 3px solid var(--sepia);
+    background: var(--card);
+    box-shadow: 4px 4px 0 var(--rule);
+  }
+  /* Polaroid-style album card. */
+  .polaroid {
+    background: var(--card);
+    padding: 0.75rem 0.75rem 1rem;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.12), 0 6px 16px rgb(0 0 0 / 0.08);
+  }
+}

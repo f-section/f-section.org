@@ -1,0 +1,73 @@
+---
+/**
+ * Every page uses this layout. It sets the language, the link-preview
+ * (OpenGraph) tags for WhatsApp, `noindex`, and the header and footer.
+ */
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Tx from '../components/Tx.astro';
+import { t, href, basePath, LANGS, type Lang } from '../i18n';
+import { DEFAULT_OG_IMAGE, NOINDEX } from '../site';
+
+interface Props {
+  lang: Lang;
+  /** Page title. The site name is appended. */
+  title: string;
+  description?: string;
+  /** Absolute URL of a 1200 × 630 preview image. */
+  image?: string;
+  /** Alt text for the preview image. */
+  imageAlt?: string;
+  /** Extra classes for <main>. */
+  mainClass?: string;
+  /** False for pages that exist in one language only (404, style guide). */
+  bilingual?: boolean;
+}
+
+const { lang, title, description, image = DEFAULT_OG_IMAGE, imageAlt, mainClass = '', bilingual = true } = Astro.props;
+const siteName = t(lang, 'site.name');
+const fullTitle = title && title !== siteName ? `${title} · ${siteName}` : `${siteName} · ${t(lang, 'site.tagline')}`;
+const desc = description || t(lang, 'site.description');
+const path = basePath(Astro.url.pathname);
+const canonical = new URL(href(lang, path), Astro.site).href;
+const ogLocale = lang === 'ta' ? 'ta_IN' : 'en_IN';
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={desc} />
+    {NOINDEX && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="canonical" href={canonical} />
+    {bilingual && LANGS.map((l) => <link rel="alternate" hreflang={l} href={new URL(href(l, path), Astro.site).href} />)}
+    <link rel="icon" href="/icons/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#F6F1E7" />
+
+    <!-- Link previews (WhatsApp, etc.) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={title || siteName} />
+    <meta property="og:description" content={desc} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={image} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    {imageAlt && <meta property="og:image:alt" content={imageAlt} />}
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:locale:alternate" content={lang === 'ta' ? 'en_IN' : 'ta_IN'} />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body class="min-h-screen">
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-50 tap rounded bg-ink text-paper">
+      <Tx lang={lang} k="nav.skip" />
+    </a>
+    <Header lang={lang} showToggle={bilingual} />
+    <main id="main" class={`mx-auto max-w-5xl px-4 py-8 ${mainClass}`}>
+      <slot />
+    </main>
+    <Footer lang={lang} />
+  </body>
+</html>

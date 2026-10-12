@@ -1,0 +1,12 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageIntro from '../components/PageIntro.astro';
+import { href, t } from '../i18n';
+---
+<BaseLayout lang="en" title={t('en', 'notfound.title')} bilingual={false}>
+  <PageIntro lang="en" titleKey="notfound.title" leadKey="notfound.lead" />
+  <p class="flex flex-wrap gap-3">
+    <a href={href('en', '/')} class="tap rounded-md border-2 border-ink-red font-semibold no-underline">{t('en', 'nav.home')}</a>
+    <a href={href('ta', '/')} class="tap rounded-md border-2 border-ink-red font-semibold no-underline" lang="ta">{t('ta', 'lang.ta')}</a>
+  </p>
+</BaseLayout>

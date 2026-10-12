@@ -1,0 +1,29 @@
+---
+/** EN / தமிழ் toggle. Links to the same page in the other language (DESIGN.md §5). */
+import { t, switchHref, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const path = Astro.url.pathname;
+const options: { code: Lang; label: string; title: string }[] = [
+  { code: 'en', label: t('en', 'lang.en'), title: t(lang, 'lang.switch_to_en') },
+  { code: 'ta', label: t('ta', 'lang.ta'), title: t(lang, 'lang.switch_to_ta') },
+];
+---
+<div class="flex rounded-full border-2 border-ink/80 overflow-hidden text-base font-semibold" role="group" aria-label={t(lang, 'lang.group')}>
+  {
+    options.map((o) =>
+      o.code === lang ? (
+        <span class="tap bg-ink text-paper" aria-current="true" lang={o.code}>
+          {o.label}
+        </span>
+      ) : (
+        <a class="tap text-ink no-underline hover:bg-ink/10" href={switchHref(path, o.code)} hreflang={o.code} lang={o.code} title={o.title}>
+          {o.label}
+        </a>
+      ),
+    )
+  }
+</div>

@@ -1,0 +1,33 @@
+{
+  "name": "f-section-org",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "description": "f-section.org: F Section, REC Trichy Class of 1996",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && node scripts/checks/tamil-todo.mjs",
+    "preview": "astro preview",
+    "check": "astro check && node scripts/checks/i18n-keys.mjs && node scripts/checks/no-media.mjs && node scripts/checks/no-pii.mjs && node scripts/checks/contrast.mjs",
+    "check:links": "node scripts/checks/links.mjs",
+    "astro": "astro",
+    "tamil-todo": "node scripts/checks/tamil-todo.mjs"
+  },
+  "dependencies": {
+    "@fontsource/caveat": "^5.3.0",
+    "@fontsource/ibm-plex-sans": "^5.3.0",
+    "@fontsource/kavivanar": "^5.3.0",
+    "@fontsource/noto-sans-tamil": "^5.3.0",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.3.8",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "typescript": "^6.0.3",
+    "yaml": "^2.9.1"
+  }
+}

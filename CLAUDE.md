@@ -12,11 +12,20 @@ The website for the F Section group of the REC Trichy (NIT Trichy) Class of 1996
 - Ingest script: Python, in `scripts/ingest/`.
 
 ## Commands
-(Fill these in during Phase 0.)
-- Dev server: `npm run dev`
-- Build: `npm run build`
-- Content check: `npm run check`
-- Ingest (dry run is the default): `python scripts/ingest --album <slug> --src <path>`
+Development happens on Saran's Windows PC, in `E:\COWORK\PROJECTS\F-SECTION\f-section.org`.
+- Dev server: `npm run dev` (http://localhost:4321)
+- Build: `npm run build` (also prints the list of text still needing Tamil)
+- Checks: `npm run check` (types and schemas, i18n keys, no media in git, no phone numbers, contrast)
+- Link check after a build: `npm run check:links`
+- Ingest (dry run is the default): `scripts\ingest\.venv\Scripts\python scripts\ingest --album <slug> --src <path>`. Add `--apply` to process and upload, or `--apply --no-upload` to process only.
+- Ingest tests: `scripts\ingest\.venv\Scripts\python -m unittest discover -s scripts/ingest/tests`
+
+## Code map
+- Pages: `src/pages/[...lang]/…`. One file builds both `/x/` (English) and `/ta/x/` (Tamil).
+- i18n helpers (`t`, `pick`, `href`, `switchHref`): `src/i18n/index.ts`. Use `<Tx>` to show bilingual text.
+- Schemas: `src/content.config.ts`. Album `media.json` is validated in `src/lib/media.ts`.
+- Site switches (`MEMBERS_AREA_ENABLED`, `NOINDEX`, `TAKEDOWN_EMAIL`): `src/site.ts`.
+- Members-only albums are not built at all until `MEMBERS_AREA_ENABLED` is true (Phase 2).
 
 ## Rules (must follow)
 1. **Never commit photos, videos, audio or scans to git.** Media goes to R2 through the ingest script. Only icons and fonts may live in `public/`.

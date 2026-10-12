@@ -173,7 +173,7 @@ Use lowercase, hyphens and no spaces in every file name and slug.
 - **Content text** (titles, captions, descriptions) is stored as a pair: `{ en: "...", ta: "..." }`.
   - If the Tamil text is missing, show the English text. Do not fail the page.
   - The build prints a list of items that still need Tamil, so Saran can fill them in later.
-- **Fonts:** IBM Plex Sans for English body text and IBM Plex Sans Tamil for Tamil, the same as ief-global.org.
+- **Fonts:** IBM Plex Sans for English body text and Noto Sans Tamil for Tamil. ief-global.org also uses Noto Sans Tamil. IBM Plex Sans Tamil is not available as a web font (see `docs/decisions/2026-10-12-fonts-and-sepia.md`).
 - **Old Arivu Malar issues** are shown exactly as written (scans). They are not translated.
 
 ---
@@ -197,16 +197,16 @@ These are proposals. Check every text colour pair for WCAG AA contrast in Phase 
 | `--paper` | `#F6F1E7` | Page background |
 | `--ink` | `#1E2A3A` | Body text (fountain-pen blue-black) |
 | `--ink-red` | `#A23B2A` | Links and accents (red-ink editor's marks) |
-| `--sepia` | `#8A6A45` | 1992–96 frames and labels |
+| `--sepia` | `#846541` | 1992–96 frames and labels. Darkened from `#8A6A45`, which was 4.41:1 on paper, below AA. |
 | `--marigold` | `#E0A100` | Decoration only. Never use it for text, because the contrast is too low. |
 | Base font size | 18 px | Older readers |
 | Tap target | at least 44 × 44 px | Phones |
 
 **Typography:**
 
-- **Body text:** IBM Plex Sans and IBM Plex Sans Tamil.
-- **English headings:** a handwriting-style font such as Caveat (a Google Font), used only for large headings and never for body text.
-- **Tamil headings:** evaluate Tamil handwriting-style fonts on Google Fonts in Phase 0. Kavivanar is one candidate I believe exists; please verify. If none reads well, use IBM Plex Sans Tamil SemiBold.
+- **Body text:** IBM Plex Sans (English) and Noto Sans Tamil (Tamil). Both are self-hosted through Fontsource.
+- **English headings:** Caveat Bold, used only for large headings and never for body text.
+- **Tamil headings:** Kavivanar (verified: it is on Google Fonts and Fontsource) is wired in for now. **Open (O-8):** Saran chooses between Kavivanar and Noto Sans Tamil SemiBold on the `/styleguide/` page.
 
 ### 6.3 Key components
 
@@ -488,14 +488,15 @@ f-section.org/
 
 ### Phase 0: Foundations
 - [x] Create the repo `f-section/f-section.org` and an org profile repo `f-section/.github`.
-- [ ] Set up Astro, Tailwind, the bilingual routing (`/` and `/ta/`) and the language toggle.
-- [ ] Add the design tokens, fonts and base layout; check contrast.
-- [ ] Add the content schemas from Section 10, with build-time validation.
+- [x] Set up Astro, Tailwind, the bilingual routing (`/` and `/ta/`) and the language toggle.
+- [x] Add the design tokens, fonts and base layout; check contrast.
+- [x] Add the content schemas from Section 10, with build-time validation.
 - [ ] Create the Cloudflare Pages project linked to GitHub, with `main` for production and `staging` for preview.
 - [ ] Create the R2 bucket `f-section-media` with the custom domain `media.f-section.org`.
-- [ ] Write the ingest script (Section 8), with a dry-run mode.
-- [ ] Add the CI checks: build, schema, links, and no media files in git.
-- [ ] Write `README.md` and `RUNBOOK.md`; add the second admin.
+- [x] Write the ingest script (Section 8), with a dry-run mode.
+- [x] Add the CI checks: build, schema, links, and no media files in git.
+- [x] Write `README.md` and `RUNBOOK.md`.
+- [ ] Add the second admin.
 - **Exit:** an empty but working bilingual site is live on staging, and one test album goes through the full pipeline.
 
 ### Phase 1: Public launch (gallery and videos)
@@ -535,7 +536,8 @@ f-section.org/
 | **O-4** | How should old Arivu Malar issues be identified? | `YYYY-MM` / `volNN-issNN` | Decide once the issues are found. Use `YYYY-MM` if they are unnumbered. |
 | **O-5** | Where should In Memoriam be visible? | Members-only / public | **Members-only** unless a family asks otherwise. |
 | **O-6** | When and how should members upload directly? | Phase 4 design | Keep curating through Google Drive until then. |
-| **O-7** | Does the site need a footer with a takedown notice and contact email? | Footer on every page / About page only / no notice on the site | Saran leans towards **no footer**. Until decided, the layout has a minimal footer with a placeholder email that is easy to remove. |
+| **O-7** | Does the site need a footer with a takedown notice and contact email? | Footer on every page / About page only / no notice on the site | Saran leans towards **no footer**. Until decided, the layout has a minimal footer. The takedown line shows only once `TAKEDOWN_EMAIL` is set in `src/site.ts`. |
+| **O-8** | Which font should Tamil headings use? | Kavivanar (handwriting style) / Noto Sans Tamil SemiBold | Compare them on `/styleguide/`. Kavivanar is the current default. |
 
 ---
 

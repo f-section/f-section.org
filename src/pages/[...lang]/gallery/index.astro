@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PageIntro from '../../../components/PageIntro.astro';
+import EraRibbon from '../../../components/EraRibbon.astro';
+import Tx from '../../../components/Tx.astro';
+import { t, href, bothLangs, langFromParam, type UiKey } from '../../../i18n';
+import { ERAS, eraSlug, isThen } from '../../../site';
+import { getAlbums } from '../../../lib/media';
+
+export function getStaticPaths() {
+  return bothLangs();
+}
+const lang = langFromParam(Astro.params.lang);
+const albums = await getAlbums();
+const eras = ERAS.map((era) => {
+  const list = albums.filter((a) => a.data.era === era);
+  return { era, albums: list.length, photos: list.reduce((n, a) => n + a.media.length, 0) };
+});
+---
+<BaseLayout lang={lang} title={t(lang, 'gallery.title')}>
+  <PageIntro lang={lang} titleKey="gallery.title" leadKey="gallery.lead" />
+  <EraRibbon lang={lang} />
+  <ul class="grid gap-6 sm:grid-cols-2">
+    {
+      eras.map((e) => (
+        <li>
+          <a
+            href={href(lang, `/gallery/${eraSlug(e.era)}/`)}
+            class:list={['block rounded-md p-6 text-ink no-underline hover:bg-card', isThen(e.era) ? 'frame-then' : 'border-2 border-ink/30 bg-card/60']}
+          >
+            <Tx lang={lang} k={`era.${e.era}` as UiKey} as="h2" class="hand text-4xl" />
+            <p class="mt-1 text-sepia" lang="en">{e.era}</p>
+            <p class="mt-2">
+              {e.albums} <Tx lang={lang} k="gallery.albums_count" /> · {e.photos} <Tx lang={lang} k="gallery.photos_count" />
+            </p>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>

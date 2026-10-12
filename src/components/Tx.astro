@@ -1,0 +1,20 @@
+---
+/**
+ * Bilingual text. Shows Tamil when present, otherwise English, and marks the
+ * English fallback with lang="en" so fonts and screen readers treat it correctly.
+ * Use either `k` (interface string) or `pair` (content text).
+ */
+import { t, tLang, pick, isFallback, type Lang, type UiKey, type Pair } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  k?: UiKey;
+  pair?: Pair | null;
+  as?: 'span' | 'p' | 'h1' | 'h2' | 'h3' | 'div';
+  class?: string;
+}
+const { lang, k, pair, as: Tag = 'span', class: className } = Astro.props;
+const text = k ? t(lang, k) : pick(pair, lang);
+const textLang = k ? tLang(lang, k) : isFallback(pair, lang) ? 'en' : lang;
+---
+<Tag class={className} lang={textLang !== lang ? textLang : undefined}>{text}</Tag>

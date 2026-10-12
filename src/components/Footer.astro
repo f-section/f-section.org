@@ -1,0 +1,23 @@
+---
+/** Minimal footer. Whether it stays, and the takedown notice, is open (O-7). */
+import Tx from './Tx.astro';
+import { TAKEDOWN_EMAIL } from '../site';
+import type { Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+---
+<footer class="mt-16 border-t-2 border-rule">
+  <div class="mx-auto max-w-5xl px-4 py-6 text-base">
+    <Tx lang={lang} k="footer.made_by" as="p" />
+    {
+      TAKEDOWN_EMAIL && (
+        <p class="mt-2">
+          <Tx lang={lang} k="footer.takedown" /> <a href={`mailto:${TAKEDOWN_EMAIL}`}>{TAKEDOWN_EMAIL}</a>
+        </p>
+      )
+    }
+  </div>
+</footer>

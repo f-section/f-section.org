@@ -1,0 +1,60 @@
+---
+/**
+ * Internal page for Phase 0 review: tokens, fonts and the Tamil heading choice.
+ * Not linked from the menu. Delete once the visual design is settled.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const swatches = [
+  { name: '--paper', hex: '#F6F1E7', use: 'Page background' },
+  { name: '--ink', hex: '#1E2A3A', use: 'Body text' },
+  { name: '--ink-red', hex: '#A23B2A', use: 'Links and accents' },
+  { name: '--sepia', hex: '#846541', use: '1992–96 frames and labels' },
+  { name: '--marigold', hex: '#E0A100', use: 'Decoration only, never text' },
+];
+---
+<BaseLayout lang="en" title="Style guide" bilingual={false}>
+  <h1 class="hand text-6xl">Style guide</h1>
+  <p class="mt-2 text-xl">For review during Phase 0. Not linked from the menu.</p>
+
+  <h2 class="hand mt-10 text-4xl">Colours</h2>
+  <ul class="mt-4 grid gap-4 sm:grid-cols-2">
+    {
+      swatches.map((s) => (
+        <li class="flex items-center gap-4">
+          <span class="h-14 w-14 shrink-0 rounded border border-ink/30" style={`background:${s.hex}`} />
+          <span>
+            <code>{s.name}</code> {s.hex}
+            <br />
+            <span class="text-base">{s.use}</span>
+          </span>
+        </li>
+      ))
+    }
+  </ul>
+  <p class="mt-4 text-base">Contrast results: run <code>npm run check</code>.</p>
+
+  <h2 class="hand mt-10 text-4xl">English</h2>
+  <p class="hand mt-2 text-5xl">Caveat heading: 30 years on</p>
+  <p class="mt-2">IBM Plex Sans body text at 18 px. <a href="#">A link in ink red.</a></p>
+  <p class="font-semibold">IBM Plex Sans SemiBold.</p>
+
+  <h2 class="hand mt-10 text-4xl">Tamil heading: choose one</h2>
+  <div class="mt-4 grid gap-6 sm:grid-cols-2" lang="ta">
+    <div class="polaroid">
+      <p class="text-base" lang="en">A. Kavivanar (handwriting style)</p>
+      <p style="font-family: 'Kavivanar'; font-size: 2.5rem; line-height: 1.5">அறிவு மலர்</p>
+    </div>
+    <div class="polaroid">
+      <p class="text-base" lang="en">B. Noto Sans Tamil SemiBold</p>
+      <p style="font-family: 'Noto Sans Tamil'; font-weight: 600; font-size: 2.25rem; line-height: 1.5">அறிவு மலர்</p>
+    </div>
+  </div>
+  <p class="mt-4" lang="ta">தமிழ் · அறிவு மலர் <span lang="en">(Noto Sans Tamil body text)</span></p>
+
+  <h2 class="hand mt-10 text-4xl">Then and now frames</h2>
+  <div class="mt-4 grid gap-6 sm:grid-cols-2">
+    <div class="frame-then p-4"><span class="hand text-3xl text-sepia">1994</span><p>Sepia frame for 1992–96.</p></div>
+    <div class="polaroid p-4"><span class="hand text-3xl">2026</span><p>Clean frame for now.</p></div>
+  </div>
+</BaseLayout>

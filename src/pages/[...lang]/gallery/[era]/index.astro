@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import PageIntro from '../../../../components/PageIntro.astro';
+import EraRibbon from '../../../../components/EraRibbon.astro';
+import AlbumCard from '../../../../components/AlbumCard.astro';
+import Tx from '../../../../components/Tx.astro';
+import { t, LANGS, langParam, langFromParam, type UiKey } from '../../../../i18n';
+import { ERAS, eraSlug, type Era } from '../../../../site';
+import { getAlbums } from '../../../../lib/media';
+
+export function getStaticPaths() {
+  return LANGS.flatMap((lang) => ERAS.map((era) => ({ params: { lang: langParam(lang), era: eraSlug(era) }, props: { era } })));
+}
+const { era } = Astro.props as { era: Era };
+const lang = langFromParam(Astro.params.lang);
+const albums = (await getAlbums()).filter((a) => a.data.era === era);
+const eraKey = `era.${era}` as UiKey;
+---
+<BaseLayout lang={lang} title={t(lang, eraKey)}>
+  <PageIntro lang={lang} titleKey={eraKey} />
+  <EraRibbon lang={lang} current={era} />
+  {
+    albums.length ? (
+      <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {albums.map((album) => (
+          <li>
+            <AlbumCard album={album} lang={lang} />
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <Tx lang={lang} k="gallery.empty" as="p" class="text-xl" />
+    )
+  }
+</BaseLayout>
