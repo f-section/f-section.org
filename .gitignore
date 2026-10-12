@@ -1,0 +1,68 @@
+# --- Media: NEVER commit photos, video, audio or scans (DESIGN.md D-04) ---
+# Media goes to R2 through scripts/ingest. Only icons may live in public/icons.
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp
+*.avif
+*.heic
+*.heif
+*.tif
+*.tiff
+*.bmp
+*.raw
+*.cr2
+*.nef
+*.arw
+*.dng
+*.psd
+*.mp4
+*.m4v
+*.mov
+*.avi
+*.mkv
+*.webm
+*.3gp
+*.mts
+*.wav
+*.mp3
+*.m4a
+*.aac
+*.flac
+*.ogg
+*.opus
+*.pdf
+*.zip
+!public/icons/**
+
+# --- Node / Astro ---
+node_modules/
+dist/
+.astro/
+.wrangler/
+
+# --- Python ---
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# --- Ingest working files ---
+scripts/ingest/out/
+scripts/ingest/*.log
+
+# --- Secrets and local config ---
+.env
+.env.*
+!.env.example
+.dev.vars
+rclone.conf
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp

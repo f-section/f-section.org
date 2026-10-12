@@ -1,0 +1,10 @@
+# Store text with LF line endings so Windows and Cloudflare's Linux builds agree.
+* text=auto eol=lf
+
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+
+*.woff  binary
+*.woff2 binary
+*.ico   binary
+*.svg   text
