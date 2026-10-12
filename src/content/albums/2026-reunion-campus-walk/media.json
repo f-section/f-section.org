@@ -11,7 +11,11 @@
       "ta": ""
     },
     "placeholder": true,
-    "place": "main-building"
+    "place": "main-building",
+    "gps": {
+      "lat": 10.7589,
+      "lon": 78.8132
+    }
   },
   {
     "id": "20260912-102010_saran_015",

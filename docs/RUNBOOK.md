@@ -31,15 +31,18 @@ How the site is run: accounts, admins, renewals and recovery. Keep this current.
 - Node 22.12 or later, Git, the GitHub CLI (`gh`), and Python 3.12 or later with `scripts/ingest/.venv`.
 - `rclone` with a remote named `r2` pointing at the Cloudflare R2 account. Use an R2 API token scoped to `f-section-media` with **Object Read & Write** only. The rclone config stays on the PC and never goes into git.
   ```bash
-  winget install Rclone.Rclone
+  winget install Rclone.Rclone   # installed 2026-10-12
   rclone config
   ```
   Choose: new remote `r2`, type `s3`, provider `Cloudflare`, then the access key, secret and endpoint from the R2 dashboard.
-- `ffmpeg`, for video and audio: `winget install Gyan.FFmpeg`
+- `ffmpeg`, for video and audio: `winget install Gyan.FFmpeg` (installed 2026-10-12)
+- `exiftool`, for inspecting photo metadata: `winget install OliverBetz.ExifTool` (installed 2026-10-12)
 - NAS mapped as a drive letter (for example `Z:`).
 
 ## Branches
 - `main` is production and protected. Changes reach it only by pull request from `staging`.
+  - GitHub branch protection (free, because the repo is public) requires a pull request and passing `site` and `ingest` checks. It applies to admins too. 0 approvals are needed, so Saran can merge his own pull requests.
+  - A local pre-push hook also blocks `git push` to `main`. Enable it once per clone with `git config core.hooksPath .githooks`.
 - `staging` is where all work happens. Cloudflare builds a preview for every push.
 
 ## Rolling back

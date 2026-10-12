@@ -1,14 +1,14 @@
 @import "tailwindcss";
 
 /* Fonts are self-hosted from @fontsource (no Google Fonts request at runtime).
-   English body: IBM Plex Sans. Tamil body: Noto Sans Tamil (as on ief-global.org).
-   Headings: Caveat (English) and Kavivanar (Tamil), large sizes only. */
-@import "@fontsource/ibm-plex-sans/latin-400.css";
-@import "@fontsource/ibm-plex-sans/latin-600.css";
+   Body text in both languages: Noto Sans Tamil (its Latin glyphs cover English),
+   as on ief-global.org and thamizh-ai.org.
+   Headings: Caveat (English); Noto Sans Tamil SemiBold (Tamil). */
+@import "@fontsource/noto-sans-tamil/latin-400.css";
+@import "@fontsource/noto-sans-tamil/latin-600.css";
 @import "@fontsource/noto-sans-tamil/tamil-400.css";
 @import "@fontsource/noto-sans-tamil/tamil-600.css";
 @import "@fontsource/caveat/latin-700.css";
-@import "@fontsource/kavivanar/tamil-400.css";
 
 /* Design tokens (DESIGN.md §6.2). Contrast is checked by scripts/checks/contrast.mjs. */
 :root {
@@ -30,8 +30,8 @@
   --color-card: var(--card);
   --color-rule: var(--rule);
 
-  --font-sans: "IBM Plex Sans", "Noto Sans Tamil", system-ui, sans-serif;
-  --font-hand: "Caveat", "Kavivanar", "Noto Sans Tamil", cursive;
+  --font-sans: "Noto Sans Tamil", system-ui, sans-serif;
+  --font-hand: "Caveat", "Noto Sans Tamil", cursive;
 }
 
 @layer base {
@@ -89,10 +89,10 @@
     font-weight: 700;
     line-height: 1.15;
   }
-  /* Tamil handwriting font has one weight and is smaller per em. */
-  :lang(ta) .hand {
-    font-weight: 400;
-    font-size: 0.85em;
+  /* Tamil headings: Caveat has no Tamil letters, so the browser draws Tamil
+     characters in the next font, Noto Sans Tamil (SemiBold, the nearest loaded
+     weight). English text inside a Tamil page stays in Caveat. */
+  .hand:lang(ta) {
     line-height: 1.4;
   }
   /* 1992–96 "ink then" frame: sepia border on paper. */

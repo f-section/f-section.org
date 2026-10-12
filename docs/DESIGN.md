@@ -73,7 +73,8 @@ f-section.org is a home on the web for the F Section group of the REC Trichy (no
 | D-09 | Work goes to a `staging` branch first. `main` is production. Nothing goes live without a preview. | Decided |
 | D-10 | The site asks search engines not to index it (`noindex`) until the group decides otherwise. | **Open (O-2)**, safe default |
 | D-11 | Original full-size files stay on the NAS and in Google Drive. R2 holds only web-sized copies. | Decided |
-| D-12 | Consent rules apply to all personal content (Section 13). | Decided |
+| D-12 | Media is vetted by hand before ingest; the site keeps GPS location and runs no consent checks of its own (Section 13). | Decided (changed 2026-10-12) |
+| D-14 | **Public-first.** Build a simple public site now. Logins and members-only areas (Phase 2, O-1) are deferred to a much later version. | Decided (2026-10-12) |
 | D-13 | The In Memoriam section is members-only by default, and nothing goes up without the family's consent. | Decided |
 
 **Note on D-02.** ief-global.org uses HTML, Tailwind, Alpine.js and a Python build script. That approach would also work here. We chose Astro for this site for three reasons:
@@ -173,7 +174,7 @@ Use lowercase, hyphens and no spaces in every file name and slug.
 - **Content text** (titles, captions, descriptions) is stored as a pair: `{ en: "...", ta: "..." }`.
   - If the Tamil text is missing, show the English text. Do not fail the page.
   - The build prints a list of items that still need Tamil, so Saran can fill them in later.
-- **Fonts:** IBM Plex Sans for English body text and Noto Sans Tamil for Tamil. ief-global.org also uses Noto Sans Tamil. IBM Plex Sans Tamil is not available as a web font (see `docs/decisions/2026-10-12-fonts-and-sepia.md`).
+- **Fonts:** Noto Sans Tamil for body text in both languages (its Latin glyphs cover English), the same as ief-global.org and thamizh-ai.org. See `docs/decisions/2026-10-12-fonts-and-sepia.md`.
 - **Old Arivu Malar issues** are shown exactly as written (scans). They are not translated.
 
 ---
@@ -204,9 +205,9 @@ These are proposals. Check every text colour pair for WCAG AA contrast in Phase 
 
 **Typography:**
 
-- **Body text:** IBM Plex Sans (English) and Noto Sans Tamil (Tamil). Both are self-hosted through Fontsource.
+- **Body text:** Noto Sans Tamil for English and Tamil, self-hosted through Fontsource.
 - **English headings:** Caveat Bold, used only for large headings and never for body text.
-- **Tamil headings:** Kavivanar (verified: it is on Google Fonts and Fontsource) is wired in for now. **Open (O-8):** Saran chooses between Kavivanar and Noto Sans Tamil SemiBold on the `/styleguide/` page.
+- **Tamil headings:** Noto Sans Tamil SemiBold (decided 2026-10-12, closes O-8).
 
 ### 6.3 Key components
 
@@ -274,7 +275,7 @@ These are proposals. Check every text colour pair for WCAG AA contrast in Phase 
 3. **Archive the originals.** Copy the chosen originals to the NAS under `f-section/originals/<album-slug>/`. This is the master copy.
 4. **Ingest.** Run `scripts/ingest` on Saran's Windows PC (NAS mapped as a drive). It does the following:
    - Reads the originals for one album.
-   - **Removes GPS location data** from every file. It keeps the date taken, because the date is needed for sorting.
+   - **Keeps the date taken and the GPS location.** The display copy keeps its EXIF, and the coordinates are written to `media.json` for the map link. Thumbnails carry no metadata, to stay small.
    - Rotates each image the right way up, using its EXIF orientation.
    - Creates web copies (sizes in 8.2).
    - Names the files using the rule in Section 4.4.
@@ -445,7 +446,7 @@ f-section.org/
 │   └── styles/
 ├── functions/                 ← Phase 2b only: login middleware
 ├── scripts/
-│   └── ingest/                ← Python: resize, strip GPS, manifest, rclone upload
+│   └── ingest/                ← Python: resize, read date and GPS, manifest, rclone upload
 ├── public/                    ← favicon and fonts only. NO photos or videos.
 ├── .github/workflows/
 │   └── check.yml              ← build, schema check, link check, "no media in git" check
@@ -471,9 +472,9 @@ f-section.org/
 
 ## 13. Privacy, consent and safety rules
 
-1. **GPS data is always removed** from photos and videos before upload.
-2. **Consent before public.** A photo where people can be clearly identified goes public only if it is a group photo the group has agreed to share, or the people in it have agreed. When in doubt, mark it `members`.
-3. **Children's photos are members-only.** No exceptions.
+1. **Location is kept.** Photos and videos keep their GPS data, so the site can show where each one was taken (a "Show on map" link). Changed 2026-10-12, see `docs/decisions/2026-10-12-public-first-curated-media.md`.
+2. **Curated before ingest.** Saran and friends vet every photo by hand before it is added to an album. Anything handed to the ingest script is cleared for publishing as is. The site does not run its own consent checks.
+3. **Children's photos:** left to the curators' judgement during vetting.
 4. **Takedown.** People can ask for a photo to be removed by emailing Saran. Act on requests within a few days, without asking why. Where this notice appears (a page footer, the About page, or only in the WhatsApp group) is **Open (O-7)**. Saran leans towards no footer, because the site is for close friends and family.
 5. **Search engines.** Every page carries `noindex` until the group decides otherwise (O-2).
 6. **No personal contact details** (phone numbers, addresses) anywhere on the site, including the members area.
@@ -537,7 +538,7 @@ f-section.org/
 | **O-5** | Where should In Memoriam be visible? | Members-only / public | **Members-only** unless a family asks otherwise. |
 | **O-6** | When and how should members upload directly? | Phase 4 design | Keep curating through Google Drive until then. |
 | **O-7** | Does the site need a footer with a takedown notice and contact email? | Footer on every page / About page only / no notice on the site | Saran leans towards **no footer**. Until decided, the layout has a minimal footer. The takedown line shows only once `TAKEDOWN_EMAIL` is set in `src/site.ts`. |
-| **O-8** | Which font should Tamil headings use? | Kavivanar (handwriting style) / Noto Sans Tamil SemiBold | Compare them on `/styleguide/`. Kavivanar is the current default. |
+| ~~O-8~~ | Which font should Tamil headings use? | | **Closed 2026-10-12:** Noto Sans Tamil SemiBold. |
 
 ---
 
@@ -572,7 +573,7 @@ Paste this into Claude Code after cloning the empty repo and copying in `CLAUDE.
 > 2. Add the design tokens and fonts from Section 6.
 > 3. Add the content collections and schemas from Section 10, with one sample public album that uses placeholder images.
 > 4. Add a `.gitignore` that blocks media files, and a CI workflow that fails if any media file is committed.
-> 5. Write `scripts/ingest` in Python with a `--dry-run` flag that is on by default. It must strip GPS data, resize to the sizes in Section 8.2, write `media.json`, and upload with `rclone copy` only.
+> 5. Write `scripts/ingest` in Python with a `--dry-run` flag that is on by default. It must keep the date and GPS data, resize to the sizes in Section 8.2, write `media.json`, and upload with `rclone copy` only.
 > 6. Write `README.md` and a `RUNBOOK.md` skeleton.
 > Work on the `staging` branch. Do not push to `main`. Do not create or delete any Cloudflare resources without asking me first.
 

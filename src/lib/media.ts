@@ -19,6 +19,8 @@ const mediaItem = z.object({
   taken: z.string().optional(),
   caption: z.object({ en: z.string().default(''), ta: z.string().default('') }).default({ en: '', ta: '' }),
   alt: z.object({ en: z.string().default(''), ta: z.string().default('') }).optional(),
+  /** Where it was taken, from the photo's own GPS data (kept on purpose). */
+  gps: z.object({ lat: z.number().min(-90).max(90), lon: z.number().min(-180).max(180) }).optional(),
   place: z.string().optional(),
   pairWith: z.string().optional(),
   /** Sample-only: render a drawn placeholder instead of loading from R2. */
@@ -76,6 +78,11 @@ export async function getAlbumsByEra(era: Era): Promise<Album[]> {
 
 export function coverOf(album: Album): MediaItem | undefined {
   return album.media.find((m) => m.id === album.data.cover) ?? album.media[0];
+}
+
+/** Map link that opens the Maps app on phones. */
+export function mapUrl(gps: { lat: number; lon: number }): string {
+  return `https://www.google.com/maps/search/?api=1&query=${gps.lat},${gps.lon}`;
 }
 
 /** R2 keys follow `<visibility>/albums/<slug>/<size>/<id>.webp` (see scripts/ingest). */

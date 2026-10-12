@@ -51,13 +51,13 @@ npm run check:links
    scripts/ingest/.venv/Scripts/python scripts/ingest --album <slug> --src "Z:/f-section/originals/<slug>"
    ```
 5. Run it for real with `--apply`. This step:
-   - removes GPS and all other metadata
+   - keeps the date and GPS location (for the map link)
    - makes 480 px and 2048 px WebP copies (videos at 1080p and 720p)
    - updates `media.json`
    - uploads with `rclone copy --immutable`, which never overwrites or deletes
 6. Commit `album.yaml` and `media.json` to `staging`, then check the preview on a phone.
 
-The ingest script needs `rclone` (configured with an `r2` remote) and, for video and audio, `ffmpeg`. See RUNBOOK.md.
+The ingest script needs `rclone` (configured with an `r2` remote) and, for video and audio, `ffmpeg`. All three tools, including `exiftool`, are installed on the Windows PC with winget. See RUNBOOK.md.
 
 ## Deploy
 - `staging` branch: Cloudflare Pages preview. All work goes here first.

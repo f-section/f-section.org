@@ -2,8 +2,10 @@
 
 Dry run is the default: it only prints the plan. Pass --apply to write files.
 
-Safety rules (CLAUDE.md):
-  * GPS and all other metadata are removed from every web copy.
+Rules (CLAUDE.md):
+  * Photos are already curated by Saran, so location is KEPT: the display copy keeps
+    its EXIF (date and GPS) and media.json records the coordinates for a map link.
+    Thumbnails carry no metadata, to stay small.
   * Uploads use `rclone copy --immutable`: never `sync`, never overwrite.
   * Originals are only read, never changed.
 """
@@ -252,12 +254,59 @@ def has_gps(path: Path) -> bool:
         return GPS_IFD in exif or bool(exif.get_ifd(GPS_IFD))
 
 
+def _dms_to_deg(dms, ref) -> float | None:
+    try:
+        d, m, s = (float(x) for x in dms)
+    except (TypeError, ValueError):
+        return None
+    deg = d + m / 60 + s / 3600
+    return -deg if str(ref).strip("\x00 ").upper() in ("S", "W") else deg
+
+
+def photo_gps(path: Path) -> dict | None:
+    """{lat, lon} from a photo's EXIF, or None."""
+    try:
+        with open_image(path) as im:
+            g = im.getexif().get_ifd(GPS_IFD)
+    except Exception:
+        return None
+    if not g or 2 not in g or 4 not in g:
+        return None
+    lat, lon = _dms_to_deg(g[2], g.get(1, "N")), _dms_to_deg(g[4], g.get(3, "E"))
+    if lat is None or lon is None or (lat == 0 and lon == 0):
+        return None
+    return {"lat": round(lat, 6), "lon": round(lon, 6)}
+
+
+def video_gps(path: Path) -> dict | None:
+    """{lat, lon} from a phone video's ISO 6709 `location` tag, or None."""
+    ffprobe = shutil.which("ffprobe")
+    if not ffprobe:
+        return None
+    try:
+        out = subprocess.run(
+            [ffprobe, "-v", "quiet", "-print_format", "json", "-show_entries", "format_tags", str(path)],
+            capture_output=True, text=True, check=True,
+        ).stdout
+        tags = {k.lower(): v for k, v in json.loads(out).get("format", {}).get("tags", {}).items()}
+    except Exception:
+        return None
+    loc = tags.get("location") or tags.get("com.apple.quicktime.location.iso6709")
+    m = re.match(r"^([+-]\d+(?:\.\d+)?)([+-]\d+(?:\.\d+)?)", loc or "")
+    return {"lat": round(float(m.group(1)), 6), "lon": round(float(m.group(2)), 6)} if m else None
+
+
 def process_photo(p: Planned, out: Path) -> dict:
-    """Write thumb and display WebP copies with NO metadata (so no GPS). Returns manifest fields."""
+    """Write thumb and display WebP copies. Returns manifest fields.
+
+    The display copy keeps the EXIF (date taken, GPS, camera) with orientation reset,
+    because it has been rotated upright. The thumbnail carries no metadata, to stay small.
+    """
     from PIL import ImageOps
 
     with open_image(p.src) as im:
-        im = ImageOps.exif_transpose(im)  # rotate the right way up, then drop EXIF
+        im = ImageOps.exif_transpose(im)  # rotate the right way up; orientation tag is reset
+        exif_bytes = im.getexif().tobytes()
         if im.mode not in ("RGB", "L"):
             im = im.convert("RGB")
         results = {}
@@ -266,13 +315,15 @@ def process_photo(p: Planned, out: Path) -> dict:
             copy.thumbnail((edge, edge))  # keeps aspect ratio, never upscales
             dest = out / size / f"{p.id}.webp"
             dest.parent.mkdir(parents=True, exist_ok=True)
-            # No `exif=` argument: Pillow writes no metadata at all.
-            copy.save(dest, "WEBP", quality=WEBP_QUALITY, method=6)
-            if has_gps(dest):
-                raise RuntimeError(f"GPS data still present in {dest}")
+            extra = {"exif": exif_bytes} if size == "display" and exif_bytes else {}
+            copy.save(dest, "WEBP", quality=WEBP_QUALITY, method=6, **extra)
             results[size] = copy.size
     w, h = results["display"]
-    return {"width": w, "height": h}
+    fields: dict = {"width": w, "height": h}
+    gps = photo_gps(p.src)
+    if gps:
+        fields["gps"] = gps
+    return fields
 
 
 def run_ffmpeg(args: list[str]) -> None:
@@ -290,30 +341,30 @@ def probe_size(path: Path) -> tuple[int, int]:
     return int(s["width"]), int(s["height"])
 
 
-# Strip global and per-stream metadata (removes location/GPS atoms on phone videos).
-NO_META = ["-map_metadata", "-1", "-map_metadata:s:v", "-1", "-map_metadata:s:a", "-1", "-map_chapters", "-1"]
-
-
 def process_video(p: Planned, out: Path) -> dict:
     dest = out / "video"
     dest.mkdir(parents=True, exist_ok=True)
     for height, rate, maxrate in (("1080", "5M", "5.5M"), ("720", "2.5M", "2.8M")):
         run_ffmpeg([
-            "-i", str(p.src), *NO_META, "-map", "0:v:0", "-map", "0:a:0?",
+            "-i", str(p.src), "-map", "0:v:0", "-map", "0:a:0?",
             "-vf", f"scale=-2:'min({height},ih)'",
             "-c:v", "libx264", "-preset", "slow", "-b:v", rate, "-maxrate", maxrate, "-bufsize", "10M",
             "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart",
             str(dest / f"{p.id}-{height}.mp4"),
         ])
-    run_ffmpeg(["-ss", "1", "-i", str(p.src), *NO_META, "-frames:v", "1", "-vf", "scale=-2:'min(720,ih)'", "-q:v", "3", str(dest / f"{p.id}.jpg")])
+    run_ffmpeg(["-ss", "1", "-i", str(p.src), "-frames:v", "1", "-vf", "scale=-2:'min(720,ih)'", "-q:v", "3", str(dest / f"{p.id}.jpg")])
     w, h = probe_size(dest / f"{p.id}-1080.mp4")
-    return {"width": w, "height": h}
+    fields: dict = {"width": w, "height": h}
+    gps = video_gps(p.src)
+    if gps:
+        fields["gps"] = gps
+    return fields
 
 
 def process_audio(p: Planned, out: Path) -> dict:
     dest = out / "audio"
     dest.mkdir(parents=True, exist_ok=True)
-    run_ffmpeg(["-i", str(p.src), "-map_metadata", "-1", "-vn", "-c:a", "libmp3lame", "-b:a", "128k", str(dest / f"{p.id}.mp3")])
+    run_ffmpeg(["-i", str(p.src), "-vn", "-c:a", "libmp3lame", "-b:a", "128k", str(dest / f"{p.id}.mp3")])
     return {}
 
 

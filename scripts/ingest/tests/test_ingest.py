@@ -51,19 +51,32 @@ class IngestTests(unittest.TestCase):
         p = make_photo(self.src / "saran" / "a.jpg")
         self.assertTrue(ingest.has_gps(p))
 
-    def test_photo_web_copies_have_no_gps_and_are_upright(self):
+    def test_photo_copies_are_upright_and_display_keeps_location(self):
         p = make_photo(self.src / "saran" / "a.jpg", orientation=6)  # 6 = rotate 90°
+        original_bytes = p.read_bytes()
         [planned] = ingest.plan(self.src, [], None, None)
-        dims = ingest.process_photo(planned, self.out)
-        self.assertEqual(dims, {"width": 1365, "height": 2048})  # portrait after rotation
-        for size, edge in (("thumb", 480), ("display", 2048)):
-            f = self.out / size / f"{planned.id}.webp"
-            self.assertTrue(f.exists())
-            self.assertFalse(ingest.has_gps(f))
-            with Image.open(f) as im:
-                self.assertEqual(max(im.size), edge)
-                self.assertEqual(len(im.getexif()), 0, "web copies must carry no EXIF at all")
-        self.assertTrue(ingest.has_gps(p), "the original must not be changed")
+        fields = ingest.process_photo(planned, self.out)
+        self.assertEqual((fields["width"], fields["height"]), (1365, 2048))  # portrait after rotation
+        # 10°45'30"N 78°49'E (the fixture's fake coordinates)
+        self.assertEqual(fields["gps"], {"lat": 10.758333, "lon": 78.816667})
+
+        display = self.out / "display" / f"{planned.id}.webp"
+        thumb = self.out / "thumb" / f"{planned.id}.webp"
+        with Image.open(display) as im:
+            self.assertEqual(max(im.size), 2048)
+            exif = im.getexif()
+            self.assertTrue(ingest.has_gps(display), "display copy keeps GPS")
+            self.assertEqual(exif.get_ifd(ingest.EXIF_IFD).get(ingest.EXIF_DATETIME_ORIGINAL), "2026:09:12 10:15:33")
+            self.assertNotEqual(exif.get(0x0112), 6, "orientation must be reset after rotating")
+        with Image.open(thumb) as im:
+            self.assertEqual(max(im.size), 480)
+            self.assertEqual(len(im.getexif()), 0, "thumbnails carry no metadata")
+        self.assertEqual(p.read_bytes(), original_bytes, "the original must not be changed")
+
+    def test_photo_without_gps_has_no_gps_field(self):
+        make_photo(self.src / "saran" / "a.jpg", gps=False)
+        [planned] = ingest.plan(self.src, [], None, None)
+        self.assertNotIn("gps", ingest.process_photo(planned, self.out))
 
     def test_naming_uses_exif_date_and_contributor_folder(self):
         make_photo(self.src / "Saran K" / "a.jpg", taken="2026:09:12 10:15:33")
@@ -108,6 +121,7 @@ class IngestTests(unittest.TestCase):
         self.assertEqual((item["width"], item["height"]), (2048, 1365))
         self.assertEqual(item["credit"], "saran")
         self.assertEqual(len(item["sha256"]), 64)
+        self.assertEqual(item["gps"], {"lat": 10.758333, "lon": 78.816667})
         self.assertTrue((self.out / "public/albums/2026-test-album/display/20260912-101533_saran_001.webp").exists())
         # Running again adds nothing.
         ingest.main(["--album", "2026-test-album", "--src", str(self.src), "--apply", "--no-upload"])
