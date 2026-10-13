@@ -1,0 +1,33 @@
+---
+/** Strip across the top of the gallery for choosing the era (DESIGN.md §6.3). */
+import Tx from './Tx.astro';
+import { t, href, type Lang, type UiKey } from '../i18n';
+import { ERAS, eraSlug, isThen, type Era } from '../site';
+
+interface Props {
+  lang: Lang;
+  current?: Era;
+}
+const { lang, current } = Astro.props;
+---
+<nav aria-label={t(lang, 'gallery.lead')} class="-mx-4 mb-8 overflow-x-auto px-4">
+  <ul class="flex gap-2 pb-2">
+    {
+      ERAS.map((era) => (
+        <li class="shrink-0">
+          <a
+            href={href(lang, `/gallery/${eraSlug(era)}/`)}
+            aria-current={era === current ? 'page' : undefined}
+            class:list={[
+              'tap rounded-full border-2 font-semibold no-underline',
+              era === current ? 'bg-ink text-paper border-ink' : 'text-ink hover:bg-ink/10',
+              era !== current && (isThen(era) ? 'border-sepia' : 'border-ink/40'),
+            ]}
+          >
+            <Tx lang={lang} k={`era.${era}` as UiKey} />
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>

@@ -1,0 +1,24 @@
+---
+import Tx from './Tx.astro';
+import type { Lang, UiKey, Pair } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  titleKey?: UiKey;
+  title?: Pair;
+  leadKey?: UiKey;
+  lead?: Pair;
+}
+const { lang, titleKey, title, leadKey, lead } = Astro.props;
+---
+<div class="mb-8">
+  <h1 class="hand text-5xl md:text-6xl text-ink">
+    {titleKey ? <Tx lang={lang} k={titleKey} /> : <Tx lang={lang} pair={title} />}
+  </h1>
+  {
+    (leadKey || lead?.en) && (
+      <p class="mt-3 max-w-2xl text-xl">{leadKey ? <Tx lang={lang} k={leadKey} /> : <Tx lang={lang} pair={lead} />}</p>
+    )
+  }
+  <slot />
+</div>

@@ -1,0 +1,49 @@
+---
+/**
+ * One photo from an album. Loads lazily at its real aspect ratio so the page
+ * does not jump. Sample items marked `placeholder` are drawn, not loaded.
+ */
+import { t, pick, type Lang } from '../i18n';
+import { photoUrl, type Album, type MediaItem } from '../lib/media';
+
+interface Props {
+  album: Album;
+  item: MediaItem;
+  lang: Lang;
+  size?: 'thumb' | 'display';
+  class?: string;
+  eager?: boolean;
+  /** Force an aspect ratio (cropped), e.g. '4 / 3' for album cards. */
+  ratio?: string;
+}
+const { album, item, lang, size = 'thumb', class: className = '', eager = false } = Astro.props;
+// Alt text: explicit alt, else the caption, else the album title (DESIGN.md §6.4).
+const alt = pick(item.alt, lang) || pick(item.caption, lang) || pick(album.data.title, lang);
+const ratio = Astro.props.ratio ?? `${item.width} / ${item.height}`;
+---
+{
+  item.placeholder ? (
+    <div
+      role="img"
+      aria-label={`${alt}. ${t(lang, 'common.placeholder_photo')}`}
+      class={`flex items-center justify-center bg-gradient-to-br from-rule to-sepia/40 text-ink/70 ${className}`}
+      style={`aspect-ratio: ${ratio}`}
+    >
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <path d="M3 8a2 2 0 0 1 2-2h2l1.5-2h7L17 6h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+        <circle cx="12" cy="13" r="3.5" />
+      </svg>
+    </div>
+  ) : (
+    <img
+      src={photoUrl(album, item, size)}
+      alt={alt}
+      width={item.width}
+      height={item.height}
+      loading={eager ? 'eager' : 'lazy'}
+      decoding="async"
+      class={`h-auto w-full bg-rule object-cover ${className}`}
+      style={`aspect-ratio: ${ratio}`}
+    />
+  )
+}

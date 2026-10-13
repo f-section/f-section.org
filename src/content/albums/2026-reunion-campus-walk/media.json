@@ -1,0 +1,88 @@
+[
+  {
+    "id": "20260912-101533_saran_014",
+    "type": "photo",
+    "width": 2048,
+    "height": 1365,
+    "sha256": "",
+    "credit": "saran",
+    "caption": {
+      "en": "Sample placeholder photo",
+      "ta": ""
+    },
+    "placeholder": true,
+    "place": "main-building",
+    "gps": {
+      "lat": 10.7589,
+      "lon": 78.8132
+    }
+  },
+  {
+    "id": "20260912-102010_saran_015",
+    "type": "photo",
+    "width": 1365,
+    "height": 2048,
+    "sha256": "",
+    "credit": "saran",
+    "caption": {
+      "en": "Sample placeholder photo",
+      "ta": ""
+    },
+    "placeholder": true,
+    "place": "main-building"
+  },
+  {
+    "id": "20260912-103402_saran_016",
+    "type": "photo",
+    "width": 2048,
+    "height": 1365,
+    "sha256": "",
+    "credit": "saran",
+    "caption": {
+      "en": "Sample placeholder photo",
+      "ta": ""
+    },
+    "placeholder": true,
+    "place": "hostel"
+  },
+  {
+    "id": "20260912-104745_saran_017",
+    "type": "photo",
+    "width": 2048,
+    "height": 1536,
+    "sha256": "",
+    "credit": "saran",
+    "caption": {
+      "en": "Sample placeholder photo",
+      "ta": ""
+    },
+    "placeholder": true,
+    "place": "hostel"
+  },
+  {
+    "id": "20260912-110230_saran_018",
+    "type": "photo",
+    "width": 2048,
+    "height": 1365,
+    "sha256": "",
+    "credit": "saran",
+    "caption": {
+      "en": "Sample placeholder photo",
+      "ta": ""
+    },
+    "placeholder": true
+  },
+  {
+    "id": "20260912-111512_saran_019",
+    "type": "photo",
+    "width": 1536,
+    "height": 2048,
+    "sha256": "",
+    "credit": "saran",
+    "caption": {
+      "en": "Sample placeholder photo",
+      "ta": ""
+    },
+    "placeholder": true
+  }
+]

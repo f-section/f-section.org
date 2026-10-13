@@ -1,0 +1,79 @@
+---
+/** One album. The full-screen lightbox comes in Phase 1; for now each photo links to its large copy. */
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import PageIntro from '../../../../components/PageIntro.astro';
+import Photo from '../../../../components/Photo.astro';
+import Tx from '../../../../components/Tx.astro';
+import { pick, href, LANGS, langParam, langFromParam, type UiKey } from '../../../../i18n';
+import { eraSlug, isThen } from '../../../../site';
+import { getAlbums, coverOf, photoUrl, mapUrl, type Album } from '../../../../lib/media';
+
+export async function getStaticPaths() {
+  const albums = await getAlbums();
+  return LANGS.flatMap((lang) =>
+    albums.map((album) => ({
+      params: { lang: langParam(lang), era: eraSlug(album.data.era), album: album.id },
+      props: { album },
+    })),
+  );
+}
+const { album } = Astro.props as { album: Album };
+const lang = langFromParam(Astro.params.lang);
+const { data } = album;
+const then = isThen(data.era);
+const cover = coverOf(album);
+const ogImage = cover && !cover.placeholder ? photoUrl(album, cover, 'display') : undefined;
+const dateLabel = then
+  ? String(data.date.getUTCFullYear())
+  : data.date.toLocaleDateString(lang === 'ta' ? 'ta-IN' : 'en-IN', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+const eraKey = `era.${data.era}` as UiKey;
+---
+<BaseLayout lang={lang} title={pick(data.title, lang)} description={pick(data.summary, lang) || undefined} image={ogImage}>
+  <p class="mb-2">
+    <a href={href(lang, `/gallery/${eraSlug(data.era)}/`)} class="tap -ml-3 font-semibold">
+      <span>← <Tx lang={lang} k="gallery.back_to_era" /> <Tx lang={lang} k={eraKey} /></span>
+    </a>
+  </p>
+  <PageIntro lang={lang} title={data.title} lead={data.summary}>
+    <p class="mt-2 text-sepia">
+      <span class="hand text-2xl">{dateLabel}</span>
+      {data.location.en && (<span> · <Tx lang={lang} pair={data.location} /></span>)}
+    </p>
+  </PageIntro>
+
+  <ul class="columns-2 gap-3 sm:columns-3 [&>li]:mb-3">
+    {
+      album.media
+        .filter((m) => m.type === 'photo')
+        .map((item) => (
+          <li class="break-inside-avoid">
+            <figure class:list={[then ? 'frame-then p-2' : 'polaroid p-2']}>
+              {item.placeholder ? (
+                <Photo album={album} item={item} lang={lang} />
+              ) : (
+                <a href={photoUrl(album, item, 'display')} class="block">
+                  <Photo album={album} item={item} lang={lang} class:list={[then && 'sepia-[.2]']} />
+                </a>
+              )}
+              {(item.caption.en || item.credit || item.gps) && (
+                <figcaption class="mt-2 text-base leading-snug">
+                  {item.caption.en && <Tx lang={lang} pair={item.caption} />}
+                  {item.credit && (
+                    <span class="block text-sepia">
+                      <Tx lang={lang} k="common.photo_by" /> {item.credit}
+                    </span>
+                  )}
+                  {item.gps && (
+                    <a href={mapUrl(item.gps)} class="tap -ml-3 justify-start" target="_blank" rel="noopener">
+                      <span aria-hidden="true">📍</span>&nbsp;<Tx lang={lang} k="common.map" />
+                    </a>
+                  )}
+                </figcaption>
+              )}
+            </figure>
+          </li>
+        ))
+    }
+  </ul>
+  {album.media.length === 0 && <Tx lang={lang} k="gallery.empty" as="p" />}
+</BaseLayout>

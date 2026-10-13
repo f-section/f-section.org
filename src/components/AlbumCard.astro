@@ -1,0 +1,29 @@
+---
+/** Polaroid-style album card with a handwritten date (DESIGN.md §6.3). */
+import Photo from './Photo.astro';
+import Tx from './Tx.astro';
+import { href, type Lang } from '../i18n';
+import { eraSlug, isThen } from '../site';
+import { coverOf, type Album } from '../lib/media';
+
+interface Props {
+  album: Album;
+  lang: Lang;
+}
+const { album, lang } = Astro.props;
+const cover = coverOf(album);
+const then = isThen(album.data.era);
+const dateLabel = then
+  ? String(album.data.date.getUTCFullYear())
+  : album.data.date.toLocaleDateString(lang === 'ta' ? 'ta-IN' : 'en-IN', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+---
+<a
+  href={href(lang, `/gallery/${eraSlug(album.data.era)}/${album.id}/`)}
+  class:list={['polaroid block text-ink no-underline transition-transform hover:-rotate-1 focus-visible:-rotate-1', then && 'frame-then']}
+>
+  <div class:list={['overflow-hidden', then && 'sepia-[.35]']}>
+    {cover ? <Photo album={album} item={cover} lang={lang} ratio="4 / 3" class="object-cover" /> : <div class="aspect-[4/3] bg-rule" />}
+  </div>
+  <Tx lang={lang} pair={album.data.title} as="h3" class="mt-3 text-xl font-semibold leading-snug" />
+  <p class="hand text-2xl text-sepia" lang={lang}>{dateLabel}</p>
+</a>

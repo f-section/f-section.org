@@ -71,10 +71,11 @@ f-section.org is a home on the web for the F Section group of the REC Trichy (no
 | D-07 | Login has two stages: 2a uses Cloudflare Access (at most 50 users); 2b uses our own login for up to 500 users. | **Open (O-1)** |
 | D-08 | Videos are MP4 files in R2. We do not use YouTube, because the total footage is under 30 minutes. | Decided |
 | D-09 | Work goes to a `staging` branch first. `main` is production. Nothing goes live without a preview. | Decided |
-| D-10 | The site asks search engines not to index it (`noindex`) until the group decides otherwise. | **Open (O-2)**, safe default |
+| D-10 | The site is open to search engines, with a sitemap and robots.txt. Staging previews stay unindexed. | Decided (2026-10-12, closes O-2) |
 | D-11 | Original full-size files stay on the NAS and in Google Drive. R2 holds only web-sized copies. | Decided |
-| D-12 | Consent rules apply to all personal content (Section 13). | Decided |
-| D-13 | The In Memoriam section is members-only by default, and nothing goes up without the family's consent. | Decided |
+| D-12 | Media is vetted by hand before ingest; the site keeps GPS location and runs no consent checks of its own (Section 13). | Decided (changed 2026-10-12) |
+| D-14 | **Public-first.** Build a simple public site now. Logins and members-only areas (Phase 2, O-1) are deferred to a much later version. | Decided (2026-10-12) |
+| D-13 | In Memoriam is public and curated by hand. Families have agreed in advance; the build runs no consent check. | Decided (changed 2026-10-12, closes O-5) |
 
 **Note on D-02.** ief-global.org uses HTML, Tailwind, Alpine.js and a Python build script. That approach would also work here. We chose Astro for this site for three reasons:
 
@@ -116,7 +117,7 @@ f-section.org
 │   └── /arivumalar/2027 …    yearly releases
 │
 ├── /people                   [M] Then & Now directory (Phase 2)
-├── /in-memoriam              [M] Friends we have lost (Phase 2, with family consent)
+├── /in-memoriam              [P] Friends we have lost
 ├── /reunions                 [P] 2016, 2026, and the next one
 │
 └── /ta/…                     The same pages in Tamil (see Section 5)
@@ -173,7 +174,7 @@ Use lowercase, hyphens and no spaces in every file name and slug.
 - **Content text** (titles, captions, descriptions) is stored as a pair: `{ en: "...", ta: "..." }`.
   - If the Tamil text is missing, show the English text. Do not fail the page.
   - The build prints a list of items that still need Tamil, so Saran can fill them in later.
-- **Fonts:** IBM Plex Sans for English body text and IBM Plex Sans Tamil for Tamil, the same as ief-global.org.
+- **Fonts:** Noto Sans Tamil for body text in both languages (its Latin glyphs cover English), the same as ief-global.org and thamizh-ai.org. See `docs/decisions/2026-10-12-fonts-and-sepia.md`.
 - **Old Arivu Malar issues** are shown exactly as written (scans). They are not translated.
 
 ---
@@ -197,16 +198,16 @@ These are proposals. Check every text colour pair for WCAG AA contrast in Phase 
 | `--paper` | `#F6F1E7` | Page background |
 | `--ink` | `#1E2A3A` | Body text (fountain-pen blue-black) |
 | `--ink-red` | `#A23B2A` | Links and accents (red-ink editor's marks) |
-| `--sepia` | `#8A6A45` | 1992–96 frames and labels |
+| `--sepia` | `#846541` | 1992–96 frames and labels. Darkened from `#8A6A45`, which was 4.41:1 on paper, below AA. |
 | `--marigold` | `#E0A100` | Decoration only. Never use it for text, because the contrast is too low. |
 | Base font size | 18 px | Older readers |
 | Tap target | at least 44 × 44 px | Phones |
 
 **Typography:**
 
-- **Body text:** IBM Plex Sans and IBM Plex Sans Tamil.
-- **English headings:** a handwriting-style font such as Caveat (a Google Font), used only for large headings and never for body text.
-- **Tamil headings:** evaluate Tamil handwriting-style fonts on Google Fonts in Phase 0. Kavivanar is one candidate I believe exists; please verify. If none reads well, use IBM Plex Sans Tamil SemiBold.
+- **Body text:** Noto Sans Tamil for English and Tamil, self-hosted through Fontsource.
+- **English headings:** Caveat Bold, used only for large headings and never for body text.
+- **Tamil headings:** Noto Sans Tamil SemiBold (decided 2026-10-12, closes O-8).
 
 ### 6.3 Key components
 
@@ -274,7 +275,7 @@ These are proposals. Check every text colour pair for WCAG AA contrast in Phase 
 3. **Archive the originals.** Copy the chosen originals to the NAS under `f-section/originals/<album-slug>/`. This is the master copy.
 4. **Ingest.** Run `scripts/ingest` on Saran's Windows PC (NAS mapped as a drive). It does the following:
    - Reads the originals for one album.
-   - **Removes GPS location data** from every file. It keeps the date taken, because the date is needed for sorting.
+   - **Keeps the date taken and the GPS location.** The display copy keeps its EXIF, and the coordinates are written to `media.json` for the map link. Thumbnails carry no metadata, to stay small.
    - Rotates each image the right way up, using its EXIF orientation.
    - Creates web copies (sizes in 8.2).
    - Names the files using the rule in Section 4.4.
@@ -298,7 +299,7 @@ These are proposals. Check every text colour pair for WCAG AA contrast in Phase 
 | Audio | MP3, 128 kbps | |
 | Magazine scan | One WebP per page (1600 px long edge) plus one compressed PDF per issue | Scan masters (400–600 dpi PNG or TIFF) stay on the NAS. |
 
-**Music warning:** montages with copyrighted film songs are a legal grey area, even on our own site. Prefer royalty-free music or our own recordings (for example, someone singing at the reunion).
+**Music:** montages use film songs from our college years as background music (decided 2026-10-12). They are part of the nostalgia. The build does not check for music clearance. If a rights holder ever objects, take the video down or swap its soundtrack (see the takedown rule, §13.4).
 
 ---
 
@@ -375,7 +376,6 @@ files: { "1080": "public/video/2026-reunion-montage-1080.mp4",
          "720":  "public/video/2026-reunion-montage-720.mp4" }
 poster: public/video/2026-reunion-montage.jpg
 subtitles: { en: null, ta: null }
-music_cleared: true            # must be true before visibility can be public
 ```
 
 ### 10.4 Arivu Malar issue: `src/content/arivumalar/<issue-id>.yaml`
@@ -393,34 +393,32 @@ contents:                      # typed table of contents, so the archive is sear
 editors: []
 ```
 
-### 10.5 Person (Phase 2): `src/content/people/<slug>.yaml` (members only)
+### 10.5 Person: `src/content/people/<slug>.yaml`
 
 ```yaml
 slug: firstname-lastname
 name: { en: "", ta: "" }
 section: F                     # F, or another section of the batch
-photo_1996: members/people/firstname-lastname-1996.webp
-photo_2026: members/people/firstname-lastname-2026.webp
-consent:
-  listed: true                 # the person agreed to appear in the directory
-  show_2026_photo: true
-  show_bio: false
+visibility: public             # optional, default public
+photo_1996: public/people/firstname-lastname-1996.webp
+photo_2026: public/people/firstname-lastname-2026.webp
 bio: { en: "", ta: "" }
 ```
 
 The restored yearbook headshots made for the anniversary magazine can be used for `photo_1996`.
 
-### 10.6 In Memoriam (Phase 2): `src/content/memoriam/<slug>.yaml`
+### 10.6 In Memoriam: `src/content/memoriam/<slug>.yaml`
 
 ```yaml
 slug: firstname-lastname
 name: { en: "", ta: "" }
 years: "YYYY – YYYY"
-photo: members/memoriam/firstname-lastname.webp
-tribute: { en: "", ta: "" }    # written by friends, reviewed by the family
-family_consent: true           # the build FAILS if this is not true
-visibility: members
+photo: public/memoriam/firstname-lastname.webp
+tribute: { en: "", ta: "" }    # written by friends
+visibility: public             # optional, default public
 ```
+
+Friends and families have agreed in advance, and Saran curates every entry by hand, so the build runs no consent check (changed 2026-10-12).
 
 This page should be quiet: no comments, no counters and no social buttons.
 
@@ -445,7 +443,7 @@ f-section.org/
 │   └── styles/
 ├── functions/                 ← Phase 2b only: login middleware
 ├── scripts/
-│   └── ingest/                ← Python: resize, strip GPS, manifest, rclone upload
+│   └── ingest/                ← Python: resize, read date and GPS, manifest, rclone upload
 ├── public/                    ← favicon and fonts only. NO photos or videos.
 ├── .github/workflows/
 │   └── check.yml              ← build, schema check, link check, "no media in git" check
@@ -471,13 +469,13 @@ f-section.org/
 
 ## 13. Privacy, consent and safety rules
 
-1. **GPS data is always removed** from photos and videos before upload.
-2. **Consent before public.** A photo where people can be clearly identified goes public only if it is a group photo the group has agreed to share, or the people in it have agreed. When in doubt, mark it `members`.
-3. **Children's photos are members-only.** No exceptions.
+1. **Location is kept.** Photos and videos keep their GPS data, so the site can show where each one was taken (a "Show on map" link). Changed 2026-10-12, see `docs/decisions/2026-10-12-public-first-curated-media.md`.
+2. **Curated before ingest.** Saran and friends vet every photo by hand before it is added to an album. Anything handed to the ingest script is cleared for publishing as is. The site does not run its own consent checks.
+3. **Children's photos:** left to the curators' judgement during vetting.
 4. **Takedown.** People can ask for a photo to be removed by emailing Saran. Act on requests within a few days, without asking why. Where this notice appears (a page footer, the About page, or only in the WhatsApp group) is **Open (O-7)**. Saran leans towards no footer, because the site is for close friends and family.
-5. **Search engines.** Every page carries `noindex` until the group decides otherwise (O-2).
+5. **Search engines.** The site may be indexed (D-10). Only the internal `/styleguide/` and the 404 page carry `noindex`.
 6. **No personal contact details** (phone numbers, addresses) anywhere on the site, including the members area.
-7. **In Memoriam** follows Section 10.6. Nothing goes up without the family's consent.
+7. **In Memoriam** follows Section 10.6. Families agreed in advance, and entries are curated by hand.
 8. **Second admin.** Add one trusted classmate as an admin on the GitHub org, the Cloudflare account and the domain, and record this in `RUNBOOK.md`. If Saran is unavailable, the site must not be lost.
 9. **Domain auto-renew** is on for f-section.org.
 10. **Backups follow 3-2-1:** originals on the NAS, a second copy (an external drive kept offline), and a third copy in Google Drive. R2 is where the site's media lives; it is not a backup.
@@ -488,14 +486,15 @@ f-section.org/
 
 ### Phase 0: Foundations
 - [x] Create the repo `f-section/f-section.org` and an org profile repo `f-section/.github`.
-- [ ] Set up Astro, Tailwind, the bilingual routing (`/` and `/ta/`) and the language toggle.
-- [ ] Add the design tokens, fonts and base layout; check contrast.
-- [ ] Add the content schemas from Section 10, with build-time validation.
+- [x] Set up Astro, Tailwind, the bilingual routing (`/` and `/ta/`) and the language toggle.
+- [x] Add the design tokens, fonts and base layout; check contrast.
+- [x] Add the content schemas from Section 10, with build-time validation.
 - [ ] Create the Cloudflare Pages project linked to GitHub, with `main` for production and `staging` for preview.
 - [ ] Create the R2 bucket `f-section-media` with the custom domain `media.f-section.org`.
-- [ ] Write the ingest script (Section 8), with a dry-run mode.
-- [ ] Add the CI checks: build, schema, links, and no media files in git.
-- [ ] Write `README.md` and `RUNBOOK.md`; add the second admin.
+- [x] Write the ingest script (Section 8), with a dry-run mode.
+- [x] Add the CI checks: build, schema, links, and no media files in git.
+- [x] Write `README.md` and `RUNBOOK.md`.
+- [ ] Add the second admin.
 - **Exit:** an empty but working bilingual site is live on staging, and one test album goes through the full pipeline.
 
 ### Phase 1: Public launch (gallery and videos)
@@ -530,12 +529,13 @@ f-section.org/
 | ID | Question | Options | Recommendation |
 |---|---|---|---|
 | **O-1** | How should up to 500 people log in? | **A.** Cloudflare Access only. Simple, but the free plan covers about 50 users, and above that it costs per user per month. **B.** Our own login: "Sign in with Google" plus an emailed one-time link, with an allowlist of emails in Cloudflare D1. The emailed links go through an email service such as Resend (free tier: 3,000 emails a month, 100 a day). **C.** A shared family passcode. Easy, but weak, because passcodes get forwarded on WhatsApp. | Use **A for Phase 2a** (F Section only). Move to **B** when the whole batch is invited. With B, send invites in batches, so the 100-emails-a-day limit is not hit on launch day. Use a maintained authentication library; do not hand-write the security code. |
-| **O-2** | Should public pages appear in Google search? | Yes / No | **No** for now. This is easy to change later. |
+| ~~O-2~~ | Should public pages appear in Google search? | | **Closed 2026-10-12: yes.** |
 | **O-3** | Should batchmates from other sections get their own "section" pages? | Yes / No / Later | **Later.** Revisit after Phase 2. |
 | **O-4** | How should old Arivu Malar issues be identified? | `YYYY-MM` / `volNN-issNN` | Decide once the issues are found. Use `YYYY-MM` if they are unnumbered. |
-| **O-5** | Where should In Memoriam be visible? | Members-only / public | **Members-only** unless a family asks otherwise. |
+| ~~O-5~~ | Where should In Memoriam be visible? | | **Closed 2026-10-12: public.** |
 | **O-6** | When and how should members upload directly? | Phase 4 design | Keep curating through Google Drive until then. |
-| **O-7** | Does the site need a footer with a takedown notice and contact email? | Footer on every page / About page only / no notice on the site | Saran leans towards **no footer**. Until decided, the layout has a minimal footer with a placeholder email that is easy to remove. |
+| **O-7** | Does the site need a footer with a takedown notice and contact email? | Footer on every page / About page only / no notice on the site | Saran leans towards **no footer**. Until decided, the layout has a minimal footer. The takedown line shows only once `TAKEDOWN_EMAIL` is set in `src/site.ts`. |
+| ~~O-8~~ | Which font should Tamil headings use? | | **Closed 2026-10-12:** Noto Sans Tamil SemiBold. |
 
 ---
 
@@ -570,7 +570,7 @@ Paste this into Claude Code after cloning the empty repo and copying in `CLAUDE.
 > 2. Add the design tokens and fonts from Section 6.
 > 3. Add the content collections and schemas from Section 10, with one sample public album that uses placeholder images.
 > 4. Add a `.gitignore` that blocks media files, and a CI workflow that fails if any media file is committed.
-> 5. Write `scripts/ingest` in Python with a `--dry-run` flag that is on by default. It must strip GPS data, resize to the sizes in Section 8.2, write `media.json`, and upload with `rclone copy` only.
+> 5. Write `scripts/ingest` in Python with a `--dry-run` flag that is on by default. It must keep the date and GPS data, resize to the sizes in Section 8.2, write `media.json`, and upload with `rclone copy` only.
 > 6. Write `README.md` and a `RUNBOOK.md` skeleton.
 > Work on the `staging` branch. Do not push to `main`. Do not create or delete any Cloudflare resources without asking me first.
 

@@ -11,4 +11,4 @@
 The site is for close friends and family, not a public organisation. Saran leans towards having no footer.
 
 ## Until decided
-The layout keeps a minimal footer with a placeholder email, so it is easy to remove or move. The takedown rule itself does not change: requests are acted on within a few days, without asking why.
+The layout keeps a minimal footer. The takedown line is hidden while `TAKEDOWN_EMAIL` in `src/site.ts` is `null`, so there is nothing to remove later. The takedown rule itself does not change: requests are acted on within a few days, without asking why.

@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageIntro from '../../components/PageIntro.astro';
+import Tx from '../../components/Tx.astro';
+import { t, bothLangs, langFromParam } from '../../i18n';
+
+export function getStaticPaths() {
+  return bothLangs();
+}
+const lang = langFromParam(Astro.params.lang);
+---
+<BaseLayout lang={lang} title={t(lang, 'about.title')} description={t(lang, 'about.lead')}>
+  <PageIntro lang={lang} titleKey="about.title" leadKey="about.lead" />
+  <Tx lang={lang} k="common.coming_soon" as="p" class="text-xl" />
+</BaseLayout>

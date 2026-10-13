@@ -1,0 +1,12 @@
+#!/bin/sh
+# Blocks direct pushes to main (CLAUDE.md rule 2). main changes only by a
+# pull request from staging, merged on GitHub.
+# Enable once per clone:  git config core.hooksPath .githooks
+while read -r local_ref local_sha remote_ref remote_sha; do
+  if [ "$remote_ref" = "refs/heads/main" ]; then
+    echo "pre-push: direct pushes to main are blocked." >&2
+    echo "Push to staging and open a pull request instead." >&2
+    exit 1
+  fi
+done
+exit 0

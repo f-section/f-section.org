@@ -1,0 +1,11 @@
+# Cloudflare Pages response headers.
+# The site is open to search engines (O-2 decided 2026-10-12).
+# Preview (staging) deployments get `X-Robots-Tag: noindex` from Cloudflare automatically.
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), camera=(), microphone=()
+
+# Built assets have content hashes in their names, so they can be cached forever.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable

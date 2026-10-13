@@ -1,0 +1,8 @@
+# Campus and Trichy spots, used for Places and Then & Now pages (DESIGN.md §4.3).
+# Slugs: lowercase with hyphens. Add Tamil names when ready; empty falls back to English.
+- id: main-building
+  name: { en: "Main building", ta: "" }
+- id: hostel
+  name: { en: "Hostel", ta: "" }
+- id: canteen
+  name: { en: "Canteen", ta: "" }

@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AlbumCard from '../../components/AlbumCard.astro';
+import Tx from '../../components/Tx.astro';
+import { href, bothLangs, langFromParam } from '../../i18n';
+import { getAlbums } from '../../lib/media';
+
+export function getStaticPaths() {
+  return bothLangs();
+}
+const lang = langFromParam(Astro.params.lang);
+const latest = (await getAlbums()).slice(0, 6);
+---
+<BaseLayout lang={lang} title="">
+  <section class="mb-12">
+    <p class="hand text-3xl text-sepia" lang="en">1992 → 2026</p>
+    <h1 class="hand text-6xl md:text-7xl text-ink"><Tx lang={lang} k="home.title" /></h1>
+    <p class="mt-4 max-w-2xl text-xl"><Tx lang={lang} k="home.lead" /></p>
+    <div class="mt-4 h-1 w-32 bg-marigold" aria-hidden="true"></div>
+  </section>
+
+  <section aria-labelledby="latest">
+    <h2 id="latest" class="hand mb-6 text-4xl"><Tx lang={lang} k="home.latest" /></h2>
+    {
+      latest.length ? (
+        <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {latest.map((album) => (
+            <li>
+              <AlbumCard album={album} lang={lang} />
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <Tx lang={lang} k="gallery.empty" as="p" />
+      )
+    }
+    <p class="mt-8">
+      <a href={href(lang, '/gallery/')} class="tap rounded-md border-2 border-ink-red font-semibold no-underline">
+        <Tx lang={lang} k="home.see_all" />&nbsp;→
+      </a>
+    </p>
+  </section>
+</BaseLayout>

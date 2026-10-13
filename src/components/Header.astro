@@ -1,0 +1,75 @@
+---
+import LangToggle from './LangToggle.astro';
+import Tx from './Tx.astro';
+import { t, href, basePath, type Lang, type UiKey } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  showToggle?: boolean;
+}
+const { lang, showToggle = true } = Astro.props;
+const current = basePath(Astro.url.pathname);
+
+const nav: { path: string; key: UiKey }[] = [
+  { path: '/gallery/', key: 'nav.gallery' },
+  { path: '/videos/', key: 'nav.videos' },
+  { path: '/arivumalar/', key: 'nav.arivumalar' },
+  { path: '/reunions/', key: 'nav.reunions' },
+  { path: '/about/', key: 'nav.about' },
+];
+const isCurrent = (p: string) => current === p || current.startsWith(p);
+---
+<header class="border-b-2 border-rule bg-paper">
+  <div class="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-2">
+    <a href={href(lang, '/')} class="hand tap whitespace-nowrap px-0 text-3xl text-ink no-underline sm:text-4xl" lang="en">F Section</a>
+
+    <nav class="hidden md:block" aria-label={t(lang, 'nav.main_label')}>
+      <ul class="flex items-center gap-1">
+        {
+          nav.map((n) => (
+            <li>
+              <a
+                href={href(lang, n.path)}
+                class:list={['tap rounded-md text-ink no-underline hover:bg-ink/10', isCurrent(n.path) && 'underline decoration-ink-red decoration-2']}
+                aria-current={isCurrent(n.path) ? 'page' : undefined}
+              >
+                <Tx lang={lang} k={n.key} />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      {showToggle && <LangToggle lang={lang} />}
+      <details class="relative md:hidden">
+        <summary class="tap cursor-pointer list-none rounded-md border-2 border-ink/80 font-semibold [&::-webkit-details-marker]:hidden">
+          <Tx lang={lang} k="nav.menu" />
+        </summary>
+        <nav class="absolute right-0 z-20 mt-2 w-60 rounded-md border-2 border-rule bg-card p-2 shadow-lg" aria-label={t(lang, 'nav.main_label')}>
+          <ul>
+            <li>
+              <a href={href(lang, '/')} class="tap w-full justify-start text-ink no-underline hover:bg-ink/10">
+                <Tx lang={lang} k="nav.home" />
+              </a>
+            </li>
+            {
+              nav.map((n) => (
+                <li>
+                  <a
+                    href={href(lang, n.path)}
+                    class="tap w-full justify-start text-ink no-underline hover:bg-ink/10"
+                    aria-current={isCurrent(n.path) ? 'page' : undefined}
+                  >
+                    <Tx lang={lang} k={n.key} />
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </details>
+    </div>
+  </div>
+</header>
