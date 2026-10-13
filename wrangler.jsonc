@@ -21,5 +21,8 @@
   "workers_dev": true,
   // Preview URLs for non-production branches, e.g. staging-f-section-site.<subdomain>.workers.dev
   "preview_urls": true,
+  // Workers Builds runs `npx wrangler preview` for non-production branches (staging),
+  // which requires this block. It can stay empty: assets and settings above apply.
+  "previews": {},
   "observability": { "enabled": true }
 }
