@@ -11,6 +11,13 @@
     // /gallery → /gallery/ (matches trailingSlash: 'always' in astro.config.mjs).
     "html_handling": "auto-trailing-slash"
   },
+  // Custom domains: Cloudflare creates the DNS records and certificates on the next
+  // deploy from main. www serves the same site; its <link rel="canonical"> points at
+  // f-section.org. A Redirect Rule (www → apex, 301) can be added in the dashboard.
+  "routes": [
+    { "pattern": "f-section.org", "custom_domain": true },
+    { "pattern": "www.f-section.org", "custom_domain": true }
+  ],
   "workers_dev": true,
   // Preview URLs for non-production branches, e.g. staging-f-section-site.<subdomain>.workers.dev
   "preview_urls": true,

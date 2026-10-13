@@ -25,7 +25,8 @@ How the site is run: accounts, admins, renewals and recovery. Keep this current.
 | Worker (site) | `f-section-site`: Workers Builds from GitHub `f-section/f-section.org`, config in `wrangler.jsonc`, `NODE_VERSION=24` | ✅ created 2026-10-13 |
 | Production branch | `main` → https://f-section-site.asaravanan75.workers.dev (f-section.org once the custom domain is added) | ✅ live |
 | Preview branch | `staging` → preview URL (`preview_urls: true`) | ✅ |
-| Custom domain (site) | `f-section.org` and `www.f-section.org` on the Worker | _not yet_ |
+| Custom domain (site) | `f-section.org` and `www.f-section.org`, set in `wrangler.jsonc` `routes` (attached on the next deploy from `main`) | ⏳ after PR 2 |
+| R2 objects | `public/site/og-default.jpg` (link-preview image) | ✅ uploaded 2026-10-13 |
 | R2 bucket | `f-section-media`, location APAC, `r2.dev` URL **off** | ✅ created 2026-10-13 |
 | R2 custom domain | `media.f-section.org`, minimum TLS 1.2 | ✅ connected 2026-10-13 |
 | Access (members area) | Deferred to a much later version (D-14) | _later_ |
@@ -116,8 +117,12 @@ rclone size r2:f-section-media
 ```
 The config is saved in `%APPDATA%\rclone\rclone.conf`, outside the repo. Optionally, `rclone config` → `s` (set configuration password) encrypts it.
 
-### 7. Upload the default link-preview image (Claude)
-`src/site.ts` points WhatsApp previews at `https://media.f-section.org/public/site/og-default.jpg` (1200 × 630). Once the bucket is live, make the image and upload it with `rclone copy`.
+### 7. Upload the default link-preview image (Claude, done 2026-10-13)
+`src/site.ts` points WhatsApp previews at `https://media.f-section.org/public/site/og-default.jpg` (1200 × 630). To change the image, edit and run `scripts/og/make_og_image.py`, **save it under a new name** (for example `og-default-v2.jpg`), upload it, then update `DEFAULT_OG_IMAGE`. The old object is never overwritten.
+```bash
+scripts\ingest\.venv\Scripts\python scripts\og\make_og_image.py
+rclone copy --immutable --header-upload "Cache-Control: public, max-age=86400" scripts\ingest\out\public\site r2:f-section-media/public/site
+```
 
 ## Local tools (Windows PC)
 - Node 22.12 or later, Git, the GitHub CLI (`gh`), and Python 3.12 or later with `scripts/ingest/.venv`.
