@@ -1,0 +1,25 @@
+// Cloudflare Worker that serves the built static site (Workers Builds, connected to GitHub).
+// main → production. Other branches (staging) → preview URLs.
+// Build command: npm run build. Deploy command: npx wrangler deploy (Cloudflare default).
+{
+  "name": "f-section-site",
+  "compatibility_date": "2026-10-06",
+  "assets": {
+    "directory": "./dist",
+    // Serve dist/404.html with a 404 status for unknown paths.
+    "not_found_handling": "404-page",
+    // /gallery → /gallery/ (matches trailingSlash: 'always' in astro.config.mjs).
+    "html_handling": "auto-trailing-slash"
+  },
+  // Custom domains: Cloudflare creates the DNS records and certificates on the next
+  // deploy from main. www serves the same site; its <link rel="canonical"> points at
+  // f-section.org. A Redirect Rule (www → apex, 301) can be added in the dashboard.
+  "routes": [
+    { "pattern": "f-section.org", "custom_domain": true },
+    { "pattern": "www.f-section.org", "custom_domain": true }
+  ],
+  "workers_dev": true,
+  // Preview URLs for non-production branches, e.g. staging-f-section-site.<subdomain>.workers.dev
+  "preview_urls": true,
+  "observability": { "enabled": true }
+}

@@ -376,7 +376,13 @@ def upload(local: Path, remote: str, bucket: str, key_prefix: str) -> None:
     target = f"{remote}:{bucket}/{key_prefix}"
     print(f"\n↑ rclone copy --immutable {local} {target}")
     # --immutable: fail rather than modify any object that already exists.
-    subprocess.run([rclone, "copy", "--immutable", "--progress", str(local), target], check=True)
+    # Media is never overwritten (new versions get new names), so phones may cache it forever.
+    subprocess.run(
+        [rclone, "copy", "--immutable", "--progress",
+         "--header-upload", "Cache-Control: public, max-age=31536000, immutable",
+         str(local), target],
+        check=True,
+    )
     out = subprocess.run([rclone, "size", "--json", f"{remote}:{bucket}"], capture_output=True, text=True, check=True).stdout
     total = json.loads(out).get("bytes", 0)
     print(f"\nBucket {bucket}: {human(total)} used of the 10 GB free tier.")

@@ -20,12 +20,18 @@ How the site is run: accounts, admins, renewals and recovery. Keep this current.
 
 | Resource | Name | Status |
 |---|---|---|
-| Pages project | `f-section-org`, from GitHub `f-section/f-section.org` | _not created_ |
-| Pages build | Command `npm run build`, output `dist`, Node 22 or later | _not created_ |
-| Production branch | `main` → f-section.org | _not created_ |
-| Preview branch | `staging` → `staging.f-section-org.pages.dev` (Cloudflare marks previews `noindex`) | _not created_ |
-| R2 bucket | `f-section-media`, custom domain `media.f-section.org` | _not created_ |
+| Cloudflare account | Account ID `ba192ced071eda871cf3a8040e546047` | ✅ |
+| DNS zone | `f-section.org`, zone ID `a02100991dd0671129fed18b193804f1`, nameservers `albert` and `kehlani.ns.cloudflare.com` | ✅ active |
+| Worker (site) | `f-section-site`: Workers Builds from GitHub `f-section/f-section.org`, config in `wrangler.jsonc`, `NODE_VERSION=24` | ✅ created 2026-10-13 |
+| Production branch | `main` → https://f-section-site.asaravanan75.workers.dev (f-section.org once the custom domain is added) | ✅ live |
+| Preview branch | `staging` → preview URL (`preview_urls: true`) | ✅ |
+| Custom domain (site) | `f-section.org` and `www.f-section.org`, set in `wrangler.jsonc` `routes` (attached on the next deploy from `main`) | ⏳ after PR 2 |
+| R2 objects | `public/site/og-default.jpg` (link-preview image) | ✅ uploaded 2026-10-13 |
+| R2 bucket | `f-section-media`, location APAC, `r2.dev` URL **off** | ✅ created 2026-10-13 |
+| R2 custom domain | `media.f-section.org`, minimum TLS 1.2 | ✅ connected 2026-10-13 |
 | Access (members area) | Deferred to a much later version (D-14) | _later_ |
+
+The site runs as a **Worker with static assets**, not a classic Pages project. It is what the Cloudflare dashboard creates by default now. Static file requests are free and unlimited. `_headers` works the same way. The 404 page and trailing slashes are set in `wrangler.jsonc`.
 
 ## First-time Cloudflare setup
 
@@ -46,26 +52,24 @@ Steps marked **Saran** need your login, or a grant of access that only you can g
 1. In the dashboard, open **R2 Object Storage** and choose to enable or subscribe to R2. Cloudflare asks for a payment method, even for the free tier. Nothing is charged while storage stays under 10 GB. The ingest script warns at 8 GB.
 2. Note your **Account ID**. It is shown on the R2 overview page, on the right. You need it for the rclone endpoint.
 
-### 3. Create the Pages project from GitHub (Saran)
-The Git connection has to be made in the dashboard, because you grant the Cloudflare GitHub app access to the `f-section` organisation.
-1. **Workers & Pages → Create → Pages → Connect to Git.**
-2. Choose **GitHub**, then authorise the **Cloudflare Workers and Pages** app. Install it on the **f-section** organisation, and give it access to only the `f-section.org` repository.
-3. Choose the repository `f-section/f-section.org` and **Begin setup**:
-   - Project name: `f-section-org`
+### 3. Connect the site to GitHub (Saran, done 2026-10-13)
+The Git connection is made in the dashboard, because you grant the Cloudflare GitHub app access to the `f-section` organisation.
+1. **Workers & Pages → Create → Import a repository** (Workers Builds). Authorise the **Cloudflare Workers and Pages** GitHub app on the **f-section** organisation, for the `f-section.org` repository only.
+2. Settings used:
+   - Worker name: `f-section-site`. It must match `name` in `wrangler.jsonc`.
    - Production branch: `main`
-   - Framework preset: **Astro**
    - Build command: `npm run build`
-   - Build output directory: `dist`
-   - Environment variable (production and preview): `NODE_VERSION` = `24`. The repo's `.node-version` also says 24.
-4. **Save and Deploy.** The first build takes about a minute, and the site appears at `f-section-org.pages.dev`.
-5. **Settings → Builds → Branch control:** preview branches = **All non-production branches**. `staging` then gets `staging.f-section-org.pages.dev`.
-6. **Custom domains → Set up a custom domain:** add `f-section.org`, then `www.f-section.org`. Cloudflare creates the DNS records. To redirect `www` to the bare domain, add a **Redirect Rule** (Rules → Redirect Rules): `www.f-section.org/*` → `https://f-section.org/${1}`, status 301.
+   - Deploy command: `npx wrangler deploy` (the default)
+   - Non-production branch deploy command: `npx wrangler versions upload` (the default). This gives `staging` a preview URL.
+   - Build variable: `NODE_VERSION` = `24`
+3. Every push to `main` builds and deploys. The site is at `https://f-section-site.asaravanan75.workers.dev`.
+4. **Custom domain** (next step): **Workers & Pages → f-section-site → Settings → Domains & Routes → Add → Custom domain**. Add `f-section.org`, then `www.f-section.org`. Cloudflare creates the DNS records and certificates. To redirect `www` to the bare domain, add a **Redirect Rule** (Rules → Redirect Rules): `www.f-section.org/*` → `https://f-section.org/${1}`, status 301.
 
-### 4. Create the R2 bucket and its domain (Claude, after Saran runs `wrangler login`)
+### 4. Create the R2 bucket and its domain (Claude, done 2026-10-13)
 Run `wrangler login` once in a terminal (wrangler 4.x is installed globally) and approve in the browser. Then Claude runs:
 ```bash
 wrangler r2 bucket create f-section-media --location apac
-wrangler r2 bucket domain add f-section-media --domain media.f-section.org --zone-id <zone id of f-section.org> --min-tls 1.2
+wrangler r2 bucket domain add f-section-media --domain media.f-section.org --zone-id a02100991dd0671129fed18b193804f1 --min-tls 1.2
 ```
 (Or in the dashboard: **R2 → Create bucket** `f-section-media`, location hint **Asia-Pacific**. Then **Settings → Custom Domains → Add** `media.f-section.org`.)
 Do **not** turn on the bucket's `r2.dev` public URL. The custom domain is the only public way in.
@@ -80,7 +84,7 @@ Do **not** turn on the bucket's `r2.dev` public URL. The custom domain is the on
 3. **Create API Token.** The next page is shown **only once**. Keep it open for step 6. It shows:
    - **Access Key ID**
    - **Secret Access Key**
-   - the S3 endpoint for your account: `https://<ACCOUNT_ID>.r2.cloudflarestorage.com`
+   - the S3 endpoint: `https://ba192ced071eda871cf3a8040e546047.r2.cloudflarestorage.com`
    Do not paste these into chat, email or any file in the repo.
 
 ### 6. Set up rclone on the Windows PC (Saran)
@@ -96,7 +100,7 @@ Answer the questions:
 5. `access_key_id`: paste the **Access Key ID**.
 6. `secret_access_key`: paste the **Secret Access Key**.
 7. `region`: press Enter (auto).
-8. `endpoint`: `https://<ACCOUNT_ID>.r2.cloudflarestorage.com`
+8. `endpoint`: `https://ba192ced071eda871cf3a8040e546047.r2.cloudflarestorage.com`
 9. Edit the advanced config? `n`. Then `y` to keep the remote, and `q` to quit.
 
 Because the token is limited to one bucket, add one advanced setting so rclone doesn't try to list or create buckets:
@@ -113,8 +117,12 @@ rclone size r2:f-section-media
 ```
 The config is saved in `%APPDATA%\rclone\rclone.conf`, outside the repo. Optionally, `rclone config` → `s` (set configuration password) encrypts it.
 
-### 7. Upload the default link-preview image (Claude)
-`src/site.ts` points WhatsApp previews at `https://media.f-section.org/public/site/og-default.jpg` (1200 × 630). Once the bucket is live, make the image and upload it with `rclone copy`.
+### 7. Upload the default link-preview image (Claude, done 2026-10-13)
+`src/site.ts` points WhatsApp previews at `https://media.f-section.org/public/site/og-default.jpg` (1200 × 630). To change the image, edit and run `scripts/og/make_og_image.py`, **save it under a new name** (for example `og-default-v2.jpg`), upload it, then update `DEFAULT_OG_IMAGE`. The old object is never overwritten.
+```bash
+scripts\ingest\.venv\Scripts\python scripts\og\make_og_image.py
+rclone copy --immutable --header-upload "Cache-Control: public, max-age=86400" scripts\ingest\out\public\site r2:f-section-media/public/site
+```
 
 ## Local tools (Windows PC)
 - Node 22.12 or later, Git, the GitHub CLI (`gh`), and Python 3.12 or later with `scripts/ingest/.venv`.

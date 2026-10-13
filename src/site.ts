@@ -20,7 +20,7 @@ export const MEMBERS_AREA_ENABLED = false;
 
 /**
  * Search engines may index the site (D-10, O-2 decided 2026-10-12).
- * Cloudflare Pages adds `noindex` to preview (staging) deployments on its own.
+ * Duplicate hosts (workers.dev, preview URLs) point search engines at f-section.org via <link rel="canonical">.
  */
 export const NOINDEX = false;
 
