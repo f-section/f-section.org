@@ -8,7 +8,7 @@ The website of the F Section group, REC Trichy (now NIT Trichy) Class of 1996. I
 - Changed decisions: [`docs/decisions/`](docs/decisions/)
 
 ## Stack
-Astro (static output), Tailwind CSS and self-hosted fonts. Hosted on Cloudflare Pages. Photos and videos live in Cloudflare R2 (`media.f-section.org`), **never in git**.
+Astro (static output), Tailwind CSS and self-hosted fonts. Hosted on Cloudflare (Worker `f-section-site` with static assets, built from GitHub; see `wrangler.jsonc`). Photos and videos live in Cloudflare R2 (`media.f-section.org`), **never in git**.
 
 ## Run it locally
 You need Node 22.12 or later, and Python 3.12 or later for the ingest script.
@@ -58,5 +58,5 @@ npm run check:links
 The ingest script needs `rclone` (configured with an `r2` remote) and, for video and audio, `ffmpeg`. All three tools, including `exiftool`, are installed on the Windows PC with winget. See RUNBOOK.md.
 
 ## Deploy
-- `staging` branch: Cloudflare Pages preview. All work goes here first.
+- `staging` branch: Cloudflare preview URL. All work goes here first.
 - `main` branch: https://f-section.org. Saran merges after checking the preview. Nobody pushes to `main` directly.

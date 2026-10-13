@@ -64,7 +64,7 @@ f-section.org is a home on the web for the F Section group of the REC Trichy (no
 |---|---|---|
 | D-01 | The repo is named `f-section/f-section.org`, matching the domain. | Decided |
 | D-02 | The site is built with **Astro** (static output) and **Tailwind CSS**. | Decided (see note) |
-| D-03 | The site is hosted on **Cloudflare Pages**, connected to the GitHub repo. | Decided |
+| D-03 | The site is hosted on Cloudflare as a **Worker with static assets** (`f-section-site`, Workers Builds), connected to the GitHub repo. | Decided (changed 2026-10-13 from Pages) |
 | D-04 | Photos, videos, audio and scans are stored in **Cloudflare R2** and **never committed to git**. | Decided |
 | D-05 | The site is **bilingual (English and Tamil)** with a language toggle at the top, as on ief-global.org. English is the default. | Decided |
 | D-06 | **Mixed visibility.** The first pages are public. Personal content goes behind a login later. | Decided |
@@ -246,7 +246,7 @@ These are proposals. Check every text colour pair for WCAG AA contrast in Phase 
   │    custom domain: media.f-section.org                    │
   │    prefixes:  public/   members/                         │
   │                                                          │
-  │  Pages project: f-section-org                            │
+  │  Worker (static assets): f-section-site                  │
   │    main    ──► f-section.org         (production)        │
   │    staging ──► preview URL           (protected, Saran)  │
   │                                                          │
@@ -457,12 +457,12 @@ f-section.org/
 | Environment | Branch | URL | Who can see it |
 |---|---|---|---|
 | Local | any | `localhost` | Saran |
-| Staging | `staging` | Pages preview URL (optionally `staging.f-section.org`) | Saran only. Protect it with Cloudflare Access (one seat). |
+| Staging | `staging` | Worker preview URL | Saran, for checking before merge |
 | Production | `main` | `https://f-section.org` | Everyone (public pages) |
 
-- Cloudflare Pages builds every push automatically. Feature branches get their own preview URLs.
+- Cloudflare Workers Builds builds every push automatically. `main` deploys to production; other branches get preview URLs.
 - **Never push straight to `main`.** Work on `staging` (or a feature branch), check the preview, then merge.
-- **To roll back,** use the Pages dashboard to restore a previous deployment (one click), then `git revert` the bad commit so the code matches what is live.
+- **To roll back,** use the Worker's **Deployments** tab in the dashboard to roll back to a previous version (one click), then `git revert` the bad commit so the code matches what is live.
 - **Media rollback:** media files are never overwritten, because new versions get new names. To roll back, point the manifest back to the old file.
 
 ---
@@ -489,8 +489,8 @@ f-section.org/
 - [x] Set up Astro, Tailwind, the bilingual routing (`/` and `/ta/`) and the language toggle.
 - [x] Add the design tokens, fonts and base layout; check contrast.
 - [x] Add the content schemas from Section 10, with build-time validation.
-- [ ] Create the Cloudflare Pages project linked to GitHub, with `main` for production and `staging` for preview.
-- [ ] Create the R2 bucket `f-section-media` with the custom domain `media.f-section.org`.
+- [x] Create the Cloudflare site (Worker `f-section-site`) linked to GitHub, with `main` for production and `staging` for preview.
+- [x] Create the R2 bucket `f-section-media` with the custom domain `media.f-section.org`.
 - [x] Write the ingest script (Section 8), with a dry-run mode.
 - [x] Add the CI checks: build, schema, links, and no media files in git.
 - [x] Write `README.md` and `RUNBOOK.md`.

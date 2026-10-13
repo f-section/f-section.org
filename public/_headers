@@ -1,6 +1,5 @@
-# Cloudflare Pages response headers.
+# Response headers, applied by Cloudflare Workers static assets (same format as Pages).
 # The site is open to search engines (O-2 decided 2026-10-12).
-# Preview (staging) deployments get `X-Robots-Tag: noindex` from Cloudflare automatically.
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
