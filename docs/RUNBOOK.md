@@ -23,9 +23,9 @@ How the site is run: accounts, admins, renewals and recovery. Keep this current.
 | Cloudflare account | Account ID `ba192ced071eda871cf3a8040e546047` | ✅ |
 | DNS zone | `f-section.org`, zone ID `a02100991dd0671129fed18b193804f1`, nameservers `albert` and `kehlani.ns.cloudflare.com` | ✅ active |
 | Worker (site) | `f-section-site`: Workers Builds from GitHub `f-section/f-section.org`, config in `wrangler.jsonc`, `NODE_VERSION=24` | ✅ created 2026-10-13 |
-| Production branch | `main` → https://f-section-site.asaravanan75.workers.dev (f-section.org once the custom domain is added) | ✅ live |
-| Preview branch | `staging` → preview URL (`preview_urls: true`) | ✅ |
-| Custom domain (site) | `f-section.org` and `www.f-section.org`, set in `wrangler.jsonc` `routes` (attached on the next deploy from `main`) | ⏳ after PR 2 |
+| Production branch | `main` → https://f-section.org (also https://f-section-site.asaravanan75.workers.dev) | ✅ live |
+| Preview branch | `staging` → https://staging-f-section-site.asaravanan75.workers.dev | ✅ |
+| Custom domain (site) | `f-section.org` and `www.f-section.org`, set in `wrangler.jsonc` `routes` | ✅ live 2026-10-13 |
 | R2 objects | `public/site/og-default.jpg` (link-preview image) | ✅ uploaded 2026-10-13 |
 | R2 bucket | `f-section-media`, location APAC, `r2.dev` URL **off** | ✅ created 2026-10-13 |
 | R2 custom domain | `media.f-section.org`, minimum TLS 1.2 | ✅ connected 2026-10-13 |
@@ -60,7 +60,7 @@ The Git connection is made in the dashboard, because you grant the Cloudflare Gi
    - Production branch: `main`
    - Build command: `npm run build`
    - Deploy command: `npx wrangler deploy` (the default)
-   - Non-production branch deploy command: `npx wrangler versions upload` (the default). This gives `staging` a preview URL.
+   - Non-production branch deploy command: `npx wrangler preview` (the dashboard default). It needs the `previews` block in `wrangler.jsonc`; without it the staging build fails with "missing a previews block".
    - Build variable: `NODE_VERSION` = `24`
 3. Every push to `main` builds and deploys. The site is at `https://f-section-site.asaravanan75.workers.dev`.
 4. **Custom domain** (next step): **Workers & Pages → f-section-site → Settings → Domains & Routes → Add → Custom domain**. Add `f-section.org`, then `www.f-section.org`. Cloudflare creates the DNS records and certificates. To redirect `www` to the bare domain, add a **Redirect Rule** (Rules → Redirect Rules): `www.f-section.org/*` → `https://f-section.org/${1}`, status 301.
