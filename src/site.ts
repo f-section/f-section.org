@@ -18,8 +18,11 @@ export const TAKEDOWN_EMAIL: string | null = null;
  */
 export const MEMBERS_AREA_ENABLED = false;
 
-/** Search engines are asked not to index the site (D-10, O-2). */
-export const NOINDEX = true;
+/**
+ * Search engines may index the site (D-10, O-2 decided 2026-10-12).
+ * Cloudflare Pages adds `noindex` to preview (staging) deployments on its own.
+ */
+export const NOINDEX = false;
 
 export const ERAS = ['1992-96', 'in-between', '2016-20th', '2026-30th', '2027+'] as const;
 export type Era = (typeof ERAS)[number];

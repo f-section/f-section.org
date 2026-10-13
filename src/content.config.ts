@@ -24,7 +24,8 @@ const optionalPair = z
   })
   .default({ en: '', ta: '' });
 
-const visibility = z.enum(['public', 'members']);
+/** Public-first (D-14): everything is public unless marked members. */
+const visibility = z.enum(['public', 'members']).default('public');
 
 /** An R2 object key, e.g. `public/video/x-720.mp4`. Never a full URL. */
 const r2Key = z
@@ -77,11 +78,6 @@ const videos = defineCollection({
       files: z.object({ '1080': r2Key.optional(), '720': r2Key }),
       poster: r2Key,
       subtitles: z.object({ en: r2Key.nullish(), ta: r2Key.nullish() }).default({ en: null, ta: null }),
-      music_cleared: z.boolean(),
-    })
-    .refine((v) => v.visibility !== 'public' || v.music_cleared === true, {
-      message: 'A public video needs music_cleared: true (DESIGN.md §8.2)',
-      path: ['music_cleared'],
     })
     .refine(
       (v) =>
@@ -119,13 +115,9 @@ const people = defineCollection({
     slug: z.string().regex(SLUG),
     name: pair,
     section: z.string().regex(/^[A-Z]$/),
-    photo_1996: r2Key.refine((k) => k.startsWith('members/'), 'People photos are members-only').optional(),
-    photo_2026: r2Key.refine((k) => k.startsWith('members/'), 'People photos are members-only').optional(),
-    consent: z.object({
-      listed: z.boolean(),
-      show_2026_photo: z.boolean().default(false),
-      show_bio: z.boolean().default(false),
-    }),
+    visibility,
+    photo_1996: r2Key.optional(),
+    photo_2026: r2Key.optional(),
     bio: optionalPair,
   }),
 });
@@ -136,11 +128,9 @@ const memoriam = defineCollection({
     slug: z.string().regex(SLUG),
     name: pair,
     years: z.string(),
-    photo: r2Key.refine((k) => k.startsWith('members/'), 'In Memoriam photos are members-only').optional(),
+    photo: r2Key.optional(),
     tribute: optionalPair,
-    // The build FAILS unless the family has agreed (DESIGN.md §10.6).
-    family_consent: z.literal(true, { error: 'In Memoriam entries need family_consent: true' }),
-    visibility: z.literal('members', { error: 'In Memoriam is members-only (O-5)' }),
+    visibility,
   }),
 });
 

@@ -1,7 +1,7 @@
 # Cloudflare Pages response headers.
-# noindex until the group decides otherwise (D-10, O-2).
+# The site is open to search engines (O-2 decided 2026-10-12).
+# Preview (staging) deployments get `X-Robots-Tag: noindex` from Cloudflare automatically.
 /*
-  X-Robots-Tag: noindex, nofollow
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), camera=(), microphone=()

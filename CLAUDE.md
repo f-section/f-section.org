@@ -34,7 +34,7 @@ Development happens on Saran's Windows PC, in `E:\COWORK\PROJECTS\F-SECTION\f-se
 3. **Never delete or overwrite anything in R2** without listing the exact objects and getting Saran's explicit "yes". Upload with `rclone copy`, never `rclone sync`.
 4. **Do not create, change or delete Cloudflare resources** (Pages projects, buckets, DNS, Access policies) without asking first.
 5. **Bilingual:** every interface string goes in both `src/i18n/en.json` and `src/i18n/ta.json`. Missing Tamil content falls back to English. Never invent Tamil translations. Leave them empty for Saran.
-6. **Privacy:** media is vetted by Saran before ingest. Do not strip GPS, because the site shows a map link for each photo. The site is public-first: logins come much later. Members-only content stays under the `members/` prefix. In Memoriam entries need `family_consent: true`, or the build fails. No phone numbers or addresses anywhere.
+6. **Privacy:** media is vetted by Saran before ingest. Do not strip GPS, because the site shows a map link for each photo. The site is public-first: logins come much later. Do not add consent or music-clearance gates: friends and families have agreed, and Saran curates everything, including In Memoriam and videos with old film songs. Takedown requests are handled by hand. Members-only content, if ever used, stays under the `members/` prefix. No phone numbers or addresses anywhere.
 7. **Readers are mostly 50+ and on phones:** 18 px base text, high contrast, tap targets of at least 44 px, light pages, and OpenGraph previews on every page.
 8. **Budget:** free tiers only. Warn Saran if R2 storage approaches 8 GB, or if a change would add a paid service.
 9. **For a non-trivial task,** show a short plan first and wait for approval.

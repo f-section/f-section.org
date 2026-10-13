@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /styleguide/
+
+Sitemap: https://f-section.org/sitemap-index.xml

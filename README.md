@@ -28,9 +28,7 @@ npm run check:links
 ```
 
 `npm run check` fails if:
-- an album, video or magazine file breaks its schema
-- an In Memoriam entry lacks `family_consent: true`
-- a public video lacks `music_cleared: true`
+- an album, video, magazine, person or In Memoriam file breaks its schema
 - an i18n key is missing from `en.json` or `ta.json`
 - a media file is tracked in git
 - a phone number appears anywhere
