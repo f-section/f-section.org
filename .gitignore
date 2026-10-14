@@ -66,3 +66,7 @@ desktop.ini
 .vscode/
 .idea/
 *.swp
+
+# --- Video card renders and copied assets ---
+scripts/video/out/
+scripts/video/cards/assets/

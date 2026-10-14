@@ -75,7 +75,8 @@ const videos = defineCollection({
       summary: optionalPair,
       visibility,
       duration: z.string().regex(/^\d{1,2}:\d{2}(:\d{2})?$/),
-      files: z.object({ '1080': r2Key.optional(), '720': r2Key }),
+      // One efficient 1080p file per video (decided 2026-10-14). '720' is optional and only for long videos.
+      files: z.object({ '1080': r2Key, '720': r2Key.optional() }),
       poster: r2Key,
       subtitles: z.object({ en: r2Key.nullish(), ta: r2Key.nullish() }).default({ en: null, ta: null }),
     })

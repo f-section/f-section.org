@@ -1,0 +1,13 @@
+{
+  "_comment": "Card timings (seconds) for the 30-year reunion montage. Measured frame by frame on the iMovie export 30_Year_Video_montage.mov (254.67 s, 1080p30). 'under_in' and 'under_out' are frames just outside the old card, held still beneath the new card while it fades, so the old card never shows through.",
+  "fps": 30,
+  "fade_from_black": 0.5,
+  "zoom": 0.03,
+  "cards": [
+    { "image": "01-opening.png",    "start": 0.0,   "end": 6.1,   "fade_in": 0.0, "fade_out": 0.9, "under_out": 6.15 },
+    { "image": "02-arivumalar.png", "start": 171.1, "end": 177.7, "fade_in": 0.8, "fade_out": 0.9, "under_in": 171.0, "under_out": 177.8 },
+    { "image": "03-party.png",      "start": 237.7, "end": 243.7, "fade_in": 0.8, "fade_out": 0.9, "under_in": 237.6, "under_out": 243.8 }
+  ],
+  "_ending": "End card after the montage (needs --song). The montage audio is 'Mustafa Mustafa' (Kadhal Desam) from 0 s, cut at 254.667 s; the song continues under the end card and fades out on the pause at 268.0-268.25 s.",
+  "ending": { "image": "04-ending.png", "until": 268.25, "xfade": 1.0, "fade_out": 2.5, "audio_xfade": 0.05 }
+}

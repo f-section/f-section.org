@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ta"><head><meta charset="utf-8"><link rel="stylesheet" href="card.css">
+<style>
+  /* Closing card: same layout as 02-arivumalar, with the back cover and the closing lines of the last page. */
+  .stage { flex-direction: row; gap: 120px; padding: 0 150px 0 170px; }
+  .cover { flex: none; height: 860px; aspect-ratio: 1118 / 1588; background: #fffdf8; padding: 16px;
+           transform: rotate(2.5deg); position: relative;
+           box-shadow: 0 2px 4px rgba(0,0,0,.2), 0 26px 60px rgba(60,40,20,.32); }
+  .cover img { width: 100%; height: 100%; display: block; object-fit: cover; }
+  .tape { position: absolute; top: -24px; left: 50%; width: 160px; height: 48px; transform: translateX(-50%) rotate(-3deg);
+          background: rgba(224,161,0,.38); }
+  .text { flex: 1; text-align: left; }
+  .lead { font-size: 66px; font-weight: 600; line-height: 1.4; color: var(--ink-red); white-space: nowrap; }
+  .rule { margin: 40px 0 38px; }
+  .verse { font-size: 50px; line-height: 1.7; color: var(--ink); white-space: nowrap; }
+</style></head>
+<body>
+  <div class="frame"></div>
+  <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+  <div class="stage">
+    <div class="cover"><div class="tape"></div><img src="assets/arivumalar-back.webp" alt=""></div>
+    <div class="text">
+      <div class="lead">நிறைவல்ல…<br>இது ஒரு தொடக்கம்!</div>
+      <div class="rule"></div>
+      <div class="verse">முப்பது ஆண்டுகளின்<br>மௌனம் கலைந்தது,<br>நம் நட்பின் பயணம்<br>தொடரட்டும்!</div>
+    </div>
+  </div>
+</body></html>

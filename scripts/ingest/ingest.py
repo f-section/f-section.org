@@ -344,14 +344,15 @@ def probe_size(path: Path) -> tuple[int, int]:
 def process_video(p: Planned, out: Path) -> dict:
     dest = out / "video"
     dest.mkdir(parents=True, exist_ok=True)
-    for height, rate, maxrate in (("1080", "5M", "5.5M"), ("720", "2.5M", "2.8M")):
-        run_ffmpeg([
-            "-i", str(p.src), "-map", "0:v:0", "-map", "0:a:0?",
-            "-vf", f"scale=-2:'min({height},ih)'",
-            "-c:v", "libx264", "-preset", "slow", "-b:v", rate, "-maxrate", maxrate, "-bufsize", "10M",
-            "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart",
-            str(dest / f"{p.id}-{height}.mp4"),
-        ])
+    # One 1080p file (decided 2026-10-14): quality-based (CRF 22), capped at 4 Mbps. For photo montages
+    # this averages ~3 Mbps and looks the same as 5 Mbps, saving R2 storage and viewers' mobile data.
+    run_ffmpeg([
+        "-i", str(p.src), "-map", "0:v:0", "-map", "0:a:0?",
+        "-vf", "scale=-2:'min(1080,ih)'",
+        "-c:v", "libx264", "-preset", "slow", "-crf", "22", "-maxrate", "4M", "-bufsize", "8M",
+        "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart",
+        str(dest / f"{p.id}-1080.mp4"),
+    ])
     run_ffmpeg(["-ss", "1", "-i", str(p.src), "-frames:v", "1", "-vf", "scale=-2:'min(720,ih)'", "-q:v", "3", str(dest / f"{p.id}.jpg")])
     w, h = probe_size(dest / f"{p.id}-1080.mp4")
     fields: dict = {"width": w, "height": h}

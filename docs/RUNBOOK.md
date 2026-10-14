@@ -151,3 +151,10 @@ The R2 free tier is 10 GB. The ingest script prints the bucket size after every 
 3. Google Drive: _TODO: folder_
 
 R2 is where the site's media lives. It is **not** a backup.
+
+## Montage title cards (scripts/video)
+The title cards in the 30-year reunion montage were redone to match the site (2026-10-14). The original iMovie export stays unchanged in `E:\F Section\Finalized Articles\`; the new master is `E:\F Section\Claude outputs\30_Year_Video_montage_v3.mp4` (4 new cards, song completed under the end card).
+1. Edit the cards in `scripts/video/cards/*.html` (shared style in `card.css`).
+2. Render them at 4K: `node scripts/video/render-cards.mjs --scale 2 --cover "<final front cover>" --back "<final back cover>"` (both in `E:\F Section\Claude outputs\Montage cards (draft)\`)
+3. Lay them over the montage: `scripts\ingest\.venv\Scripts\python scripts\video\replace_cards.py --src "<iMovie export>" --song "<song .mp3>" --out "<new master>.mp4"`. Card timings are in `scripts/video/montage-2026-30th.json`. The montage audio up to 4:14.67 is kept as it is, so the music sync never changes. With `--song`, the end card (`04-ending`) is added and the same song (the montage uses it from 0 s) continues under it, fading out on a pause at 4:28. The song file stays in `E:\F Section\Claude outputs\`, never in git.
+4. Make the web copy (one 1080p file: `-crf 22 -maxrate 4M -bufsize 8M`, AAC 160k, `+faststart`) and a 1280 px JPG poster under a **new name**, and upload them with `rclone copy --immutable` to `public/video/`.

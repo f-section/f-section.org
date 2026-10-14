@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ta"><head><meta charset="utf-8"><link rel="stylesheet" href="card.css">
+<style>
+  /* Final cover: navy night sky (#0E1B32). The paper card frames it like a print on a desk;
+     the masthead uses the same navy so the two sides belong together. */
+  :root { --navy: #0e1b32; }
+  .stage { flex-direction: row; gap: 120px; padding: 0 150px 0 170px; }
+  .cover { flex: none; height: 860px; aspect-ratio: 1118 / 1588; background: #fffdf8; padding: 16px;
+           transform: rotate(-2.5deg); position: relative;
+           box-shadow: 0 2px 4px rgba(0,0,0,.2), 0 26px 60px rgba(14,27,50,.35); }
+  .cover img { width: 100%; height: 100%; display: block; object-fit: cover; }
+  .tape { position: absolute; top: -24px; left: 50%; width: 160px; height: 48px; transform: translateX(-50%) rotate(3deg);
+          background: rgba(224,161,0,.38); }
+  .text { flex: 1; text-align: left; }
+  .sub { font-size: 34px; color: var(--sepia); font-weight: 600; letter-spacing: .04em; white-space: nowrap; }
+  .mast { font-size: 136px; font-weight: 600; line-height: 1.2; color: var(--navy); white-space: nowrap; margin-top: 6px; }
+  .meta { font-size: 28px; color: var(--sepia); margin-top: 4px; letter-spacing: .02em; white-space: nowrap; }
+  .rule { margin: 34px 0 30px; }
+  .lead { font-size: 60px; font-weight: 600; line-height: 1.45; color: var(--ink-red); white-space: nowrap; }
+  .verse { margin-top: 26px; font-size: 42px; line-height: 1.65; color: var(--ink); white-space: nowrap; }
+</style></head>
+<body>
+  <div class="frame"></div>
+  <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+  <div class="stage">
+    <div class="cover"><div class="tape"></div><img src="assets/arivumalar-cover.webp" alt=""></div>
+    <div class="text">
+      <div class="sub">30வது ஆண்டு சிறப்பு மலர்</div>
+      <div class="mast">அறிவு மலர்</div>
+      <div class="meta">அறிவு: 30 · மலர்: 1 · விலை: ₹ மதிப்பற்றது · 2-10-2026</div>
+      <div class="rule"></div>
+      <div class="lead">காலம் கடந்தாலும்<br>காயாத மை!</div>
+      <div class="verse">முப்பது வருடங்கள்<br>உதிர்ந்து போயினும்<br>நட்பின் விதைகள்<br>உறங்கவேயில்லை!</div>
+    </div>
+  </div>
+</body></html>

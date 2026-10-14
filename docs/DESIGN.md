@@ -295,7 +295,7 @@ These are proposals. Check every text colour pair for WCAG AA contrast in Phase 
 |---|---|---|
 | Photo | Thumbnail: 480 px long edge, WebP. Display: 2048 px long edge, WebP. | Quality around 80. AVIF is optional later. |
 | Old scanned photo | Same as above | Scan masters at 600 dpi and keep them on the NAS. |
-| Video | MP4 (H.264 + AAC) at 1080p (about 5 Mbps) and 720p (about 2.5 Mbps), plus a JPG poster | Use `-movflags +faststart` so playback starts before the whole file loads. Subtitles (`.vtt`, EN/TA) are optional. |
+| Video | **One** MP4 (H.264 + AAC) at 1080p, quality-based (CRF 22, capped at 4 Mbps; about 3 Mbps for photo montages), plus a JPG poster. No separate 720p copy (decided 2026-10-14). | Use `-movflags +faststart` so playback starts before the whole file loads. Subtitles (`.vtt`, EN/TA) are optional. |
 | Audio | MP3, 128 kbps | |
 | Magazine scan | One WebP per page (1600 px long edge) plus one compressed PDF per issue | Scan masters (400–600 dpi PNG or TIFF) stay on the NAS. |
 
@@ -312,10 +312,10 @@ The figures below are **my estimates**, not measurements:
 | Media | Assumption | Approximate size |
 |---|---|---|
 | Photos | 3,000 photos × (≈350 KB display + ≈40 KB thumbnail) | ≈ 1.2 GB |
-| Video | 30 min at 1080p (≈1.1 GB) + 720p (≈0.6 GB) | ≈ 1.7 GB |
+| Video | 30 min at 1080p, about 3 Mbps (≈0.7 GB) | ≈ 0.7 GB |
 | Audio | A few hours at 128 kbps | ≈ 0.2 GB |
 | Arivu Malar | 15 issues × ≈40 pages, plus PDFs | ≈ 0.3 GB |
-| **Total** | | **≈ 3.4 GB, well under 10 GB** |
+| **Total** | | **≈ 2.4 GB, well under 10 GB** |
 
 **Guardrails:**
 
