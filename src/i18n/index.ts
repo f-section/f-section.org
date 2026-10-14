@@ -1,5 +1,6 @@
 import en from './en.json';
 import ta from './ta.json';
+import englishOnly from './english-only.json';
 
 export const LANGS = ['en', 'ta'] as const;
 export type Lang = (typeof LANGS)[number];
@@ -11,14 +12,21 @@ const ui: Record<Lang, Record<string, string>> = { en, ta };
 /** A bilingual content field: `{ en: "...", ta: "..." }`. */
 export type Pair = { en: string; ta?: string | null };
 
+/**
+ * Keys shown in English on every page, by Saran's choice (2026-10-14): the
+ * "F Section" logo, the tagline and the footer line. Listed in english-only.json.
+ */
+const ENGLISH_ONLY = new Set<string>(englishOnly);
+
 /** Interface string. Empty Tamil falls back to English (DESIGN.md §5). */
 export function t(lang: Lang, key: UiKey): string {
+  if (ENGLISH_ONLY.has(key)) return ui.en[key];
   return ui[lang][key] || ui.en[key];
 }
 
 /** The language the text from `t()` is actually in (English when Tamil is missing). */
 export function tLang(lang: Lang, key: UiKey): Lang {
-  return lang === 'ta' && ui.ta[key] ? 'ta' : 'en';
+  return lang === 'ta' && !ENGLISH_ONLY.has(key) && ui.ta[key] ? 'ta' : 'en';
 }
 
 /** Content text. Empty Tamil falls back to English. */

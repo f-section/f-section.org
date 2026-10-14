@@ -27,6 +27,15 @@ export const NOINDEX = false;
 export const ERAS = ['1992-96', 'in-between', '2016-20th', '2026-30th', '2027+'] as const;
 export type Era = (typeof ERAS)[number];
 
+/** Years shown under each era name (the same in both languages). */
+export const ERA_YEARS: Record<Era, string> = {
+  '1992-96': '1992–96',
+  'in-between': '1996–2016',
+  '2016-20th': '2016',
+  '2026-30th': '2026',
+  '2027+': '2027 →',
+};
+
 /** URL segment for an era. `2027+` is not URL-friendly. */
 export function eraSlug(era: Era): string {
   return era === '2027+' ? 'after-30' : era;
