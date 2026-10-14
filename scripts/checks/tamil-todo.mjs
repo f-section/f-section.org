@@ -6,7 +6,9 @@ import YAML from 'yaml';
 const todo = [];
 
 const ta = JSON.parse(readFileSync('src/i18n/ta.json', 'utf8'));
-for (const [k, v] of Object.entries(ta)) if (!v) todo.push(`src/i18n/ta.json  ${k}`);
+// Keys Saran chose to keep in English on Tamil pages (logo, tagline, footer).
+const englishOnly = new Set(JSON.parse(readFileSync('src/i18n/english-only.json', 'utf8')));
+for (const [k, v] of Object.entries(ta)) if (!v && !englishOnly.has(k)) todo.push(`src/i18n/ta.json  ${k}`);
 
 function* files(dir) {
   for (const name of readdirSync(dir)) {
