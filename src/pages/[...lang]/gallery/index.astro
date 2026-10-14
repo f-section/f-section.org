@@ -4,7 +4,7 @@ import PageIntro from '../../../components/PageIntro.astro';
 import EraRibbon from '../../../components/EraRibbon.astro';
 import Tx from '../../../components/Tx.astro';
 import { t, href, bothLangs, langFromParam, type UiKey } from '../../../i18n';
-import { ERAS, eraSlug, isThen } from '../../../site';
+import { ERAS, ERA_YEARS, eraSlug, isThen } from '../../../site';
 import { getAlbums } from '../../../lib/media';
 
 export function getStaticPaths() {
@@ -29,7 +29,7 @@ const eras = ERAS.map((era) => {
             class:list={['block rounded-md p-6 text-ink no-underline hover:bg-card', isThen(e.era) ? 'frame-then' : 'border-2 border-ink/30 bg-card/60']}
           >
             <Tx lang={lang} k={`era.${e.era}` as UiKey} as="h2" class="hand text-4xl" />
-            <p class="mt-1 text-sepia" lang="en">{e.era}</p>
+            <p class="mt-1 text-sepia">{ERA_YEARS[e.era]}</p>
             <p class="mt-2">
               {e.albums} <Tx lang={lang} k="gallery.albums_count" /> · {e.photos} <Tx lang={lang} k="gallery.photos_count" />
             </p>

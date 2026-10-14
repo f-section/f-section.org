@@ -18,19 +18,21 @@ const nav: { path: string; key: UiKey }[] = [
   { path: '/about/', key: 'nav.about' },
 ];
 const isCurrent = (p: string) => current === p || current.startsWith(p);
+// Tamil menu items are about twice as wide as English ones, so the inline menu needs more room.
+const wide = lang === 'ta';
 ---
 <header class="border-b-2 border-rule bg-paper">
-  <div class="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-2">
-    <a href={href(lang, '/')} class="hand tap whitespace-nowrap px-0 text-3xl text-ink no-underline sm:text-4xl" lang="en">F Section</a>
+  <div class="mx-auto flex max-w-6xl items-center justify-between gap-2 px-4 py-2 sm:gap-3">
+    <a href={href(lang, '/')} class="hand tap shrink-0 whitespace-nowrap px-0 text-3xl text-ink no-underline sm:text-4xl"><Tx lang={lang} k="site.name" /></a>
 
-    <nav class="hidden md:block" aria-label={t(lang, 'nav.main_label')}>
+    <nav class:list={['hidden', wide ? 'xl:block' : 'lg:block']} aria-label={t(lang, 'nav.main_label')}>
       <ul class="flex items-center gap-1">
         {
           nav.map((n) => (
             <li>
               <a
                 href={href(lang, n.path)}
-                class:list={['tap rounded-md text-ink no-underline hover:bg-ink/10', isCurrent(n.path) && 'underline decoration-ink-red decoration-2']}
+                class:list={['tap whitespace-nowrap rounded-md text-ink no-underline hover:bg-ink/10', isCurrent(n.path) && 'underline decoration-ink-red decoration-2']}
                 aria-current={isCurrent(n.path) ? 'page' : undefined}
               >
                 <Tx lang={lang} k={n.key} />
@@ -43,9 +45,10 @@ const isCurrent = (p: string) => current === p || current.startsWith(p);
 
     <div class="flex items-center gap-2">
       {showToggle && <LangToggle lang={lang} />}
-      <details class="relative md:hidden">
-        <summary class="tap cursor-pointer list-none rounded-md border-2 border-ink/80 font-semibold [&::-webkit-details-marker]:hidden">
-          <Tx lang={lang} k="nav.menu" />
+      <details class:list={['relative', wide ? 'xl:hidden' : 'lg:hidden']}>
+        <summary class="tap cursor-pointer list-none gap-2 rounded-md border-2 border-ink/80 font-semibold [&::-webkit-details-marker]:hidden">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg>
+          <Tx lang={lang} k="nav.menu" class="sr-only sm:not-sr-only" />
         </summary>
         <nav class="absolute right-0 z-20 mt-2 w-60 rounded-md border-2 border-rule bg-card p-2 shadow-lg" aria-label={t(lang, 'nav.main_label')}>
           <ul>
