@@ -1,7 +1,9 @@
 // Render the montage title cards (scripts/video/cards/*.html) to 1920 × 1080 PNGs with headless Chrome,
 // which shapes Tamil correctly. Output: scripts/video/out/cards/*.png (git-ignored).
 //
-// Usage: node scripts/video/render-cards.mjs --cover "E:/F Section/Claude outputs/Montage cards (draft)/arivumalar-final-cover.webp"
+// Usage: node scripts/video/render-cards.mjs --scale 2 \
+//          --cover "E:/F Section/Claude outputs/Montage cards (draft)/arivumalar-final-cover.webp" \
+//          --back  "E:/F Section/Claude outputs/Montage cards (draft)/arivumalar-final-back-cover.webp"
 import { execFileSync } from 'node:child_process';
 import { copyFileSync, existsSync, mkdirSync, readdirSync } from 'node:fs';
 import { dirname, extname, join, resolve } from 'node:path';
@@ -17,11 +19,12 @@ const arg = (name) => {
 const cover = arg('--cover');
 // --scale 2 renders 3840 × 2160 (for a smooth slow zoom in the video); output goes to out/cards@2x.
 const scale = Number(arg('--scale') ?? 1);
-if (cover) {
-  mkdirSync(join(cardsDir, 'assets'), { recursive: true });
-  // Keep the extension (.webp, .jpeg …); 02-arivumalar.html expects arivumalar-cover.webp.
-  copyFileSync(resolve(cover), join(cardsDir, 'assets', `arivumalar-cover${extname(cover).toLowerCase()}`));
-}
+// --back: the Arivu Malar back cover, used by 04-ending.html.
+const back = arg('--back');
+mkdirSync(join(cardsDir, 'assets'), { recursive: true });
+// Keep the extension (.webp, .jpeg …); the cards expect arivumalar-cover.webp and arivumalar-back.webp.
+if (cover) copyFileSync(resolve(cover), join(cardsDir, 'assets', `arivumalar-cover${extname(cover).toLowerCase()}`));
+if (back) copyFileSync(resolve(back), join(cardsDir, 'assets', `arivumalar-back${extname(back).toLowerCase()}`));
 
 const chrome = [
   'C:/Program Files/Google/Chrome/Application/chrome.exe',
