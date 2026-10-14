@@ -151,3 +151,10 @@ The R2 free tier is 10 GB. The ingest script prints the bucket size after every 
 3. Google Drive: _TODO: folder_
 
 R2 is where the site's media lives. It is **not** a backup.
+
+## Montage title cards (scripts/video)
+The title cards in the 30-year reunion montage were redone to match the site (2026-10-14). The original iMovie export stays unchanged in `E:\F Section\Finalized Articles\`; the new master is `E:\F Section\Claude outputs\30_Year_Video_montage_v2.mp4`.
+1. Edit the cards in `scripts/video/cards/*.html` (shared style in `card.css`).
+2. Render them at 4K: `node scripts/video/render-cards.mjs --scale 2 --cover "<final Arivu Malar cover image>"`
+3. Lay them over the montage: `scripts\ingest\.venv\Scripts\python scripts\video\replace_cards.py --src "<iMovie export>" --out "<new master>.mp4"`. Card timings are in `scripts/video/montage-2026-30th.json`. The audio is copied untouched, so the music sync never changes.
+4. Make the web copies (1080p at 5 Mbps, 720p at 2.5 Mbps, poster) under a **new name**, and upload them with `rclone copy --immutable` to `public/video/`.

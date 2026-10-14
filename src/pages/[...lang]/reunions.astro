@@ -1,15 +1,49 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageIntro from '../../components/PageIntro.astro';
+import VideoPlayer from '../../components/VideoPlayer.astro';
 import Tx from '../../components/Tx.astro';
-import { t, bothLangs, langFromParam } from '../../i18n';
+import { t, href, bothLangs, langFromParam, type UiKey } from '../../i18n';
+import { eraSlug, mediaUrl, type Era } from '../../site';
+import { getVideos } from '../../lib/videos';
+import { getAlbumsByEra } from '../../lib/media';
 
 export function getStaticPaths() {
   return bothLangs();
 }
 const lang = langFromParam(Astro.params.lang);
+// Newest reunion first.
+const reunions: Era[] = ['2026-30th', '2016-20th'];
+const sections = await Promise.all(
+  reunions.map(async (era) => ({ era, videos: await getVideos(era), albums: (await getAlbumsByEra(era)).length })),
+);
+const firstVideo = sections.flatMap((s) => s.videos)[0];
 ---
-<BaseLayout lang={lang} title={t(lang, 'reunions.title')} description={t(lang, 'reunions.lead')}>
+<BaseLayout lang={lang} title={t(lang, 'reunions.title')} description={t(lang, 'reunions.lead')} image={firstVideo ? mediaUrl(firstVideo.data.poster) : undefined}>
   <PageIntro lang={lang} titleKey="reunions.title" leadKey="reunions.lead" />
-  <Tx lang={lang} k="common.coming_soon" as="p" class="text-xl" />
+  {
+    sections.map((s) => (
+      <section class="mb-12" aria-labelledby={`reunion-${s.era}`}>
+        <h2 id={`reunion-${s.era}`} class="hand mb-6 text-4xl">
+          <Tx lang={lang} k={`era.${s.era}` as UiKey} />
+        </h2>
+        {s.videos.length > 0 && (
+          <ul class="mb-6 grid gap-8 lg:grid-cols-2">
+            {s.videos.map((v) => (
+              <li>
+                <VideoPlayer video={v} lang={lang} as="h3" />
+              </li>
+            ))}
+          </ul>
+        )}
+        {s.videos.length === 0 && s.albums === 0 ? (
+          <Tx lang={lang} k="common.coming_soon" as="p" />
+        ) : (
+          <a href={href(lang, `/gallery/${eraSlug(s.era)}/`)} class="tap rounded-md border-2 border-ink-red font-semibold no-underline">
+            <span><Tx lang={lang} k="reunions.see_photos" />&nbsp;→</span>
+          </a>
+        )}
+      </section>
+    ))
+  }
 </BaseLayout>

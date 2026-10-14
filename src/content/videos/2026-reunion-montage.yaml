@@ -1,0 +1,10 @@
+# 30-year reunion montage (iMovie edit by Saran; title cards redone 2026-10-14).
+# Web copies are encoded from the master and uploaded to R2 under public/video/.
+slug: 2026-reunion-montage
+era: 2026-30th
+title:   { en: "30 years on: Reunion 2026", ta: "30 ஆண்டுகளுக்குப் பின்: 2026 சந்திப்பு" }
+duration: "4:15"
+files:
+  "1080": public/video/2026-reunion-montage-1080.mp4
+  "720": public/video/2026-reunion-montage-720.mp4
+poster: public/video/2026-reunion-montage.jpg

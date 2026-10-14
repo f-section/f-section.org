@@ -1,0 +1,48 @@
+---
+/**
+ * Native HTML5 video (DESIGN.md §6.3). Plays the 720p copy by default, which is light on
+ * mobile data, with a link to the 1080p file. Nothing downloads until Play is pressed.
+ */
+import Tx from './Tx.astro';
+import { pick, type Lang } from '../i18n';
+import { mediaUrl } from '../site';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  video: CollectionEntry<'videos'>;
+  lang: Lang;
+  /** Heading level for the title. */
+  as?: 'h2' | 'h3';
+}
+const { video, lang, as = 'h2' } = Astro.props;
+const { data } = video;
+const title = pick(data.title, lang);
+---
+<figure class="polaroid">
+  <video
+    controls
+    playsinline
+    preload="none"
+    poster={mediaUrl(data.poster)}
+    class="aspect-video w-full bg-ink"
+    aria-label={title}
+  >
+    <source src={mediaUrl(data.files['720'])} type="video/mp4" />
+    {data.subtitles.en && <track kind="subtitles" srclang="en" label="English" src={mediaUrl(data.subtitles.en)} default={lang === 'en'} />}
+    {data.subtitles.ta && <track kind="subtitles" srclang="ta" label="தமிழ்" src={mediaUrl(data.subtitles.ta)} default={lang === 'ta'} />}
+  </video>
+  <figcaption class="mt-3">
+    <Tx lang={lang} pair={data.title} as={as} class="text-xl font-semibold leading-snug" />
+    {data.summary.en && <Tx lang={lang} pair={data.summary} as="p" class="mt-1" />}
+    <p class="mt-1 flex flex-wrap items-center gap-x-4 text-sepia">
+      <span>{data.duration}</span>
+      {
+        data.files['1080'] && (
+          <a href={mediaUrl(data.files['1080'])} class="tap -ml-3 justify-start">
+            <Tx lang={lang} k="videos.hd" />
+          </a>
+        )
+      }
+    </p>
+  </figcaption>
+</figure>

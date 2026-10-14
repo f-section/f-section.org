@@ -1,15 +1,40 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageIntro from '../../components/PageIntro.astro';
+import VideoPlayer from '../../components/VideoPlayer.astro';
 import Tx from '../../components/Tx.astro';
-import { t, bothLangs, langFromParam } from '../../i18n';
+import { t, bothLangs, langFromParam, type UiKey } from '../../i18n';
+import { ERAS, mediaUrl } from '../../site';
+import { getVideos } from '../../lib/videos';
 
 export function getStaticPaths() {
   return bothLangs();
 }
 const lang = langFromParam(Astro.params.lang);
+const videos = await getVideos();
+const groups = ERAS.map((era) => ({ era, videos: videos.filter((v) => v.data.era === era) })).filter((g) => g.videos.length);
+const ogImage = videos[0] ? mediaUrl(videos[0].data.poster) : undefined;
 ---
-<BaseLayout lang={lang} title={t(lang, 'videos.title')} description={t(lang, 'videos.lead')}>
+<BaseLayout lang={lang} title={t(lang, 'videos.title')} description={t(lang, 'videos.lead')} image={ogImage}>
   <PageIntro lang={lang} titleKey="videos.title" leadKey="videos.lead" />
-  <Tx lang={lang} k="common.coming_soon" as="p" class="text-xl" />
+  {
+    groups.length ? (
+      groups.map((g) => (
+        <section class="mb-12" aria-labelledby={`era-${g.era}`}>
+          <h2 id={`era-${g.era}`} class="hand mb-6 text-4xl">
+            <Tx lang={lang} k={`era.${g.era}` as UiKey} />
+          </h2>
+          <ul class="grid gap-8 lg:grid-cols-2">
+            {g.videos.map((v) => (
+              <li>
+                <VideoPlayer video={v} lang={lang} as="h3" />
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    ) : (
+      <Tx lang={lang} k="common.coming_soon" as="p" class="text-xl" />
+    )
+  }
 </BaseLayout>
