@@ -1,7 +1,8 @@
 ---
 /**
- * Native HTML5 video (DESIGN.md §6.3). Plays the 720p copy by default, which is light on
- * mobile data, with a link to the 1080p file. Nothing downloads until Play is pressed.
+ * Native HTML5 video (DESIGN.md §6.3). Normally one efficient 1080p file (about 3 Mbps).
+ * If a video also has a 720p copy, that plays by default and an HD link is shown.
+ * Nothing downloads until Play is pressed.
  */
 import Tx from './Tx.astro';
 import { pick, type Lang } from '../i18n';
@@ -17,6 +18,8 @@ interface Props {
 const { video, lang, as = 'h2' } = Astro.props;
 const { data } = video;
 const title = pick(data.title, lang);
+const src = data.files['720'] ?? data.files['1080'];
+const hdLink = data.files['720'] ? data.files['1080'] : undefined;
 ---
 <figure class="polaroid">
   <video
@@ -27,7 +30,7 @@ const title = pick(data.title, lang);
     class="aspect-video w-full bg-ink"
     aria-label={title}
   >
-    <source src={mediaUrl(data.files['720'])} type="video/mp4" />
+    <source src={mediaUrl(src)} type="video/mp4" />
     {data.subtitles.en && <track kind="subtitles" srclang="en" label="English" src={mediaUrl(data.subtitles.en)} default={lang === 'en'} />}
     {data.subtitles.ta && <track kind="subtitles" srclang="ta" label="தமிழ்" src={mediaUrl(data.subtitles.ta)} default={lang === 'ta'} />}
   </video>
@@ -37,8 +40,8 @@ const title = pick(data.title, lang);
     <p class="mt-1 flex flex-wrap items-center gap-x-4 text-sepia">
       <span>{data.duration}</span>
       {
-        data.files['1080'] && (
-          <a href={mediaUrl(data.files['1080'])} class="tap -ml-3 justify-start">
+        hdLink && (
+          <a href={mediaUrl(hdLink)} class="tap -ml-3 justify-start">
             <Tx lang={lang} k="videos.hd" />
           </a>
         )
