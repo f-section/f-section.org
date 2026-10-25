@@ -157,7 +157,7 @@ The date comes first so that everything sorts in time order on its own.
 | Item | Pattern | Example |
 |---|---|---|
 | Album slug | `YYYY-event-topic` | `2026-reunion-campus-walk` |
-| Media file | `YYYYMMDD-HHMMSS_contributor_NNN.ext` | `20260912-101533_saran_014.webp` |
+| Media file | `YYYYMMDD-HHMMSS_contributor_place-or-event_NNN.ext`. The place or event comes from GPS and `places.yaml`, or from the reunion schedule (2026-10-25). Older files without it keep the shorter form. | `20261003-184212_saravanan_campus-main-building_001.webp` |
 | Scanned old photo (no exact date) | `YYYY-00-00_scan_NNN.ext` | `1994-00-00_scan_007.webp` |
 | Magazine issue | `YYYY-MM`. Use `volNN-issNN` instead if the originals carry numbers (**Open, O-4**). | `1993-08` |
 | Place slug | lowercase, hyphens | `main-building` |
@@ -270,10 +270,10 @@ These are proposals. Check every text colour pair for WCAG AA contrast in Phase 
 
 ### 8.1 Workflow
 
-1. **Collect.** Friends upload to a shared Google Drive folder, with one folder per event.
-2. **Curate.** Saran picks the photos to publish, removes duplicates and blurry shots, and notes captions. Claude in the Claude app can help with this step through the Google Drive connector.
-3. **Archive the originals.** Copy the chosen originals to the NAS under `f-section/originals/<album-slug>/`. This is the master copy.
-4. **Ingest.** Run `scripts/ingest` on Saran's Windows PC (NAS mapped as a drive). It does the following:
+1. **Collect.** Friends upload to a shared Google Drive folder, with one subfolder per person. Claude reads it through a **read-only** rclone remote and never renames or deletes anything there (2026-10-25).
+2. **Curate.** Claude does the first pass and Saran approves the picks on a review page that is not published. The pass renames files in staging, removes duplicates and repeats, and prefers candid shots. Rules: `docs/decisions/2026-10-25-gallery-import-and-curation.md`. No captions.
+3. **Archive the originals.** Copy the originals to the NAS under `f-section/originals/<album-slug>/`, with the manifest that links each new name to its Drive original. This is the master copy.
+4. **Ingest.** Run `scripts/ingest` on minnaham, Saran's Ubuntu server (with the NAS mounted). It does the following:
    - Reads the originals for one album.
    - **Keeps the date taken and the GPS location.** The display copy keeps its EXIF, and the coordinates are written to `media.json` for the map link. Thumbnails carry no metadata, to stay small.
    - Rotates each image the right way up, using its EXIF orientation.
