@@ -38,7 +38,7 @@ npm run check:links
 
 ## Adding an album
 1. Create `src/content/albums/<slug>/album.yaml` (DESIGN.md §10.1). The slug looks like `2026-reunion-campus-walk`.
-2. Put the chosen originals in a folder on the NAS, with one subfolder per contributor (for example `saran/`).
+2. Put the chosen originals in `/mnt/data/f-section/originals/<slug>/` on minnaham's local disk (not the NAS), with one subfolder per contributor (for example `saran/`).
 3. Set up the ingest script once:
    ```bash
    python -m venv scripts/ingest/.venv

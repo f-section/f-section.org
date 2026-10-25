@@ -14,7 +14,7 @@ The folder links are **private**: Saran's Drive also holds personal material. Th
 - Friends keep seeing their own uploads exactly as they left them.
 
 ## Renaming: in staging, never on the Drive
-Files are renamed only in the staging area and on the NAS:
+Files are renamed only in the work area on minnaham (see "Work area" below):
 
 ```
 <YYYYMMDD>-<HHMMSS>_<who>_<place-or-event>_<NNN>.<ext>
@@ -26,7 +26,22 @@ Files are renamed only in the staging area and on the NAS:
 - **Place or event:** from GPS matched to `places.yaml`, then from the reunion schedule by time. Claude judges what is quickest: ask Saran, or make a sensible guess.
 - **No content labels** in names, and no titles or captions in the gallery.
 
-A **manifest** (CSV) links each new name to the Drive path, Drive file ID, original name and SHA-256 hash. It stays with the originals on the NAS, not in the repo, because it holds Drive IDs.
+A **manifest** (CSV) links each new name to the Drive path, Drive file ID, original name and SHA-256 hash. It stays with the originals in `/mnt/data/f-section/originals/`, not in the repo, because it holds Drive IDs.
+
+## Work area: minnaham's local disk, not the NAS
+The NAS is slow, and working straight off it has caused problems before. All downloading, converting, renaming, reviewing and ingest happen on minnaham's local disk, in **`/mnt/data/f-section`** (about 1 TB free):
+
+```
+/mnt/data/f-section/
+  drive/       read-only copy of the Drive folder, as downloaded (original names)
+  work/        converted and renamed files, grouped by event
+  originals/   <album-slug>/ full-size originals of the picks, with manifest.csv (master copy)
+  review/      the contact sheet for Saran (not published)
+  out/         ingest output (web copies) before upload to R2
+  masters/     video masters, such as the 30th reunion montage and its song
+```
+
+The NAS is only a **backup and archive** target. Copy finished folders to it with rclone or rsync, as a single bulk copy and never as a working directory. This is also where photos and videos retired from the site go.
 
 ## Curation rules
 - **Videos: tight.** Only a few short, strong clips. Each one costs storage.
@@ -38,7 +53,7 @@ A **manifest** (CSV) links each new name to the Drive path, Drive file ID, origi
 - Claude does the first pass. Saran approves the final picks on a review page (a contact sheet that is not published) before anything is ingested.
 
 ## Storage budget
-The R2 free tier is 10 GB, and it is not unlimited. Curation keeps us well under it. When storage approaches 8 GB, Saran will move older photos and videos off the site to the NAS archive. Keep that path in mind: albums must stay easy to retire one at a time. The originals stay on the NAS (`f-section/originals/<album-slug>/`), never in R2.
+The R2 free tier is 10 GB, and it is not unlimited. Curation keeps us well under it. When storage approaches 8 GB, Saran will move older photos and videos off the site to the NAS archive. Keep that path in mind: albums must stay easy to retire one at a time. The originals stay in `/mnt/data/f-section/originals/<album-slug>/`, backed up to the NAS, and never go to R2.
 
 ## Build machine
 From now on, building and ingest run on **minnaham**, Saran's always-on Ubuntu server (a Dell OptiPlex). See `2026-10-25-build-on-minnaham.md`.

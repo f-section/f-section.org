@@ -18,4 +18,5 @@ The Windows clone at `E:\COWORK\PROJECTS\F-SECTION\f-section.org` stays as a fal
 - minnaham gets its **own** R2 API token (same scope: Object Read & Write on `f-section-media` only), so either machine can be revoked on its own. Don't copy the laptop's token.
 - Machine-only settings (rclone remotes, the Drive folder IDs) stay outside the repo, in `~/.config/`.
 - Deploys still come from GitHub through Workers Builds, so wrangler is rarely needed on minnaham.
-- The video masters and the song for the montage are still on the laptop in `E:\F Section\Claude outputs\`. Copy them to the NAS when convenient.
+- **Work happens on minnaham's local disk, in `/mnt/data/f-section`, not on the NAS.** The NAS is slow, and working straight off it caused problems before. The NAS is only a backup and archive target, written with one bulk copy at a time. The folder layout is in `2026-10-25-gallery-import-and-curation.md`.
+- The video masters and the song for the montage are still on the laptop in `E:\F Section\Claude outputs\`. Copy them to `/mnt/data/f-section/masters/` when convenient.

@@ -27,7 +27,7 @@ Rules: `docs/decisions/2026-10-25-gallery-import-and-curation.md`. Machine: minn
    - Saran creates a new R2 token for an `r2` rclone remote.
 2. **Drive access.** Set up a read-only rclone remote limited to the reunion photo folder. Saran gives the folder IDs in chat; they are kept in `~/.config/`, never in the repo.
 3. **Inventory.** List every contributor folder: file counts, sizes, photos vs videos, and how many files have EXIF dates and GPS.
-4. **Download** everything to a staging folder on minnaham. Copy the originals to the NAS under `f-section/originals/2026-30th/`.
+4. **Download** everything to `/mnt/data/f-section/drive/` on minnaham's local disk, never the NAS, which is too slow to work on. Do all conversion and renaming in `/mnt/data/f-section/work/`. Keep the originals of the picks in `/mnt/data/f-section/originals/2026-30th/`, and back them up to the NAS with one bulk copy.
 5. **Clean up:**
    - Remove exact duplicates, keeping the copy with the best metadata.
    - Convert HEIC photos and HEVC videos.
@@ -46,4 +46,4 @@ Rules: `docs/decisions/2026-10-25-gallery-import-and-curation.md`. Machine: minn
 - Second admin for GitHub, Cloudflare and the domain (RUNBOOK).
 - Tamil intro text for the pages (Saran writes it).
 - Remove the placeholder sample album once real albums are in.
-- Copy the montage masters and the song from the Windows laptop to the NAS.
+- Copy the montage masters and the song from the Windows laptop to `/mnt/data/f-section/masters/` on minnaham.

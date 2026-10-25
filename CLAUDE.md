@@ -41,6 +41,7 @@ Development and ingest happen on **minnaham**, Saran's always-on Ubuntu server, 
 10. **Google Drive is read-only for Claude.** Never rename, move or delete anything there. Never put Drive folder links or IDs in this repo (it is public, and Saran's Drive holds private material); keep them in `~/.config/` on the build machine.
 11. **Curation** follows `docs/decisions/2026-10-25-gallery-import-and-curation.md`: tight on videos, lighter on photos, no repeats of the same moment, prefer candid shots.
 12. **At the end of a session,** update `docs/STATUS.md`.
+13. **Media work happens on minnaham's local disk, in `/mnt/data/f-section`**: downloads, conversion, renaming, review, originals and ingest output. Never work directly on the NAS, which is slow; it is only for bulk backup and archive copies.
 
 ## When a decision changes
 Update `docs/DESIGN.md` and add a dated note in `docs/decisions/`. Do not change a decision without Saran's approval.
