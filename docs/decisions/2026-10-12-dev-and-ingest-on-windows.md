@@ -1,5 +1,7 @@
 # Development and ingest run on Windows
 
+> **Replaced on 2026-10-25** by `2026-10-25-build-on-minnaham.md`. The Windows PC is now the fallback.
+
 **Date:** 2026-10-12
 **Approved by:** Saran
 **Affects:** DESIGN.md §7, §8.1, §16

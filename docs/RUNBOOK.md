@@ -9,8 +9,9 @@ How the site is run: accounts, admins, renewals and recovery. Keep this current.
 | GitHub org `f-section` | github.com/f-section | Saran (`ssaravanan3`) | _TODO: name a trusted classmate_ |
 | Cloudflare account | dash.cloudflare.com | Saran | _TODO_ |
 | Domain `f-section.org` | _TODO: registrar_ | Saran | _TODO_ |
-| Google Drive shared folders | _TODO: link_ | Saran | _TODO_ |
-| NAS originals | `f-section/originals/` on the home NAS | Saran | n/a |
+| Google Drive shared folders | Saran's Drive (link kept private, not in this repo) | Saran | _TODO_ |
+| Originals (master copy) | `/mnt/data/f-section/originals/` on minnaham | Saran | n/a |
+| NAS (backup and archive only) | `f-section/` on the home NAS | Saran | n/a |
 
 ## Renewals
 - [ ] Domain auto-renew is **on** (§13.9). Renewal date: _TODO_.
@@ -124,7 +125,13 @@ scripts\ingest\.venv\Scripts\python scripts\og\make_og_image.py
 rclone copy --immutable --header-upload "Cache-Control: public, max-age=86400" scripts\ingest\out\public\site r2:f-section-media/public/site
 ```
 
-## Local tools (Windows PC)
+## Build machine
+Since 2026-10-25, the main build and ingest machine is **minnaham**, Saran's always-on Ubuntu server. The Windows PC below is the fallback.
+- minnaham has its own `r2` rclone remote with its own R2 token: repeat steps 5 and 6 there, naming the token `rclone-f-section-minnaham`. To cut off one machine, revoke its token.
+- The Google Drive remote for the reunion photos is **read-only** and limited to that folder. Its folder IDs live only in `~/.config/` on minnaham, never in this repo.
+- **All media work happens on the local disk, in `/mnt/data/f-section`** (folders `drive/`, `work/`, `originals/`, `review/`, `out/`, `masters/`). Never work directly on the NAS: it is slow and caused problems before. Back up to the NAS with one bulk copy after each album.
+
+## Local tools (Windows PC, fallback)
 - Node 22.12 or later, Git, the GitHub CLI (`gh`), and Python 3.12 or later with `scripts/ingest/.venv`.
 - `rclone` (installed 2026-10-12 with `winget install Rclone.Rclone`), with a remote named `r2` set up as in step 6 above. The rclone config stays on the PC and never goes into git.
 - `ffmpeg`, for video and audio: `winget install Gyan.FFmpeg` (installed 2026-10-12)
@@ -146,7 +153,7 @@ rclone copy --immutable --header-upload "Cache-Control: public, max-age=86400" s
 The R2 free tier is 10 GB. The ingest script prints the bucket size after every upload and warns at 8 GB.
 
 ## Backups (3-2-1)
-1. Originals on the NAS: `f-section/originals/<album-slug>/`
+1. Originals on minnaham, `/mnt/data/f-section/originals/<album-slug>/`, copied to the NAS (`f-section/originals/<album-slug>/`) after each album
 2. External drive, kept offline: _TODO: schedule_
 3. Google Drive: _TODO: folder_
 

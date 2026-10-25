@@ -401,7 +401,7 @@ def main(argv: list[str] | None = None) -> int:
         "Dry run by default.",
     )
     ap.add_argument("--album", required=True, help="album slug, e.g. 2026-reunion-campus-walk")
-    ap.add_argument("--src", required=True, type=Path, help="folder of chosen originals (e.g. on the NAS)")
+    ap.add_argument("--src", required=True, type=Path, help="folder of chosen originals (e.g. /mnt/data/f-section/originals/<album>)")
     ap.add_argument("--contributor", help="name for all files; default is each file's first subfolder name")
     ap.add_argument("--scan-year", type=int, help="old scanned photos with no exact date: name them YYYY-00-00_scan_NNN")
     ap.add_argument("--apply", action="store_true", help="actually process, write media.json and upload")

@@ -72,7 +72,7 @@ f-section.org is a home on the web for the F Section group of the REC Trichy (no
 | D-08 | Videos are MP4 files in R2. We do not use YouTube, because the total footage is under 30 minutes. | Decided |
 | D-09 | Work goes to a `staging` branch first. `main` is production. Nothing goes live without a preview. | Decided |
 | D-10 | The site is open to search engines, with a sitemap and robots.txt. Staging previews stay unindexed. | Decided (2026-10-12, closes O-2) |
-| D-11 | Original full-size files stay on the NAS and in Google Drive. R2 holds only web-sized copies. | Decided |
+| D-11 | Original full-size files stay on minnaham (`/mnt/data/f-section/originals/`), backed up to the NAS, and in Google Drive. R2 holds only web-sized copies. | Decided |
 | D-12 | Media is vetted by hand before ingest; the site keeps GPS location and runs no consent checks of its own (Section 13). | Decided (changed 2026-10-12) |
 | D-14 | **Public-first.** Build a simple public site now. Logins and members-only areas (Phase 2, O-1) are deferred to a much later version. | Decided (2026-10-12) |
 | D-13 | In Memoriam is public and curated by hand. Families have agreed in advance; the build runs no consent check. | Decided (changed 2026-10-12, closes O-5) |
@@ -157,7 +157,7 @@ The date comes first so that everything sorts in time order on its own.
 | Item | Pattern | Example |
 |---|---|---|
 | Album slug | `YYYY-event-topic` | `2026-reunion-campus-walk` |
-| Media file | `YYYYMMDD-HHMMSS_contributor_NNN.ext` | `20260912-101533_saran_014.webp` |
+| Media file | `YYYYMMDD-HHMMSS_contributor_place-or-event_NNN.ext`. The place or event comes from GPS and `places.yaml`, or from the reunion schedule (2026-10-25). Older files without it keep the shorter form. | `20261003-184212_saravanan_campus-main-building_001.webp` |
 | Scanned old photo (no exact date) | `YYYY-00-00_scan_NNN.ext` | `1994-00-00_scan_007.webp` |
 | Magazine issue | `YYYY-MM`. Use `volNN-issNN` instead if the originals carry numbers (**Open, O-4**). | `1993-08` |
 | Place slug | lowercase, hyphens | `main-building` |
@@ -235,10 +235,10 @@ These are proposals. Check every text colour pair for WCAG AA contrast in Phase 
 ```
   Friends ──► Google Drive (shared folder per event)
                     │
-                    ▼  Saran curates (Claude in the Claude app can help)
-  Home NAS  ◄── originals (full size, master copy + offline backup)
+                    ▼  read-only rclone copy; Claude's first pass, Saran approves
+  minnaham /mnt/data/f-section ◄── originals (full size, master copy) ──► Home NAS (backup, archive)
                     │
-                    ▼  scripts/ingest  (runs on Saran's Windows PC)
+                    ▼  scripts/ingest  (runs on minnaham)
   ┌─────────────────────────────────────────────────────────┐
   │ Cloudflare                                               │
   │                                                          │
@@ -270,10 +270,10 @@ These are proposals. Check every text colour pair for WCAG AA contrast in Phase 
 
 ### 8.1 Workflow
 
-1. **Collect.** Friends upload to a shared Google Drive folder, with one folder per event.
-2. **Curate.** Saran picks the photos to publish, removes duplicates and blurry shots, and notes captions. Claude in the Claude app can help with this step through the Google Drive connector.
-3. **Archive the originals.** Copy the chosen originals to the NAS under `f-section/originals/<album-slug>/`. This is the master copy.
-4. **Ingest.** Run `scripts/ingest` on Saran's Windows PC (NAS mapped as a drive). It does the following:
+1. **Collect.** Friends upload to a shared Google Drive folder, with one subfolder per person. Claude reads it through a **read-only** rclone remote and never renames or deletes anything there (2026-10-25).
+2. **Curate.** Claude does the first pass and Saran approves the picks on a review page that is not published. The pass renames files in staging, removes duplicates and repeats, and prefers candid shots. Rules: `docs/decisions/2026-10-25-gallery-import-and-curation.md`. No captions.
+3. **Keep the originals.** Keep the originals in `/mnt/data/f-section/originals/<album-slug>/` on minnaham's local disk, with the manifest that links each new name to its Drive original. This is the master copy. Back it up to the NAS with one bulk copy. All work (download, conversion, renaming, review) happens on the local disk in `/mnt/data/f-section`, never directly on the slow NAS.
+4. **Ingest.** Run `scripts/ingest` on minnaham, Saran's Ubuntu server, reading from the local disk. It does the following:
    - Reads the originals for one album.
    - **Keeps the date taken and the GPS location.** The display copy keeps its EXIF, and the coordinates are written to `media.json` for the map link. Thumbnails carry no metadata, to stay small.
    - Rotates each image the right way up, using its EXIF orientation.
@@ -294,10 +294,10 @@ These are proposals. Check every text colour pair for WCAG AA contrast in Phase 
 | Media | Web copies | Notes |
 |---|---|---|
 | Photo | Thumbnail: 480 px long edge, WebP. Display: 2048 px long edge, WebP. | Quality around 80. AVIF is optional later. |
-| Old scanned photo | Same as above | Scan masters at 600 dpi and keep them on the NAS. |
+| Old scanned photo | Same as above | Scan masters at 600 dpi. Keep them in `/mnt/data/f-section/originals/`, backed up to the NAS. |
 | Video | **One** MP4 (H.264 + AAC) at 1080p, quality-based (CRF 22, capped at 4 Mbps; about 3 Mbps for photo montages), plus a JPG poster. No separate 720p copy (decided 2026-10-14). | Use `-movflags +faststart` so playback starts before the whole file loads. Subtitles (`.vtt`, EN/TA) are optional. |
 | Audio | MP3, 128 kbps | |
-| Magazine scan | One WebP per page (1600 px long edge) plus one compressed PDF per issue | Scan masters (400–600 dpi PNG or TIFF) stay on the NAS. |
+| Magazine scan | One WebP per page (1600 px long edge) plus one compressed PDF per issue | Scan masters (400–600 dpi PNG or TIFF) stay in `/mnt/data/f-section/originals/`, backed up to the NAS. |
 
 **Music:** montages use film songs from our college years as background music (decided 2026-10-12). They are part of the nostalgia. The build does not check for music clearance. If a rights holder ever objects, take the video down or swap its soundtrack (see the takedown rule, §13.4).
 
@@ -478,7 +478,7 @@ f-section.org/
 7. **In Memoriam** follows Section 10.6. Families agreed in advance, and entries are curated by hand.
 8. **Second admin.** Add one trusted classmate as an admin on the GitHub org, the Cloudflare account and the domain, and record this in `RUNBOOK.md`. If Saran is unavailable, the site must not be lost.
 9. **Domain auto-renew** is on for f-section.org.
-10. **Backups follow 3-2-1:** originals on the NAS, a second copy (an external drive kept offline), and a third copy in Google Drive. R2 is where the site's media lives; it is not a backup.
+10. **Backups follow 3-2-1:** originals on minnaham (`/mnt/data/f-section/originals/`) and the NAS, a second copy (an external drive kept offline), and a third copy in Google Drive. R2 is where the site's media lives; it is not a backup.
 
 ---
 
@@ -545,8 +545,8 @@ The **GitHub repo is the single source of truth.** Both tools work through it. N
 
 | Work | Where | Why |
 |---|---|---|
-| Writing code, building, testing, running `wrangler` or `rclone` | **Claude Code** on Saran's Windows PC (repo at `E:\COWORK\PROJECTS\F-SECTION\f-section.org`) | It has the shell, git, Node, Python, Cloudflare credentials and NAS access. |
-| Running the ingest script on media | **Claude Code** on Saran's Windows PC | The originals are on the NAS, mapped as a drive. |
+| Writing code, building, testing, running `wrangler` or `rclone` | **Claude Code** on minnaham, Saran's always-on Ubuntu server. The Windows PC (`E:\COWORK\PROJECTS\F-SECTION\f-section.org`) is the fallback. | It has the shell, git, Node, Python and the R2 and Drive remotes, and it runs around the clock. |
+| Downloading from Drive, curating, and running the ingest script | **Claude Code** on minnaham | The work area is the local disk, `/mnt/data/f-section` (about 1 TB). The NAS is too slow to work on and is only for backups. |
 | Curating content from Google Drive: shortlisting, finding duplicates, captions | **Claude app** (this project) | It has the Google Drive connector and the `E:\F Section` folder. |
 | Writing bilingual text: captions, About page, tributes, Arivu Malar articles | **Claude app** | Writing and review. The output becomes YAML or Markdown for the repo. |
 | Visual design exploration and mockups | **Claude app** | Quick visual iterations before any code exists. |
