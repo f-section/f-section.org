@@ -8,7 +8,7 @@ _Last updated: 2026-10-25_
 - https://f-section.org (English) and https://f-section.org/ta/ (Tamil). Served by the Cloudflare Worker `f-section-site`, which deploys from `main` through Workers Builds.
 - Staging preview: https://staging-f-section-site.asaravanan75.workers.dev
 - Media: R2 bucket `f-section-media`, served at https://media.f-section.org. About 149.8 MiB of the 10 GB free tier across 131 objects: the link-preview image, two videos with posters, and the first two 30th reunion albums.
-- Pages: Home, About, Gallery (by era, with a sample album that uses placeholders), Videos, Reunions, Arivu Malar.
+- Pages: Home, About, Gallery (by era, with the first two real 30th reunion albums), Videos, Reunions, Arivu Malar.
 - Two videos on Videos, Reunions and Gallery → 2026: the montage ("30 years on: Reunion 2026", 4:28)
   and the kavithai (1:36). The kavithai is in R2 and in the repo, but reaches the live site only
   once `staging` is merged to `main`.
@@ -90,10 +90,11 @@ Rules: `docs/decisions/2026-10-25-gallery-import-and-curation.md`. Machine: minn
   snapshot and the download. Re-snapshot before trusting an older listing.
 
 ## Open items
+- GPS coordinates stay in `media.json` although nothing displays them any more. Droppable if that
+  ever bothers Saran; they are also in `originals/<album>/manifest.csv`, outside git.
 - O-7: footer and takedown notice. Saran leans towards neither.
 - Second admin for GitHub, Cloudflare and the domain (RUNBOOK).
 - Tamil intro text for the pages (Saran writes it).
-- Remove the placeholder sample album once real albums are in.
 - Copy the montage masters and the song from the Windows laptop to `/mnt/data/f-section/masters/` on minnaham.
 - The Windows fallback's `scripts/ingest/.venv` predates `pillow-heif` becoming a hard
   requirement. Re-run the install there if that machine is ever used again.

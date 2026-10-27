@@ -221,7 +221,7 @@ These are proposals. Check every text colour pair for WCAG AA contrast in Phase 
 |---|---|
 | Album card | A Polaroid-style cover photo with the title and a handwritten date |
 | Era ribbon | A strip across the top of the gallery for choosing the era |
-| Lightbox | Full-screen photo viewer with swipe, caption and credit |
+| Lightbox | Full-screen photo viewer with swipe. Pictures only: no credit, no map link (2026-10-26) |
 | Then & Now slider | Two photos of the same spot (old and new); drag to compare |
 | Magazine viewer | One page at a time with next and previous buttons, plus a PDF download. A page-flip effect is optional (Phase 3). |
 | Video player | Native HTML5 `<video>` with a poster image and optional subtitles |
@@ -281,7 +281,7 @@ These are proposals. Check every text colour pair for WCAG AA contrast in Phase 
 3. **Keep the originals.** Keep the originals in `/mnt/data/f-section/originals/<album-slug>/` on minnaham's local disk, with the manifest that links each new name to its Drive original. This is the master copy. Back it up to the NAS with one bulk copy. All work (download, conversion, renaming, review) happens on the local disk in `/mnt/data/f-section`, never directly on the slow NAS.
 4. **Ingest.** Run `scripts/ingest` on minnaham, Saran's Ubuntu server, reading from the local disk. It does the following:
    - Reads the originals for one album.
-   - **Keeps the date taken and the GPS location.** The display copy keeps its EXIF, and the coordinates are written to `media.json` for the map link. Thumbnails carry no metadata, to stay small.
+   - **Keeps the date taken and the GPS location.** The display copy keeps its EXIF, and the coordinates are written to `media.json`. They are no longer shown: the map link was removed on 2026-10-26. Thumbnails carry no metadata, to stay small.
    - Rotates each image the right way up, using its EXIF orientation.
    - Creates web copies (sizes in 8.2).
    - Names the files using the rule in Section 4.4.
