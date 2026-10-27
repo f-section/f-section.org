@@ -43,5 +43,7 @@ Development and ingest happen on **minnaham**, Saran's always-on Ubuntu server, 
 12. **At the end of a session,** update `docs/STATUS.md`.
 13. **Media work happens on minnaham's local disk, in `/mnt/data/f-section`**: downloads, conversion, renaming, review, originals and ingest output. Never work directly on the NAS, which is slow; it is only for bulk backup and archive copies.
 
+14. **People are named by first name only** (`docs/decisions/2026-10-26-first-names-only.md`): titles, captions, file names, slugs, both languages. `Kumaravel`, not `Kumaravel Saravanan`. The site is a reunion album, not a register. **Never transliterate a person's name into Tamil yourself** — ask Saran. Getting a friend's own name wrong on a public page is worse than waiting for an answer.
+
 ## When a decision changes
 Update `docs/DESIGN.md` and add a dated note in `docs/decisions/`. Do not change a decision without Saran's approval.

@@ -1,0 +1,14 @@
+# Kumaravel reciting his kavithai at the top of the Trichy Rockfort,
+# 3 Oct 2026, 17:50, on the visit that replaced the cancelled turf cricket.
+# Built 2026-10-26 from Senthamilselvan's recording. The source plays mirrored
+# (a -180 display matrix plus a selfie-camera flip), so the picture is flipped
+# back and the rotation baked into the pixels; the audio is denoised with
+# RNNoise. The poem itself is shown either side of the recitation, and the
+# montage opens and closes on the Rockfort floodlit the same evening.
+slug: 2026-reunion-kavithai
+era: 2026-30th
+title:   { en: "Uchi Pillaiyar: a kavithai by Kumaravel", ta: "உச்சிப் பிள்ளையார்: குமாரவேல் கவிதை" }
+duration: "1:36"
+files:
+  "1080": public/video/2026-reunion-kavithai-1080.mp4
+poster: public/video/2026-reunion-kavithai.jpg

@@ -164,6 +164,12 @@ The date comes first so that everything sorts in time order on its own.
 
 Use lowercase, hyphens and no spaces in every file name and slug.
 
+**People are named by first name only** (2026-10-26), everywhere: titles, captions, file names,
+slugs and the `people/` collection. That is how this batch knows one another, and the site is not
+an official register. So `kumaravel`, not `kumaravel-saravanan`. If two people share a first name,
+add the least that separates them and ask Saran which form he wants. Tamil spellings of names are
+Saran's to give, not Claude's to transliterate.
+
 ---
 
 ## 5. Bilingual approach (English and Tamil)
@@ -396,12 +402,12 @@ editors: []
 ### 10.5 Person: `src/content/people/<slug>.yaml`
 
 ```yaml
-slug: firstname-lastname
+slug: firstname                # first name only (§4.4, 2026-10-26)
 name: { en: "", ta: "" }
 section: F                     # F, or another section of the batch
 visibility: public             # optional, default public
-photo_1996: public/people/firstname-lastname-1996.webp
-photo_2026: public/people/firstname-lastname-2026.webp
+photo_1996: public/people/firstname-1996.webp
+photo_2026: public/people/firstname-2026.webp
 bio: { en: "", ta: "" }
 ```
 
