@@ -210,6 +210,17 @@ Set up 2026-10-25. Versions are what was installed that day; newer is fine.
   `SHA256SUMS` for that release. Remotes (`r2`, and the read-only Drive remote) are set up per
   steps 5 and 6; the config stays in `~/.config/rclone/`, never in git.
 - `git`, `gh` (authenticated as `ssaravanan3`), and `busybox` for unzip.
+- **Pushing needs HTTPS, not SSH.** minnaham's only SSH key (`~/.ssh/id_ed25519`) belongs to
+  **`ief-admin`**, the identity for the `ief-admin/ief-web` repo, and it has no write access here:
+  a push over SSH fails with "Permission to f-section/f-section.org.git denied to ief-admin".
+  Cloning still works, because the repo is public. `gh` is logged in as `ssaravanan3`, which does
+  have write access, so this clone uses HTTPS with `gh` as the credential helper, set
+  **repo-locally** so nothing else on the machine changes:
+  ```
+  git config --local credential.helper '!gh auth git-credential'
+  git remote set-url origin https://github.com/f-section/f-section.org.git
+  ```
+  Do not set that helper globally, and do not touch the `ief-admin` key: the ief-dev repo needs it.
 - NAS reached at `/media/tnas_data` (CIFS). Backup and archive only; never a working directory.
 
 ## Local tools (Windows PC, fallback)
