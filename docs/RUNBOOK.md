@@ -125,11 +125,92 @@ scripts\ingest\.venv\Scripts\python scripts\og\make_og_image.py
 rclone copy --immutable --header-upload "Cache-Control: public, max-age=86400" scripts\ingest\out\public\site r2:f-section-media/public/site
 ```
 
+### 8. Create the read-only Google Drive remote (Saran, then Claude)
+The 30th reunion photos live in a Drive folder of Saran's, one subfolder per contributor. Claude
+reads it through a **service account** shared into that one folder as **Viewer**, so read-only is a
+property of the grant, not of a flag anyone could get wrong. Decided 2026-10-25; the alternative
+considered was `rclone config` OAuth with `scope = drive.readonly`.
+
+**Why a service account:** it is a separate identity with no link to Saran's Google session, it
+cannot see anything else in the Drive, it needs no browser token to refresh on a headless server,
+and revoking it is one click that touches nothing else.
+
+Folder IDs are **private** and live only in `~/.config/f-section/drive.env` on the build machine
+(CLAUDE.md rule 10). They never appear in this repo, in commits, in PRs or in public docs.
+
+1. **Create a Google Cloud project** (Saran) at https://console.cloud.google.com — the free tier is
+   enough and nothing here is billable. Name it something like `f-section-drive`. Note the project ID.
+2. **Enable the Drive API:** APIs & Services → Library → "Google Drive API" → Enable.
+3. **Create the service account:** IAM & Admin → Service Accounts → Create service account. Name it
+   `f-section-reader`. **Skip the "grant this service account access to the project" step** — Drive
+   access comes from sharing the folder, not from any IAM role. Copy its email, which looks like
+   `f-section-reader@<project-id>.iam.gserviceaccount.com`.
+4. **Create a JSON key:** open the service account → Keys → Add key → Create new key → JSON. The
+   browser downloads it. This file is a credential: treat it like a password, and never paste it
+   into chat or put it in the repo.
+5. **Get the key onto the build machine.** minnaham is headless, so the download lands on whichever
+   machine has the browser. From that machine:
+   ```
+   scp ~/Downloads/<project-id>-<hash>.json saran@minnaham:/home/saran/.config/f-section/drive-sa.json
+   ```
+   Then on minnaham: `chmod 600 ~/.config/f-section/drive-sa.json`. Delete the download afterwards.
+6. **Share the folder** (Saran): open the 30th reunion folder in Drive → Share → paste the service
+   account email → set it to **Viewer** → untick "Notify people" (a service account has no inbox) →
+   Share. Sharing the parent is enough; every contributor subfolder is included.
+7. **Create the rclone remote** (Claude). No secret on the command line, only a path to the key:
+   ```
+   rclone config create gdrive drive --non-interactive \
+     scope=drive.readonly \
+     service_account_file=/home/saran/.config/f-section/drive-sa.json \
+     root_folder_id=<FSECTION_DRIVE_REUNION_30TH from ~/.config/f-section/drive.env>
+   ```
+   `scope=drive.readonly` means the token itself cannot write, so the Viewer grant and the scope
+   both have to fail before anything on the Drive could change.
+8. **Test** it lists the contributor folders and nothing else:
+   ```
+   rclone lsd gdrive:
+   rclone about gdrive:
+   ```
+
+**Never** run `rclone sync`, `move`, `delete`, `rmdir`, `deletefile` or `cleanup` against
+`gdrive:`, and never `copy` *to* it. The Drive is a source only. Friends must keep seeing their own
+uploads exactly as they left them. Downloads go to `/mnt/data/f-section/drive/`, and all renaming
+happens in `/mnt/data/f-section/work/`.
+
+**To revoke:** delete the key (or the whole service account) in the Cloud console, or remove it from
+the folder's sharing list. Either cuts access immediately and affects nothing else.
+
 ## Build machine
 Since 2026-10-25, the main build and ingest machine is **minnaham**, Saran's always-on Ubuntu server. The Windows PC below is the fallback.
 - minnaham has its own `r2` rclone remote with its own R2 token: repeat steps 5 and 6 there, naming the token `rclone-f-section-minnaham`. To cut off one machine, revoke its token.
 - The Google Drive remote for the reunion photos is **read-only** and limited to that folder. Its folder IDs live only in `~/.config/` on minnaham, never in this repo.
 - **All media work happens on the local disk, in `/mnt/data/f-section`** (folders `drive/`, `work/`, `originals/`, `review/`, `out/`, `masters/`). Never work directly on the NAS: it is slow and caused problems before. Back up to the NAS with one bulk copy after each album.
+
+## Local tools (minnaham, main machine)
+Set up 2026-10-25. Versions are what was installed that day; newer is fine.
+- **Node 24** (`.node-version`, and `NODE_VERSION=24` in Workers Builds) through **fnm**, a
+  per-directory version manager in `~/.local/bin/fnm`. Ubuntu's own Node 22 stays the default
+  for every other project: fnm's `default` alias points at `system`, and this repo switches to
+  Node 24 on `cd` because of `.node-version`. The shell hook belongs in `~/.bashrc`:
+  `eval "$(fnm env --use-on-cd --shell bash)"`.
+- Use **`npm ci`**, not `npm install`. npm 11 rewrites harmless `libc` fields in
+  `package-lock.json` that the lockfile in git does not carry, which shows up as a dirty tree
+  for no reason. `npm ci` installs from the lockfile and leaves it alone.
+- **Python** for `scripts/ingest/.venv`. Ubuntu ships no `python3-venv` or `python3-pip` here, so
+  the venv is made with **`uv`** (already on the box) instead of `python3 -m venv`, which needs
+  no sudo:
+  `uv venv --python /usr/bin/python3.14 scripts/ingest/.venv`
+  `uv pip install --python scripts/ingest/.venv/bin/python -r scripts/ingest/requirements.txt`
+  The path the rest of this repo expects, `scripts/ingest/.venv/bin/python`, is unchanged.
+- `ffmpeg` and `ffprobe` 8.0.1 (`apt install ffmpeg`). HEVC decode, `libx264`, `libx265`, AAC, and
+  Intel QSV hardware encoders are all present.
+- `exiftool` 13.50 (`apt install libimage-exiftool-perl`).
+- `rclone` 1.75.2, from the official installer at https://rclone.org/install.sh, **not** apt:
+  Ubuntu's package is 1.60 from 2022. The installed binary was checked against the published
+  `SHA256SUMS` for that release. Remotes (`r2`, and the read-only Drive remote) are set up per
+  steps 5 and 6; the config stays in `~/.config/rclone/`, never in git.
+- `git`, `gh` (authenticated as `ssaravanan3`), and `busybox` for unzip.
+- NAS reached at `/media/tnas_data` (CIFS). Backup and archive only; never a working directory.
 
 ## Local tools (Windows PC, fallback)
 - Node 22.12 or later, Git, the GitHub CLI (`gh`), and Python 3.12 or later with `scripts/ingest/.venv`.
