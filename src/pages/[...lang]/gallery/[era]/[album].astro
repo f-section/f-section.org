@@ -6,7 +6,7 @@ import Photo from '../../../../components/Photo.astro';
 import Tx from '../../../../components/Tx.astro';
 import { pick, href, LANGS, langParam, langFromParam, type UiKey } from '../../../../i18n';
 import { eraSlug, isThen } from '../../../../site';
-import { getAlbums, coverOf, photoUrl, mapUrl, type Album } from '../../../../lib/media';
+import { getAlbums, coverOf, photoUrl, type Album } from '../../../../lib/media';
 
 export async function getStaticPaths() {
   const albums = await getAlbums();
@@ -55,19 +55,11 @@ const eraKey = `era.${data.era}` as UiKey;
                   <Photo album={album} item={item} lang={lang} class:list={[then && 'sepia-[.2]']} />
                 </a>
               )}
-              {(item.caption.en || item.credit || item.gps) && (
+              {/* Pictures only: no credit line, no map link (2026-10-26). The credit and
+                  the coordinates stay in media.json; they are simply not shown. */}
+              {item.caption.en && (
                 <figcaption class="mt-2 text-base leading-snug">
-                  {item.caption.en && <Tx lang={lang} pair={item.caption} />}
-                  {item.credit && (
-                    <span class="block text-sepia">
-                      <Tx lang={lang} k="common.photo_by" /> {item.credit}
-                    </span>
-                  )}
-                  {item.gps && (
-                    <a href={mapUrl(item.gps)} class="tap -ml-3 justify-start" target="_blank" rel="noopener">
-                      <span aria-hidden="true">📍</span>&nbsp;<Tx lang={lang} k="common.map" />
-                    </a>
-                  )}
+                  <Tx lang={lang} pair={item.caption} />
                 </figcaption>
               )}
             </figure>

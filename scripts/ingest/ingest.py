@@ -14,6 +14,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import os
 import re
 import shutil
@@ -104,7 +105,14 @@ def load_manifest(album_dir: Path) -> list[dict]:
 
 
 def write_manifest(album_dir: Path, items: list[dict]) -> None:
-    items = sorted(items, key=lambda m: m["id"])
+    # media.json order IS display order: the album page renders it as it stands. That order
+    # may be deliberate -- 2026-reunion-campus opens on the main gate, which is not its
+    # earliest photo -- so keep the order of whatever is already in the manifest and append
+    # new items after it, by id. Re-running ingest must never reshuffle a curated album.
+    rank = {m["id"]: i for i, m in enumerate(load_manifest(album_dir))}
+    known = sorted((m for m in items if m["id"] in rank), key=lambda m: rank[m["id"]])
+    fresh = sorted((m for m in items if m["id"] not in rank), key=lambda m: m["id"])
+    items = known + fresh
     text = json.dumps(items, indent=2, ensure_ascii=False) + "\n"
     (album_dir / "media.json").write_bytes(text.encode("utf-8"))
 
@@ -260,6 +268,13 @@ def _dms_to_deg(dms, ref) -> float | None:
     except (TypeError, ValueError):
         return None
     deg = d + m / 60 + s / 3600
+    # A camera that wrote GPS tags but never got a fix leaves 0/0 rationals, and
+    # float(IFDRational(0, 0)) is nan rather than an error. nan passes the "is it
+    # 0,0" test below (nan == 0 is False), reaches media.json, and breaks the build:
+    # Python writes bare NaN, which is not valid JSON and no strict parser accepts.
+    # Found on a real photo on 2026-10-26.
+    if not math.isfinite(deg):
+        return None
     return -deg if str(ref).strip("\x00 ").upper() in ("S", "W") else deg
 
 
@@ -274,6 +289,8 @@ def photo_gps(path: Path) -> dict | None:
         return None
     lat, lon = _dms_to_deg(g[2], g.get(1, "N")), _dms_to_deg(g[4], g.get(3, "E"))
     if lat is None or lon is None or (lat == 0 and lon == 0):
+        return None
+    if not (-90 <= lat <= 90 and -180 <= lon <= 180):
         return None
     return {"lat": round(lat, 6), "lon": round(lon, 6)}
 

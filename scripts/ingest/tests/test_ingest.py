@@ -127,6 +127,53 @@ class IngestTests(unittest.TestCase):
         ingest.main(["--album", "2026-test-album", "--src", str(self.src), "--apply", "--no-upload"])
         self.assertEqual(len(json.loads((self.album / "media.json").read_text("utf-8"))), 1)
 
+    def test_curated_order_survives_a_second_ingest(self):
+        """media.json order is display order and may be hand-curated, so a later
+        ingest must append rather than reshuffle (2026-10-26)."""
+        make_photo(self.src / "saran" / "a.jpg", taken="2026:09:12 10:15:33")
+        make_photo(self.src / "saran" / "b.jpg", taken="2026:09:12 09:00:00")
+        ingest.main(["--album", "2026-test-album", "--src", str(self.src), "--apply", "--no-upload"])
+
+        # Hand-curate: put the later photo first, as the campus album does with the gate.
+        path = self.album / "media.json"
+        items = json.loads(path.read_text("utf-8"))
+        items.reverse()
+        curated = [m["id"] for m in items]
+        path.write_text(json.dumps(items, indent=2) + "\n", encoding="utf-8")
+
+        # A new photo arrives and ingest runs again.
+        make_photo(self.src / "saran" / "c.jpg", taken="2026:09:12 08:00:00")
+        ingest.main(["--album", "2026-test-album", "--src", str(self.src), "--apply", "--no-upload"])
+
+        after = [m["id"] for m in json.loads(path.read_text("utf-8"))]
+        self.assertEqual(after[:2], curated, "curated order was reshuffled")
+        self.assertEqual(len(after), 3, "the new photo should be appended")
+        self.assertNotIn(after[2], curated)
+
+    def test_gps_tags_with_no_fix_are_dropped_not_written_as_nan(self):
+        """A camera can write GPS tags with 0/0 rationals when it never got a fix.
+        float(IFDRational(0, 0)) is nan, which used to reach media.json as bare NaN
+        and break the build, because that is not valid JSON (2026-10-26)."""
+        from PIL import TiffImagePlugin
+
+        path = self.src / "saran" / "nofix.jpg"
+        make_photo(path, gps=False)
+        im = Image.open(path)
+        exif = im.getexif()
+        exif.get_ifd(ingest.EXIF_IFD)[ingest.EXIF_DATETIME_ORIGINAL] = "2026:09:12 10:15:33"
+        g = exif.get_ifd(ingest.GPS_IFD)
+        zero = TiffImagePlugin.IFDRational(0, 0)
+        g[1], g[2] = "", (zero, zero, zero)
+        g[3], g[4] = "", (zero, zero, zero)
+        im.save(path, exif=exif)
+
+        self.assertIsNone(ingest.photo_gps(path), "GPS with no fix should be dropped")
+
+        ingest.main(["--album", "2026-test-album", "--src", str(self.src), "--apply", "--no-upload"])
+        raw = (self.album / "media.json").read_text("utf-8")
+        self.assertNotIn("NaN", raw)
+        json.loads(raw)  # strict parsers must accept it
+
 
 if __name__ == "__main__":
     unittest.main()

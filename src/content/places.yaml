@@ -1,8 +1,42 @@
 # Campus and Trichy spots, used for Places and Then & Now pages (DESIGN.md §4.3).
 # Slugs: lowercase with hyphens. Add Tamil names when ready; empty falls back to English.
+#
+# Places are optional metadata on a photo, not part of its id (see
+# docs/decisions/2026-10-26-media-ids-stay-short.md). A photo with no known place
+# is fine; nobody goes hunting for one.
+
+# --- REC / NIT Trichy campus ---
 - id: main-building
   name: { en: "Main building", ta: "" }
 - id: hostel
   name: { en: "Hostel", ta: "" }
 - id: canteen
   name: { en: "Canteen", ta: "" }
+- id: octagon
+  name: { en: "Octagon", ta: "" }
+- id: shopping-complex
+  name: { en: "Shopping complex", ta: "" }
+- id: campus-temple
+  name: { en: "Campus temple", ta: "" }
+- id: departments
+  name: { en: "Departments", ta: "" }
+
+# --- Trichy, 30th reunion (October 2026) ---
+- id: vayalur-temple
+  name: { en: "Arulmigu Vayalur Murugan Temple", ta: "" }
+- id: mukkombu
+  name: { en: "Mukkombu (Upper Anicut)", ta: "" }
+- id: rockfort
+  name: { en: "Rockfort, Uchi Pillaiyar Koil", ta: "" }
+- id: main-guard-gate
+  name: { en: "Main Guard Gate", ta: "" }
+- id: srm-hotel
+  name: { en: "Hotel Tamil Nadu (SRM)", ta: "" }
+- id: ammikal
+  name: { en: "Ammikal Restaurant", ta: "" }
+- id: banana-leaf
+  name: { en: "Banana Leaf Restaurant", ta: "" }
+- id: trichy-station
+  name: { en: "Trichy Railway Station", ta: "" }
+- id: egmore-station
+  name: { en: "Chennai Egmore Railway Station", ta: "" }

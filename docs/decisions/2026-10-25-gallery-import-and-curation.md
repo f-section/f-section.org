@@ -16,15 +16,24 @@ The folder links are **private**: Saran's Drive also holds personal material. Th
 ## Renaming: in staging, never on the Drive
 Files are renamed only in the work area on minnaham (see "Work area" below):
 
+> **Superseded on 2026-10-26** by `2026-10-26-media-ids-stay-short.md`: there is no
+> place-or-event segment. The name is `<YYYYMMDD>-<HHMMSS>_<who>_<NNN>.<ext>`, and the place is
+> optional metadata in `media.json`. The rest of this section still applies.
+
 ```
-<YYYYMMDD>-<HHMMSS>_<who>_<place-or-event>_<NNN>.<ext>
-20261003-184212_saravanan_campus-main-building_001.jpg
+<YYYYMMDD>-<HHMMSS>_<who>_<NNN>.<ext>
+20261003-184212_saravanan_001.jpg
 ```
 
 - **Date and time:** from EXIF first. For copies with no EXIF (WhatsApp forwards), from the file name (`IMG-20261003-WA0012`), then the Drive date.
 - **Who:** the contributor's folder name, lowercased (`07 - Mohanraj` → `mohanraj`).
 - **Place or event:** from GPS matched to `places.yaml`, then from the reunion schedule by time. Claude judges what is quickest: ask Saran, or make a sensible guess.
 - **No content labels** in names, and no titles or captions in the gallery.
+  - **Amended 2026-10-26:** one narrow exception. The five department group photos in the campus
+    album carry the department as a caption (`Production`, `Civil`, `Mechanical`, `Electrical`,
+    `Metallurgy`), because the caption is the whole point of those pictures: classmates look for
+    their own department. Every other photo stays caption-free. This is an exception, not a change
+    of policy: do not caption anything else without asking Saran.
 
 A **manifest** (CSV) links each new name to the Drive path, Drive file ID, original name and SHA-256 hash. It stays with the originals in `/mnt/data/f-section/originals/`, not in the repo, because it holds Drive IDs.
 

@@ -1,0 +1,12 @@
+# Day 1 of the 30th reunion: the afternoon back on campus, 2 October 2026.
+# Order is deliberate and lives in media.json: the main gate opens the album,
+# then the five department groups, then the afternoon in time order.
+slug: 2026-reunion-campus
+era: 2026-30th
+date: 2026-10-02
+title:    { en: "Back on campus", ta: "" }
+summary:  { en: "", ta: "" }
+location: { en: "REC / NIT Trichy campus", ta: "" }
+visibility: public
+cover: 20261002-175124_sridhar_001
+places: [main-building, hostel, octagon, departments, campus-temple, shopping-complex]
