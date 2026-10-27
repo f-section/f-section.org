@@ -7,7 +7,7 @@ _Last updated: 2026-10-25_
 ## Live
 - https://f-section.org (English) and https://f-section.org/ta/ (Tamil). Served by the Cloudflare Worker `f-section-site`, which deploys from `main` through Workers Builds.
 - Staging preview: https://staging-f-section-site.asaravanan75.workers.dev
-- Media: R2 bucket `f-section-media`, served at https://media.f-section.org. About 137.9 MiB of the 10 GB free tier: the link-preview image, the 30th reunion montage, and the kavithai video, each with a poster.
+- Media: R2 bucket `f-section-media`, served at https://media.f-section.org. About 149.8 MiB of the 10 GB free tier across 131 objects: the link-preview image, two videos with posters, and the first two 30th reunion albums.
 - Pages: Home, About, Gallery (by era, with a sample album that uses placeholders), Videos, Reunions, Arivu Malar.
 - Two videos on Videos, Reunions and Gallery → 2026: the montage ("30 years on: Reunion 2026", 4:28)
   and the kavithai (1:36). The kavithai is in R2 and in the repo, but reaches the live site only
@@ -51,20 +51,36 @@ Rules: `docs/decisions/2026-10-25-gallery-import-and-curation.md`. Machine: minn
    Gallery 2026 in both languages. **Tamil title needs Saran's eye**, especially the spelling of
    the name.
 
+### Done on 2026-10-26
+8. **First two albums ingested and live in R2.** `2026-reunion-campus` (31 photos, opening on the
+   main gate, then the five department groups, then the afternoon in time order) and
+   `2026-reunion-arivu-malar` (32, including all 16 people who spoke). 63 originals totalling
+   395 MB became 126 web files totalling 13 MB. Originals are in
+   `/mnt/data/f-section/originals/<slug>/<contributor>/`.
+   Two bugs in `scripts/ingest` were found by running it on real files for the first time, both
+   fixed with regression tests:
+   - **GPS with no fix became `NaN`.** A camera that writes GPS tags without a fix leaves 0/0
+     rationals, and `float(IFDRational(0, 0))` is `nan`, not an error. It passed the "is it 0,0"
+     check (`nan == 0` is False), reached `media.json` as bare `NaN`, and broke the build, because
+     that is not valid JSON. Now dropped, with a range check as well.
+   - **`write_manifest` re-sorted by id on every run**, which would have silently undone the
+     campus album's deliberate order the next time anything was ingested into it. It now keeps the
+     order of whatever is already in the manifest and appends new items after it.
+
 ### Next
-8. **Photo curation.** Contact sheets per event, then picks. Weighting, as Saran restated on
+9. **Photo curation, remaining two albums.** Contact sheets per event, then picks. Weighting, as Saran restated on
    2026-10-25: strongly prefer natural and candid — friends talking, walking, unaware of the
    camera — over posed shots at the lens. Posed is acceptable occasionally, not as the default.
    Start from Mohanraj's `1st Cut` (208 Canon frames, the backbone).
-9. **Two montages, by day** (Saran changed this on 2026-10-26, replacing the three themed ones
+10. **Two montages, by day** (Saran changed this on 2026-10-26, replacing the three themed ones
    agreed the day before): **Day 1** and **Day 2**. Reason: each day mixes campus, temple, meals
    and evening material, so a day-shaped cut varies the imagery, where a theme-shaped cut would
    string together many near-identical scenes. Day 3 is only departure and tails Day 2.
    Music: `masters/Nanban-En_Frienda_Pola.mp3` (3:53), a different section under each montage.
    It is a loud master (-10.6 LUFS, +0.6 dBTP) and must be normalised down for web.
-10. **Review page.** Contact sheet in `review/` for approval before any ingest.
-11. **Ingest and upload.** Blocked on the R2 token for minnaham (RUNBOOK steps 5-6).
-12. **Open a PR** from `staging` with the album pages and the video entries.
+11. **Review page.** Contact sheet in `review/` for approval before any ingest.
+12. **Ingest and upload.** R2 token and `r2` remote are in place since 2026-10-26.
+13. **Open a PR** from `staging` with the album pages and the video entries.
 
 ### Notes worth keeping
 - The kavithai source plays **mirrored** (a `-180` display matrix plus a selfie-camera mirror);

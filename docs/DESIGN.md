@@ -157,7 +157,7 @@ The date comes first so that everything sorts in time order on its own.
 | Item | Pattern | Example |
 |---|---|---|
 | Album slug | `YYYY-event-topic` | `2026-reunion-campus-walk` |
-| Media file | `YYYYMMDD-HHMMSS_contributor_place-or-event_NNN.ext`. The place or event comes from GPS and `places.yaml`, or from the reunion schedule (2026-10-25). Older files without it keep the shorter form. | `20261003-184212_saravanan_campus-main-building_001.webp` |
+| Media file | `YYYYMMDD-HHMMSS_contributor_NNN.ext`. No place segment: the place is optional metadata in `media.json` (`place`), not part of the id (2026-10-26). | `20261003-184212_saravanan_001.webp` |
 | Scanned old photo (no exact date) | `YYYY-00-00_scan_NNN.ext` | `1994-00-00_scan_007.webp` |
 | Magazine issue | `YYYY-MM`. Use `volNN-issNN` instead if the originals carry numbers (**Open, O-4**). | `1993-08` |
 | Place slug | lowercase, hyphens | `main-building` |
@@ -277,7 +277,7 @@ These are proposals. Check every text colour pair for WCAG AA contrast in Phase 
 ### 8.1 Workflow
 
 1. **Collect.** Friends upload to a shared Google Drive folder, with one subfolder per person. Claude reads it through a **read-only** rclone remote and never renames or deletes anything there (2026-10-25).
-2. **Curate.** Claude does the first pass and Saran approves the picks on a review page that is not published. The pass renames files in staging, removes duplicates and repeats, and prefers candid shots. Rules: `docs/decisions/2026-10-25-gallery-import-and-curation.md`. No captions.
+2. **Curate.** Claude does the first pass and Saran approves the picks on a review page that is not published. The pass renames files in staging, removes duplicates and repeats, and prefers candid shots. Rules: `docs/decisions/2026-10-25-gallery-import-and-curation.md`. No captions, with one exception agreed 2026-10-26: the department group photos are captioned with the department name.
 3. **Keep the originals.** Keep the originals in `/mnt/data/f-section/originals/<album-slug>/` on minnaham's local disk, with the manifest that links each new name to its Drive original. This is the master copy. Back it up to the NAS with one bulk copy. All work (download, conversion, renaming, review) happens on the local disk in `/mnt/data/f-section`, never directly on the slow NAS.
 4. **Ingest.** Run `scripts/ingest` on minnaham, Saran's Ubuntu server, reading from the local disk. It does the following:
    - Reads the originals for one album.
