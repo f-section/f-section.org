@@ -67,6 +67,21 @@ Rules: `docs/decisions/2026-10-25-gallery-import-and-curation.md`. Machine: minn
      campus album's deliberate order the next time anything was ingested into it. It now keeps the
      order of whatever is already in the manifest and appends new items after it.
 
+### Paused 2026-10-26, mid-review
+Albums 3 and 4 are **chosen but not ingested**. Saran is reviewing the contact sheets.
+- `2026-reunion-outings` — 19 of 74 (Vayalur, Mukkombu, Banana Leaf, Rockfort, Main Guard Gate)
+- `2026-reunion-hotel` — 22 of 127 (train up, check-in, Ammikal lunch, pool, swings, train home)
+- The 128 undated WhatsApp files: **recommend taking none.** 95 are under 2 MP; the 28 usable
+  distinct moments are the Mukkombu walkway and the lit Rockfort, both already covered by better
+  cameras.
+
+The pick lists, the reasoning and how to resume are in
+`/mnt/data/f-section/work/curation/PICKS-PENDING-REVIEW.md`, with the triage data and the
+scripts beside it. Contact sheets are in `/mnt/data/f-section/review/`. None of that is in git:
+it names contributors and is working material, not site content.
+
+Running total if approved: 94 photos of 563 across four albums.
+
 ### Next
 9. **Photo curation, remaining two albums.** Contact sheets per event, then picks. Weighting, as Saran restated on
    2026-10-25: strongly prefer natural and candid — friends talking, walking, unaware of the
