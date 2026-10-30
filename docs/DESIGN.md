@@ -221,10 +221,10 @@ These are proposals. Check every text colour pair for WCAG AA contrast in Phase 
 |---|---|
 | Album card | A Polaroid-style cover photo with the title and a handwritten date |
 | Era ribbon | A strip across the top of the gallery for choosing the era |
-| Lightbox | Full-screen photo viewer with swipe. Pictures only: no credit, no map link (2026-10-26) |
+| Lightbox | Full-screen photo viewer: back, forward, back-to-the-first, a count, swipe, arrow keys and Escape (2026-10-30). Pictures only: no credit, no map link (2026-10-26). With no JavaScript the photo link still opens the large copy |
 | Then & Now slider | Two photos of the same spot (old and new); drag to compare |
 | Magazine viewer | One page at a time with next and previous buttons, plus a PDF download. A page-flip effect is optional (Phase 3). |
-| Video player | Native HTML5 `<video>` with a poster image and optional subtitles |
+| Video player | Native HTML5 `<video>` with a poster image and optional subtitles, plus a "Start from the beginning" button (2026-10-30) |
 | Language toggle | EN / தமிழ், at the top right |
 
 ### 6.4 Accessibility

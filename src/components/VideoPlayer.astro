@@ -39,6 +39,15 @@ const hdLink = data.files['720'] ? data.files['1080'] : undefined;
     {data.summary.en && <Tx lang={lang} pair={data.summary} as="p" class="mt-1" />}
     <p class="mt-1 flex flex-wrap items-center gap-x-4 text-sepia">
       <span>{data.duration}</span>
+      {/* The browser's own controls have no way back to the start except dragging
+          the slider, which is fiddly on a phone (2026-10-30). */}
+      <button type="button" data-video-restart class="tap -ml-3 justify-start gap-2 text-ink-red">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 5v14" />
+          <path d="M19 5 9 12l10 7z" fill="currentColor" />
+        </svg>
+        <Tx lang={lang} k="videos.restart" />
+      </button>
       {
         hdLink && (
           <a href={mediaUrl(hdLink)} class="tap -ml-3 justify-start">
@@ -49,3 +58,14 @@ const hdLink = data.files['720'] ? data.files['1080'] : undefined;
     </p>
   </figcaption>
 </figure>
+
+<script>
+  // "Start from the beginning": rewind this figure's video and play it.
+  document.addEventListener('click', (e) => {
+    const button = (e.target as HTMLElement).closest('[data-video-restart]');
+    const video = button?.closest('figure')?.querySelector<HTMLVideoElement>('video');
+    if (!video) return;
+    video.currentTime = 0;
+    video.play().catch(() => {}); // a browser that refuses to autoplay is fine: it just rewinds
+  });
+</script>

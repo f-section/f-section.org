@@ -2,12 +2,12 @@
 
 Where the project stands, and what comes next. Update this file at the end of every working session. No private links, tokens or personal details: this repo is public.
 
-_Last updated: 2026-10-25_
+_Last updated: 2026-10-30_
 
 ## Live
 - https://f-section.org (English) and https://f-section.org/ta/ (Tamil). Served by the Cloudflare Worker `f-section-site`, which deploys from `main` through Workers Builds.
 - Staging preview: https://staging-f-section-site.asaravanan75.workers.dev
-- Media: R2 bucket `f-section-media`, served at https://media.f-section.org. About 149.8 MiB of the 10 GB free tier across 131 objects: the link-preview image, two videos with posters, and the first two 30th reunion albums.
+- Media: R2 bucket `f-section-media`, served at https://media.f-section.org. About 150.7 MiB of the 10 GB free tier across 145 objects: the link-preview image, two videos with posters, and the first two 30th reunion albums. Six of those objects (three photos dropped from Arivu Malar on 2026-10-30) are no longer referenced; nothing is deleted from R2 without Saran's explicit yes.
 - Pages: Home, About, Gallery (by era, with the first two real 30th reunion albums), Videos, Reunions, Arivu Malar.
 - Two videos on Videos, Reunions and Gallery → 2026: the montage ("30 years on: Reunion 2026", 4:28)
   and the kavithai (1:36). The kavithai is in R2 and in the repo, but reaches the live site only
@@ -67,20 +67,61 @@ Rules: `docs/decisions/2026-10-25-gallery-import-and-curation.md`. Machine: minn
      campus album's deliberate order the next time anything was ingested into it. It now keeps the
      order of whatever is already in the manifest and appends new items after it.
 
+### Paused 2026-10-26, mid-review
+Albums 3 and 4 are **chosen but not ingested**. Saran is reviewing the contact sheets.
+- `2026-reunion-outings` — 19 of 74 (Vayalur, Mukkombu, Banana Leaf, Rockfort, Main Guard Gate)
+- `2026-reunion-hotel` — 22 of 127 (train up, check-in, Ammikal lunch, pool, swings, train home)
+- The 128 undated WhatsApp files: **recommend taking none.** 95 are under 2 MP; the 28 usable
+  distinct moments are the Mukkombu walkway and the lit Rockfort, both already covered by better
+  cameras.
+
+The pick lists, the reasoning and how to resume are in
+`/mnt/data/f-section/work/curation/PICKS-PENDING-REVIEW.md`, with the triage data and the
+scripts beside it. Contact sheets are in `/mnt/data/f-section/review/`. None of that is in git:
+it names contributors and is working material, not site content.
+
+Running total if approved: 94 photos of 563 across four albums.
+
+### Done on 2026-10-30
+9. **Arivu Malar album reworked** on Saran's notes after seeing it live, and **the gallery and
+   the video player learned to navigate** (`docs/decisions/2026-10-30-lightbox-and-video-restart.md`).
+   - Cover is now `IMG_8847` (the group of seven, just after the release). The old cover,
+     `IMG_8843`, was already inside the album and stays there.
+   - `IMG_8867` added: the one woman who came to the event, speaking.
+   - Out: `IMG_8887`, `IMG_8908` and `IMG_8837` (all repeats of a face already in the album;
+     `IMG_8837` and `IMG_8840` are both Saran speaking, so only `IMG_8840` stays).
+     In: `IMG_8836`, `IMG_8845`, `IMG_8864`, `IMG_8900`, `IMG_8902`, `IMG_8936`.
+     All from `07 - Mohanraj/1st Cut`. **32 → 36 photos.**
+   - Order reworked so the same face is not in two frames running. The one place it still is,
+     deliberately, is 9–11 (`IMG_8843` → `IMG_8845` → `IMG_8847`): that is the release itself,
+     told in three frames, and the same handful of people are in all of them.
+   - New ids continue the sequence (`_033`–`_039`), so nothing already in R2 was renamed.
+     Contact sheet of the new order: `/mnt/data/f-section/review/arivu-malar-v2.jpg`.
+   - **Lightbox** (`src/components/Lightbox.astro`): tapping a photo now opens it in place with
+     first · back · forward, a counter, swipe, arrow keys and Escape. It layers on the existing
+     photo links, so with no JavaScript the album behaves exactly as before.
+   - **Videos**: a "Start from the beginning" button under each one.
+   - Six new interface strings. **The Tamil is Claude's draft and needs Saran's eye.**
+
 ### Next
-9. **Photo curation, remaining two albums.** Contact sheets per event, then picks. Weighting, as Saran restated on
+10. **Arivu Malar 2026 as an online e-book** — Saran's choice on 2026-10-30, ahead of the
+   remaining albums and the montages. Plan:
+   `docs/decisions/2026-10-30-arivumalar-2026-ebook.md`.
+11. **Photo curation, remaining two albums** (deferred on 2026-10-30, picks already chosen and
+   waiting in `/mnt/data/f-section/work/curation/PICKS-PENDING-REVIEW.md`). Contact sheets per
+   event, then picks. Weighting, as Saran restated on
    2026-10-25: strongly prefer natural and candid — friends talking, walking, unaware of the
    camera — over posed shots at the lens. Posed is acceptable occasionally, not as the default.
    Start from Mohanraj's `1st Cut` (208 Canon frames, the backbone).
-10. **Two montages, by day** (Saran changed this on 2026-10-26, replacing the three themed ones
+12. **Two montages, by day** (deferred on 2026-10-30; Saran changed this on 2026-10-26, replacing the three themed ones
    agreed the day before): **Day 1** and **Day 2**. Reason: each day mixes campus, temple, meals
    and evening material, so a day-shaped cut varies the imagery, where a theme-shaped cut would
    string together many near-identical scenes. Day 3 is only departure and tails Day 2.
    Music: `masters/Nanban-En_Frienda_Pola.mp3` (3:53), a different section under each montage.
    It is a loud master (-10.6 LUFS, +0.6 dBTP) and must be normalised down for web.
-11. **Review page.** Contact sheet in `review/` for approval before any ingest.
-12. **Ingest and upload.** R2 token and `r2` remote are in place since 2026-10-26.
-13. **Open a PR** from `staging` with the album pages and the video entries.
+13. **Review page.** Contact sheet in `review/` for approval before any ingest.
+14. **Ingest and upload.** R2 token and `r2` remote are in place since 2026-10-26.
+15. **Open a PR** from `staging` with the album pages and the video entries.
 
 ### Notes worth keeping
 - The kavithai source plays **mirrored** (a `-180` display matrix plus a selfie-camera mirror);

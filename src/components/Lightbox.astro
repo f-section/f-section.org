@@ -1,0 +1,167 @@
+---
+/**
+ * Full-screen photo viewer for one album (DESIGN.md §6.3).
+ *
+ * The album page already links every photo to its large copy, so with no
+ * JavaScript the link still works exactly as before. When JavaScript and
+ * <dialog> are available, this takes the click over and opens the photo in
+ * place, with back, forward and "first photo" so nobody has to leave the
+ * viewer to see the next picture. Arrow keys, Home, Escape and a sideways
+ * swipe do the same thing.
+ *
+ * It reads the photos straight out of the page -- every `a[data-lb-item]` --
+ * so there is no second copy of the album to keep in step.
+ */
+import { t, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const btn =
+  'tap rounded-full text-paper/75 hover:text-paper hover:bg-paper/10 focus-visible:text-paper';
+---
+<dialog
+  data-lightbox
+  tabindex="-1"
+  aria-label={t(lang, 'lightbox.label')}
+  class="m-0 h-full max-h-none w-full max-w-none bg-ink p-0 text-paper backdrop:bg-ink/80"
+>
+  <div class="flex h-full flex-col">
+    <div class="flex shrink-0 items-center justify-between px-2 pt-[env(safe-area-inset-top)]">
+      <p data-lb-count class="px-3 text-base text-paper/75 tabular-nums" aria-live="polite"></p>
+      <button type="button" data-lb="close" class={btn} aria-label={t(lang, 'lightbox.close')}>
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M6 6l12 12M18 6 6 18" />
+        </svg>
+      </button>
+    </div>
+
+    <div data-lb-stage class="flex min-h-0 flex-1 items-center justify-center px-2 py-1">
+      <img data-lb-img src="" alt="" class="max-h-full max-w-full object-contain" />
+    </div>
+
+    <div class="shrink-0 px-2 pb-[env(safe-area-inset-bottom)]">
+      <p data-lb-caption class="mx-auto max-w-3xl px-2 pb-1 text-center text-base leading-snug"></p>
+      <div class="flex items-center justify-center gap-2 pb-1">
+        <button type="button" data-lb="first" class={btn} aria-label={t(lang, 'lightbox.first')}>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M6 5v14" />
+            <path d="M19 5 9 12l10 7z" fill="currentColor" />
+          </svg>
+        </button>
+        <button type="button" data-lb="prev" class={btn} aria-label={t(lang, 'lightbox.prev')}>
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m15 5-7 7 7 7" />
+          </svg>
+        </button>
+        <button type="button" data-lb="next" class={btn} aria-label={t(lang, 'lightbox.next')}>
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m9 5 7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('dialog[data-lightbox]');
+  const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('a[data-lb-item]'));
+
+  // No <dialog> support: leave the links alone, so a tap still opens the photo.
+  if (dialog && links.length && typeof dialog.showModal === 'function') {
+    const lb = dialog;
+    const img = dialog.querySelector<HTMLImageElement>('[data-lb-img]')!;
+    const caption = dialog.querySelector<HTMLElement>('[data-lb-caption]')!;
+    const count = dialog.querySelector<HTMLElement>('[data-lb-count]')!;
+    const stage = dialog.querySelector<HTMLElement>('[data-lb-stage]')!;
+    let at = 0;
+    let opener: HTMLAnchorElement | null = null;
+
+    const preload = (i: number) => {
+      const a = links[i];
+      if (a) new Image().src = a.href;
+    };
+
+    function show(i: number) {
+      at = (i + links.length) % links.length;
+      const a = links[at];
+      const thumb = a.querySelector('img');
+      img.src = a.href;
+      img.alt = thumb?.alt ?? '';
+      // Hold the real shape while the big copy loads, so nothing jumps.
+      img.width = Number(thumb?.getAttribute('width')) || 0;
+      img.height = Number(thumb?.getAttribute('height')) || 0;
+      caption.textContent = a.dataset.caption ?? '';
+      caption.hidden = !a.dataset.caption;
+      count.textContent = `${at + 1} / ${links.length}`;
+      preload(at + 1);
+      preload(at - 1);
+    }
+
+    function open(i: number, from: HTMLAnchorElement) {
+      opener = from;
+      show(i);
+      lb.showModal();
+      document.documentElement.style.overflow = 'hidden';
+      // Focus the viewer itself, not a button: arrow keys and Escape still work,
+      // and no control is left wearing a focus ring over the photo.
+      lb.focus();
+    }
+
+    links.forEach((a, i) =>
+      a.addEventListener('click', (e) => {
+        // Let a middle-click or ctrl-click open the photo in a new tab as usual.
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || (e as MouseEvent).button !== 0) return;
+        e.preventDefault();
+        open(i, a);
+      }),
+    );
+
+    dialog.addEventListener('click', (e) => {
+      const action = (e.target as HTMLElement).closest<HTMLElement>('[data-lb]')?.dataset.lb;
+      if (action === 'next') show(at + 1);
+      else if (action === 'prev') show(at - 1);
+      else if (action === 'first') show(0);
+      else if (action === 'close') dialog.close();
+      // A tap on the dark area around the photo closes it too.
+      else if (e.target === dialog || e.target === stage) dialog.close();
+    });
+
+    dialog.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') show(at + 1);
+      else if (e.key === 'ArrowLeft') show(at - 1);
+      else if (e.key === 'Home') show(0);
+      else return;
+      e.preventDefault();
+    });
+
+    dialog.addEventListener('close', () => {
+      document.documentElement.style.overflow = '';
+      opener?.focus();
+      img.removeAttribute('src');
+    });
+
+    // Swipe sideways on a phone. A mostly-vertical drag is left alone.
+    let x0 = 0;
+    let y0 = 0;
+    stage.addEventListener(
+      'touchstart',
+      (e) => {
+        x0 = e.changedTouches[0].clientX;
+        y0 = e.changedTouches[0].clientY;
+      },
+      { passive: true },
+    );
+    stage.addEventListener(
+      'touchend',
+      (e) => {
+        const dx = e.changedTouches[0].clientX - x0;
+        const dy = e.changedTouches[0].clientY - y0;
+        if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) show(at + (dx < 0 ? 1 : -1));
+      },
+      { passive: true },
+    );
+  }
+</script>
