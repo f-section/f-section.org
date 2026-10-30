@@ -7,7 +7,7 @@ _Last updated: 2026-10-30_
 ## Live
 - https://f-section.org (English) and https://f-section.org/ta/ (Tamil). Served by the Cloudflare Worker `f-section-site`, which deploys from `main` through Workers Builds.
 - Staging preview: https://staging-f-section-site.asaravanan75.workers.dev
-- Media: R2 bucket `f-section-media`, served at https://media.f-section.org. About 150.7 MiB of the 10 GB free tier across 145 objects: the link-preview image, two videos with posters, and the first two 30th reunion albums. Four of those objects (two photos dropped from Arivu Malar on 2026-10-30) are no longer referenced; nothing is deleted from R2 without Saran's explicit yes.
+- Media: R2 bucket `f-section-media`, served at https://media.f-section.org. About 150.7 MiB of the 10 GB free tier across 145 objects: the link-preview image, two videos with posters, and the first two 30th reunion albums. Six of those objects (three photos dropped from Arivu Malar on 2026-10-30) are no longer referenced; nothing is deleted from R2 without Saran's explicit yes.
 - Pages: Home, About, Gallery (by era, with the first two real 30th reunion albums), Videos, Reunions, Arivu Malar.
 - Two videos on Videos, Reunions and Gallery → 2026: the montage ("30 years on: Reunion 2026", 4:28)
   and the kavithai (1:36). The kavithai is in R2 and in the repo, but reaches the live site only
@@ -88,8 +88,10 @@ Running total if approved: 94 photos of 563 across four albums.
    - Cover is now `IMG_8847` (the group of seven, just after the release). The old cover,
      `IMG_8843`, was already inside the album and stays there.
    - `IMG_8867` added: the one woman who came to the event, speaking.
-   - Out: `IMG_8887`, `IMG_8908` (both repeats). In: `IMG_8836`, `IMG_8845`, `IMG_8864`,
-     `IMG_8900`, `IMG_8902`, `IMG_8936`. All from `07 - Mohanraj/1st Cut`. **32 → 37 photos.**
+   - Out: `IMG_8887`, `IMG_8908` and `IMG_8837` (all repeats of a face already in the album;
+     `IMG_8837` and `IMG_8840` are both Saran speaking, so only `IMG_8840` stays).
+     In: `IMG_8836`, `IMG_8845`, `IMG_8864`, `IMG_8900`, `IMG_8902`, `IMG_8936`.
+     All from `07 - Mohanraj/1st Cut`. **32 → 36 photos.**
    - Order reworked so the same face is not in two frames running. The one place it still is,
      deliberately, is 9–11 (`IMG_8843` → `IMG_8845` → `IMG_8847`): that is the release itself,
      told in three frames, and the same handful of people are in all of them.
