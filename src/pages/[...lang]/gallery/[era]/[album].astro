@@ -1,8 +1,9 @@
 ---
-/** One album. The full-screen lightbox comes in Phase 1; for now each photo links to its large copy. */
+/** One album: every photo links to its large copy, and Lightbox turns those links into a viewer. */
 import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import PageIntro from '../../../../components/PageIntro.astro';
 import Photo from '../../../../components/Photo.astro';
+import Lightbox from '../../../../components/Lightbox.astro';
 import Tx from '../../../../components/Tx.astro';
 import { pick, href, LANGS, langParam, langFromParam, type UiKey } from '../../../../i18n';
 import { eraSlug, isThen } from '../../../../site';
@@ -51,7 +52,12 @@ const eraKey = `era.${data.era}` as UiKey;
               {item.placeholder ? (
                 <Photo album={album} item={item} lang={lang} />
               ) : (
-                <a href={photoUrl(album, item, 'display')} class="block">
+                <a
+                  href={photoUrl(album, item, 'display')}
+                  class="block"
+                  data-lb-item
+                  data-caption={pick(item.caption, lang) || undefined}
+                >
                   <Photo album={album} item={item} lang={lang} class:list={[then && 'sepia-[.2]']} />
                 </a>
               )}
@@ -68,4 +74,5 @@ const eraKey = `era.${data.era}` as UiKey;
     }
   </ul>
   {album.media.length === 0 && <Tx lang={lang} k="gallery.empty" as="p" />}
+  <Lightbox lang={lang} />
 </BaseLayout>
