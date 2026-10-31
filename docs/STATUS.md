@@ -7,7 +7,7 @@ _Last updated: 2026-10-31_
 ## Live
 - https://f-section.org (English) and https://f-section.org/ta/ (Tamil). Served by the Cloudflare Worker `f-section-site`, which deploys from `main` through Workers Builds.
 - Staging preview: https://staging-f-section-site.asaravanan75.workers.dev
-- Media: R2 bucket `f-section-media`, served at https://media.f-section.org. About 150.7 MiB of the 10 GB free tier across 145 objects: the link-preview image, two videos with posters, and the first two 30th reunion albums. Six of those objects (three photos dropped from Arivu Malar on 2026-10-30) are no longer referenced; nothing is deleted from R2 without Saran's explicit yes.
+- Media: R2 bucket `f-section-media`, served at https://media.f-section.org. About 196.7 MiB of the 10 GB free tier across 217 objects: the link-preview image, two videos with posters, the first two 30th reunion albums, and Arivu Malar 2026 (71 pictures and the printed book, uploaded 2026-10-31). Six of those objects (three photos dropped from Arivu Malar on 2026-10-30) are no longer referenced; nothing is deleted from R2 without Saran's explicit yes.
 - Pages: Home, About, Gallery (by era, with the first two real 30th reunion albums), Videos, Reunions, Arivu Malar.
 - Two videos on Videos, Reunions and Gallery → 2026: the montage ("30 years on: Reunion 2026", 4:28)
   and the kavithai (1:36). The kavithai is in R2 and in the repo, but reaches the live site only
@@ -150,20 +150,23 @@ Running total if approved: 94 photos of 563 across four albums.
    - The third profile photograph is a **tag, not an upload**: `photo_event: { album, id }` points
      at a picture already in the `2026-reunion-arivu-malar` album, so the same object serves both
      pages. The slot is built and empty — Saran tags them from
-     `/mnt/data/f-section/review/arivumalar-tagging.html`.
+     `/mnt/data/f-section/review/arivumalar-tagging.html`. Only `அன்று` and `இன்று` are captioned
+     (Saran, 2026-10-31): two labels for the three pictures, with the album link below the row.
    - 20 new `ebook.*` interface strings in both languages; the Tamil is Claude's draft under
      rule 5 and wants Saran's eye.
    - `scripts/arivumalar/media.py` converted **71 pictures** (8.3 MB) and staged them with the
-     printed book; `rclone copy --immutable --dry-run` reports 72 new objects, 46.0 MiB, nothing
-     overwritten. **The upload waits on Saran's yes.** R2 would go from 150.7 MiB to about 197 MiB.
+     printed book. **Uploaded on 2026-10-31** with Saran's yes: `rclone copy --immutable` put 72
+     new objects / 46.0 MiB in place, overwriting nothing, and the covers, the pictures and the
+     39.5 MB book all answer 200 from `media.f-section.org`. R2 is now 196.7 MiB of the 10 GB.
    - `npm run check` (0 errors), `npm run build` (124 pages) and `npm run check:links`
      (5,546 links) are all clean.
    - Still open: Saran's photo tags, captions for the four கான்ஸ்டன் photographs, and the three
      photo crops from the printed book (வைரமுத்து and ஸ்ரீதர்'s `அன்று`, மோகன் சுகுமார்'s `இன்று`).
 
 ### Next
-12. **Arivu Malar 2026 — upload the media and open the PR** (checkpoints 4 and 5). Then the
-   reorder pass, once Saran has read the book on the web.
+12. **Arivu Malar 2026 — Saran reads it on the web.** The media is in R2 and the PR is open
+   (checkpoints 4 and 5 done on 2026-10-31); what is left is his read of the staging preview, the
+   reorder pass that follows it, his eye over the 19 Tamil interface strings, and his photo tags.
 13. **Photo curation, remaining two albums** (deferred on 2026-10-30, picks already chosen and
    waiting in `/mnt/data/f-section/work/curation/PICKS-PENDING-REVIEW.md`). Contact sheets per
    event, then picks. Weighting, as Saran restated on

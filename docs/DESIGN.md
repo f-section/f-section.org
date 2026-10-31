@@ -431,7 +431,10 @@ fields and panels, their photographs, and their closing quote. These pages are `
 A person can carry a third photograph, `photo_event` (2026-10-31) — them speaking on release
 night. It is a tag, not a file: `{ album, id }` points at a picture already in a gallery album, so
 the same object serves both pages and nothing is uploaded twice. A tag naming a missing album or
-photo stops the build. The page then reads `அன்று` · release night · `இன்று`.
+photo stops the build. The row reads `அன்று`, the release-night picture, then `இன்று`, with only
+the two outer ones captioned (Saran, 2026-10-31): the release-night picture is as much `இன்று` as
+the family one, so a third caption said nothing and crowded the row. The album link below it says
+where that picture comes from.
 
 **Pictures:** `scripts/arivumalar/media.py` writes one WebP copy of each (1600px, quality 80) into
 a tree that mirrors the R2 keys, and records every size in `src/lib/ebook-img.json`. A Sätteri hast

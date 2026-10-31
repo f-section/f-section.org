@@ -7,6 +7,10 @@
  * Three photographs where we have them: their 1996 picture, them speaking on the night
  * the book was released, and the family picture they sent (Saran, 2026-10-31). The middle
  * one points at a gallery album, so the same file serves both pages.
+ *
+ * Only two of them are labelled, அன்று and இன்று (Saran, 2026-10-31): the release-night
+ * picture belongs to இன்று as much as the family one does, and a third caption only
+ * crowded the row. The album link under the row says where it comes from.
  */
 import BaseLayout from '../../../../../layouts/BaseLayout.astro';
 import Lightbox from '../../../../../components/Lightbox.astro';
@@ -65,10 +69,11 @@ const lang = langFromParam(Astro.params.lang);
 const { data } = person;
 const name = pick(data.name, lang);
 
-// அன்று, then the release night, then இன்று — the order the book reads in.
+// அன்று, then the release night, then இன்று — the order the book reads in. The middle
+// picture carries no caption; see the note at the head of this file.
 const frames = [
   data.photo_then && { ...picture(data.photo_then), label: t(lang, 'ebook.then') },
-  event && { src: event.src, width: event.width, height: event.height, alt: '', label: t(lang, 'ebook.at_the_release') },
+  event && { src: event.src, width: event.width, height: event.height, alt: '', label: '' },
   data.photo_now && { ...picture(data.photo_now), label: t(lang, 'ebook.now') },
 ].filter(Boolean) as { src: string; width?: number; height?: number; alt: string; label: string }[];
 const link = 'tap max-w-[45%] items-start gap-1 rounded-md px-2 py-2 leading-snug no-underline hover:bg-ink/5';
@@ -113,7 +118,9 @@ const link = 'tap max-w-[45%] items-start gap-1 rounded-md px-2 py-2 leading-snu
                   style="aspect-ratio: 4 / 5"
                 />
               </a>
-              <figcaption class="mt-2 text-base font-semibold text-sepia">{frame.label}</figcaption>
+              {frame.label && (
+                <figcaption class="mt-2 text-base font-semibold text-sepia">{frame.label}</figcaption>
+              )}
             </figure>
           </li>
         ))}

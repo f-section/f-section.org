@@ -57,7 +57,9 @@ first line stands as its title.
 **The third photograph.** Each profile can also show them speaking on the night the book was
 released (Saran, 2026-10-31): `அன்று`, then release night, then the family picture as `இன்று`. It
 is a tag pointing into the `2026-reunion-arivu-malar` album, not a new upload, so the picture is
-the one already on the site and the profile links back to the album.
+the one already on the site and the profile links back to the album. Only `அன்று` and `இன்று` are
+captioned — two labels for three pictures (Saran, 2026-10-31) — because the release-night picture
+belongs to today as much as the family one does.
 
 **Alt text stays empty** where the print design had none (Saran, 2026-10-31): a photo described
 for the sake of it reads awkwardly, and the text beside it already carries the meaning. The pages
