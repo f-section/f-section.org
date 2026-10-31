@@ -17,7 +17,7 @@ wherever the two disagree.
 | Page images | 71 pages × 3 sizes rendered with `pdftoppm` | **none.** Nothing to render, no poppler, no Ghostscript. |
 | Profiles | one collection, layout unstated | **an index plus one page per person**, each `noindex`. |
 | Reading order | a new web order worked out up front | **the printed order first.** Saran reorders after reading it on the web. |
-| Names | the book's full names | **first names only** (rule 14), with `printed_name` keeping what the book printed. |
+| Names | the book's full names | **first names only** (rule 14), with `printed_name` keeping what the book printed. Some Tamil first names run to two words with the surname separate, so மோகன் சுகுமார் and இரமேஷ் கண்ணன் are first names, not name plus surname (Saran, 2026-10-31). |
 
 ## The shape
 
@@ -45,6 +45,20 @@ out. The printed look lives in the PDF.
 width above it on a phone — and tap into the existing Lightbox. The design's floats are in mm and
 are not carried over.
 
+**The poems are scattered, not collected.** In print, `கவிதைகள்` was a nine-page set and two more
+of குமாரவேல்'s short poems sat on the leftover half of his own profile page, filling space the A5
+sheet could not use. The web has no such constraint, so every poem is its own reading page placed
+between the essays and the stories: ten in all, five of them குமாரவேல்'s plus the two from his
+profile. `மூச்சுவிடும் தூரம்` was likewise filler on the puzzle answers page and now stands alone.
+The two from the profile page have no printed title, so each is headed and listed by its first line.
+
+**Alt text stays empty** where the print design had none (Saran, 2026-10-31): a photo described
+for the sake of it reads awkwardly, and the text beside it already carries the meaning. The pages
+therefore emit `alt=""`, which is the correct way to mark a picture as decorative — not a missing
+attribute. The exception is கான்ஸ்டன்'s essay, whose four photographs get real captions when Saran
+sends them; the design hand-over left those open too. This is the e-book only: DESIGN.md §6.4 still
+holds for the gallery.
+
 **Puzzles** stay HTML, not page images: the crossword is a real CSS grid with its clues, and the six
 differences are two pictures. Both keep their answers behind a **விடைகள்** button, which also
 leaves the door open to making them interactive later.
@@ -70,7 +84,7 @@ the edits made during design. The printed HTML is the authority.
   Markdown, verbatim; a trailing `\` keeps a printed line break. `![alt](r2:public/…)` marks a
   photo that lives in R2, and the `r2:` scheme keeps Astro's image pipeline out of it.
   `type` picks the layout: `article · memoir · story · poem · humour · photos · scans · profiles ·
-  quotes · crossword · spot-six`.
+  quotes · crossword · spot-six`. An `untitled` poem is headed and listed by its own first line.
 - **`src/content/arivumalar/2026/people/<slug>.yaml`** — one person: first name, `printed_name`,
   city, the labelled fields and panels as printed, both photos, and their closing quote.
 - **`taPair`** — Tamil required, English optional, because the magazine has no English titles. The
@@ -86,12 +100,9 @@ behind a button). They are listed in `DROPPED` in the extract script, with the r
 
 - The reading order. It is the printed order for now, by Saran's decision, and he moves sections
   after reading them on the web.
-- Alt text for 24 photos that the print design needed none for, including the four கான்ஸ்டன்
-  pictures whose captions the design hand-over left open.
+- Captions for the four கான்ஸ்டன் photographs, still waiting on Saran since the design hand-over.
 - The `அன்று` photos of வைரமுத்து and ஸ்ரீதர், and மோகன்சுகுமார்'s `இன்று` photo: all three are
   cropped from the printed book, which carries reworks made after the design was finished.
-- The two short untitled poems printed inside குமாரவேல்'s own profile page: left on his page for
-  now.
 - DESIGN.md §3 and §6.3 are updated when the pages are built (checkpoint 3). §10.4 is updated now,
   with the schema.
 

@@ -304,10 +304,12 @@ NAMES = {
     "டி. மணிகண்டன்": "மணிகண்டன்",
     "மரகதவல்லி": "மரகதவல்லி",
     "முகமது இஸ்மாயில்": "இஸ்மாயில்",
-    "மோகன்சுகுமார்": "மோகன்சுகுமார்",
-    "மோகன் சுகுமார்": "மோகன்சுகுமார்",
+    # Some Tamil first names run to two words, with the surname separate (Saran,
+    # 2026-10-31). மோகன் சுகுமார் and இரமேஷ் கண்ணன் are first names, not name + surname.
+    "மோகன்சுகுமார்": "மோகன் சுகுமார்",
+    "மோகன் சுகுமார்": "மோகன் சுகுமார்",
     "பி. மோகன்ராஜ்": "மோகன்ராஜ்",
-    "எம். ரமேஷ் கண்ணன்": "ரமேஷ்",
+    "எம். ரமேஷ் கண்ணன்": "இரமேஷ் கண்ணன்",
     "சி ராம்மோகன்": "ராம்மோகன்",
     "சி. ராம்மோகன்": "ராம்மோகன்",
     "வைரமுத்து டி.": "வைரமுத்து",
@@ -331,9 +333,9 @@ PEOPLE_SLUGS = {
     "மணிகண்டன்": "manikandan",
     "மரகதவல்லி": "maragathavalli",
     "இஸ்மாயில்": "ismail",
-    "மோகன்சுகுமார்": "mohansugumar",
+    "மோகன் சுகுமார்": "mohan-sugumar",
     "மோகன்ராஜ்": "mohanraj",
-    "ரமேஷ்": "ramesh",
+    "இரமேஷ் கண்ணன்": "ramesh-kannan",
     "ராம்மோகன்": "rammohan",
     "வைரமுத்து": "vairamuthu",
     "ஸ்ரீதர்": "sridhar",
@@ -352,6 +354,7 @@ class Sec:
     title: str = ""  # only when the design heading is not the title we want
     start: str = ""  # take blocks from the one whose text starts with this
     stop: str = ""  # ...up to the one whose text starts with this
+    take: int = -1  # keep only this text block of the region, counting from 0
     dark: bool = False
 
 
@@ -369,6 +372,7 @@ SECTIONS = (
     Sec("tamil-in-ai", "கட்டுரை - செயற்கை நுண்ணறிவில் தமிழ் - சரவணன்.dc.html", "article", ("சரவணன்",)),
     Sec("thavam", POEMS, "poem", ("குமாரவேல்",), pages=(6,)),
     Sec("from-the-sea-to-life", "கடலிலிருந்து வாழ்க்கைக்கு - கான்ஸ்டன்.dc.html", "memoir", ("கான்ஸ்டன்",)),
+    Sec("shadows-still-talking", PROFILES, "poem", ("குமாரவேல்",), pages=(4,), start="கவிதைகள்", take=0),
     Sec("olithu-kol", "கதை - ஒலித்து கொல் - பாஞ்சாலை.dc.html", "story", ("பாஞ்சாலை",)),
     Sec("spot-six", SPOT, "spot-six", title="ஆறு வித்தியாசங்களைக் கண்டுபிடி", stop="கவிதை"),
     Sec("you-can-do-it", "கதை - உன்னால் முடியும் தம்பி - மோகன் சுகுமார்.dc.html", "story", ("மோகன்சுகுமார்",)),
@@ -376,6 +380,7 @@ SECTIONS = (
     Sec("tamils-in-the-uae", "கட்டுரை - அமீரக வளர்ச்சியில் தமிழர் தடம் - புவனேஷ்.dc.html", "article", ("புவனேஷ்",)),
     Sec("aval", POEMS, "poem", ("கலைச்செழியன்",), pages=(2,)),
     Sec("crossword", "குறுக்கெழுத்துப் போட்டி.dc.html", "crossword"),
+    Sec("your-classroom", PROFILES, "poem", ("குமாரவேல்",), pages=(4,), start="கவிதைகள்", take=1),
     Sec("why-this-alphabet-order", "கட்டுரை - வரிசையில் என்ன உள்ளது - சரவணன்.dc.html", "article", ("சரவணன்",)),
     Sec("my-poem-has-not-aged", POEMS, "poem", ("குமாரவேல்",), pages=(3, 4)),
     Sec("indian-steel-industry", "கட்டுரை - இந்தியாவின் எஃகு தொழில் - செந்தமிழ்ச் செல்வன்.dc.html", "article", ("செந்தமிழ்ச் செல்வன்",)),
@@ -426,6 +431,9 @@ def pick(blocks: list[Block], sec: Sec) -> list[Block]:
             if i and b.text.startswith(sec.stop):
                 out = out[:i]
                 break
+    if sec.take >= 0:
+        texts = [b for b in out if b.kind == "text"]
+        out = [texts[sec.take]] if sec.take < len(texts) else []
     return out
 
 
@@ -539,6 +547,11 @@ def write_poem(sec: Sec, pages: list[list[Block]]) -> tuple[dict, str]:
             if (body or stanza) and b.color == "#645c50" and 0 < b.size < 8:
                 flush()
                 note = b.text
+                continue
+            if sec.take >= 0:
+                title = b.text.split("\n")[0]
+                meta["untitled"] = True
+                body.append(md_lines(b.text))
                 continue
             if not title:
                 dedication = b.text
@@ -699,7 +712,6 @@ def write_people(path: Path) -> list[dict]:
                 "city": "",
                 "fields": [],
                 "panels": [],
-                "poems": [],
             }
             people.append(person)
 
@@ -739,8 +751,8 @@ def write_people(path: Path) -> list[dict]:
                 continue
             if b.kind == "text":
                 if in_poems:
-                    person["poems"].append(b.text)
-                elif pending_panel:
+                    continue  # scattered as their own poem pages instead
+                if pending_panel:
                     person["panels"].append({"label": pending_panel, "value": b.text})
                     pending_panel = ""
                 elif pending_label:
@@ -763,8 +775,6 @@ def write_people(path: Path) -> list[dict]:
         for key in ("photo_then", "photo_now"):
             if key in p:
                 p[key]["alt"] = f"{first} — {'அன்று' if key == 'photo_then' else 'இன்று'}"
-        if not p["poems"]:
-            del p["poems"]
     return people
 
 

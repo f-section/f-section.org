@@ -106,7 +106,7 @@ Running total if approved: 94 photos of 563 across four albums.
 ### Done on 2026-10-31
 10. **Arivu Malar 2026 e-book — checkpoint 1, the text is in.** Pulled the whole magazine out of
    the Claude Design export (`/mnt/data/f-section/arivumalar/2026/incoming/claude-design-arivumalar-source/`)
-   and into repo content. **27 reading pages, 19 profile pages, about 5,000 words of Tamil,
+   and into repo content. **29 reading pages, 19 profile pages, about 5,000 words of Tamil,
    69 photographs listed.** The export's `.dc.html` files carry the Tamil live in the markup, so
    there was no OCR, no `.docx` pass and no retyping: every string is copied byte for byte.
    `scripts/arivumalar/extract.py --verify` re-reads the export and reports **no text lost**.
@@ -123,9 +123,17 @@ Running total if approved: 94 photos of 563 across four albums.
      required, English optional) in `src/content.config.ts`. `npm run check` and `npm run build`
      are clean.
    - Review document for Saran: `/mnt/data/f-section/review/arivumalar-extract-2026-10-31.md`.
-   - Still open: alt text for 24 photos (including the four கான்ஸ்டன் pictures the design hand-over
-     left), the `அன்று` photos of வைரமுத்து and ஸ்ரீதர் plus மோகன்சுகுமார்'s `இன்று` photo (all
-     three to be cropped from the printed book), and three first names to confirm.
+   - Names settled the same day: **இரமேஷ் கண்ணன்** and **மோகன் சுகுமார்** are two-word first
+     names, not name plus surname; இஸ்மாயில் and சுகந்தி stay as they were. The two short poems
+     printed inside குமாரவேல்'s profile (they filled the leftover half page in print) are now
+     scattered pages of their own, so **ten poem pages** in all. Alt text stays **empty** where
+     the print design had none, by Saran's call: the pages emit `alt=""`, the correct mark for a
+     decorative picture.
+   - `scripts/arivumalar/proof.py` renders the whole magazine as one HTML sheet at the site's
+     18px Noto Sans Tamil for proofreading: `/mnt/data/f-section/review/arivumalar-proof.html`.
+   - Still open: captions for the four கான்ஸ்டன் photographs (waiting on Saran since the design
+     hand-over), and the `அன்று` photos of வைரமுத்து and ஸ்ரீதர் plus மோகன் சுகுமார்'s `இன்று`
+     photo, all three to be cropped from the printed book.
 
 ### Next
 11. **Arivu Malar 2026 e-book — checkpoint 2, the proofread.** Saran reads it section by section;

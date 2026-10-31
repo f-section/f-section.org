@@ -169,6 +169,8 @@ const arivumalarSections = defineCollection({
     dedication: z.string().default(''),
     /** Shown on a dark page: the In Memoriam poem (2026-10-31). */
     dark: z.boolean().default(false),
+    /** An untitled poem: `title` is its own first line, so the page prints no heading. */
+    untitled: z.boolean().default(false),
     photos: z.array(ebookPhoto).default([]),
     // Puzzles.
     grid: z.array(z.string()).default([]),
@@ -210,7 +212,6 @@ const arivumalarPeople = defineCollection({
     /** வைரமுத்து and ஸ்ரீதர் have no `அன்று` photo yet (2026-10-31). */
     photo_then: ebookPhoto.optional(),
     photo_now: ebookPhoto.optional(),
-    poems: z.array(z.string()).default([]),
     quote: z.string().default(''),
   }),
 });
