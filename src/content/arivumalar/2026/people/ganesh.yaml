@@ -1,0 +1,32 @@
+slug: ganesh
+name:
+  ta: கணேஷ்
+printed_name: வி. கணேஷ்
+order: 1
+city: பெங்களூரு
+fields:
+- label: பணி
+  value: தெற்கு மற்றும் மேற்குப் பிராந்தியங்களுக்கான தொழில்நுட்பச் சேவைப் பிரிவுத் தலைவர்
+- label: பொழுதுபோக்கு
+  value: திரைப்படங்கள் மற்றும் வலைத்தொடர்கள் (Web Series) பார்ப்பது
+- label: இணையர்
+  value: வீணா ஜி.
+- label: திருமண நாள்
+  value: 22.11.2001
+- label: பிள்ளைகள்
+  value: ஆயுஷ் ஜி.
+- label: முப்பது ஆண்டுச் சாதனை
+  value: என் பெற்றோருக்கு மிகச் சிறந்த, நல்ல மகனாக இருப்பது
+panels:
+- label: மறக்க முடியாத நினைவு
+  value: வளாகத் தேர்வு (Campus Selection)
+photo_then:
+  key: public/arivumalar/2026/img/family-old-ganesh.webp
+  source: assets/family/old/ganesh.png
+  alt: கணேஷ் — அன்று
+photo_now:
+  key: public/arivumalar/2026/img/family-ganesh-1.webp
+  source: assets/family/ganesh-1.jpeg
+  alt: கணேஷ் — இன்று
+quote: “இதுவரை நாம் கடந்து வந்த பாதையை மறக்கக் கூடாது; இன்று நாம் அடைந்துள்ள அனைத்து நிலைகளுக்கும் இறைவனுக்கு
+  நன்றியுடன் இருக்க வேண்டும்.”

@@ -1,0 +1,36 @@
+slug: senthamilselvan
+name:
+  ta: செந்தமிழ்ச் செல்வன்
+printed_name: செந்தமிழ்ச் செல்வன் சு.
+order: 8
+city: சேலம், தமிழ்நாடு, இந்தியா
+fields:
+- label: பணி
+  value: பொது மேலாளர், சேலம் உருக்காலை (SAIL), சேலம்
+- label: பொழுதுபோக்கு
+  value: கிரிக்கெட் விளையாட்டு
+- label: இணையர்
+  value: செ. பிரியதர்ஷிணி
+- label: திருமண நாள்
+  value: 06.06.2004
+- label: பிள்ளைகள்
+  value: 'செ. நிதின் ஆதவ் — B.E (EEE) 4th ஆண்டு
+
+    செ. ருத்ரா — 6 வகுப்பு'
+- label: தன்னார்வப் பணி
+  value: குடும்பம் மற்றும் பணி காலங்களில் நேரம் சரியாக இருக்கிறது. இப்போது தன்னார்வலர் பணி செய்ய நேரம்
+    இல்லை.
+- label: முப்பது ஆண்டுச் சாதனை
+  value: SAIL இல் தொடர்ந்து பணியில் இருப்பது மற்றும் குடும்பத்தினரை மகிழ்வுடன் வைத்து இருப்பது தான் சாதனை.
+panels:
+- label: மறக்க முடியாத நினைவு
+  value: நவம்பர் 6, 1992 கல்லூரியில் சேர்ந்த நிகழ்வு மற்றும் SAIL இல் வேலை கிடைத்த நாள்
+photo_then:
+  key: public/arivumalar/2026/img/family-old-senthamil.webp
+  source: assets/family/old/senthamil.png
+  alt: செந்தமிழ்ச் செல்வன் — அன்று
+photo_now:
+  key: public/arivumalar/2026/img/family-senthamil-1.webp
+  source: assets/family/senthamil-1.jpg
+  alt: செந்தமிழ்ச் செல்வன் — இன்று
+quote: “மகிழ்வுடன் இருப்போம், மற்றவர்களையும் மகிழ்விப்போம். குடும்ப நல்நிகழ்வுகளுக்கு அழையுங்கள்.”

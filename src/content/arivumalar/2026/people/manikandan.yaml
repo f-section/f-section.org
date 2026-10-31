@@ -1,0 +1,28 @@
+slug: manikandan
+name:
+  ta: மணிகண்டன்
+printed_name: டி. மணிகண்டன்
+order: 12
+city: சென்னை, தமிழ்நாடு
+fields:
+- label: பணி
+  value: ஐ.ஓ.சி.எல் (IOCL)
+- label: பொழுதுபோக்கு
+  value: புத்தகங்கள் வாசிப்பது
+- label: திருமண நாள்
+  value: 02.06.2004
+- label: பிள்ளைகள்
+  value: 'நிஷோக் மணிகண்டன்
+
+    ஹர்ஷினி மணிகண்டன்'
+panels:
+- label: முப்பது ஆண்டுச் சாதனை
+  value: நல்ல ஆரோக்கியம்
+photo_then:
+  key: public/arivumalar/2026/img/family-old-manikandan.webp
+  source: assets/family/old/manikandan.png
+  alt: மணிகண்டன் — அன்று
+photo_now:
+  key: public/arivumalar/2026/img/family-manikandan-1.webp
+  source: assets/family/manikandan-1.jpeg
+  alt: மணிகண்டன் — இன்று

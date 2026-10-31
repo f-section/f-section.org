@@ -399,6 +399,32 @@ contents:                      # typed table of contents, so the archive is sear
 editors: []
 ```
 
+An annual issue that also has a web edition carries four more fields (2026-10-31):
+
+```yaml
+cover: public/arivumalar/2026/cover-front.webp
+cover_back: public/arivumalar/2026/cover-back.webp
+pdf_bytes: 39545164            # so the download link can state its size
+order: [inside-cover-1995, …]  # the web reading order, as section slugs
+```
+
+`order` is the **only** place the web reading order is set. It differs from the printed order, and
+`contents` stays for the scanned archive issues.
+
+**Sections:** `src/content/arivumalar/<issue-id>/sections/<slug>.md`, one per reading page. The
+Tamil body is Markdown, verbatim from the Claude Design export; a trailing `\` keeps a printed line
+break, and `![alt](r2:public/…)` is a photo in R2. `type` picks the layout — `article · memoir ·
+story · poem · humour · photos · scans · profiles · quotes · crossword · spot-six`. Puzzles carry
+their grid, clues and answers as data, so they can become interactive later.
+
+**People:** `src/content/arivumalar/<issue-id>/people/<slug>.yaml`, one per person in
+`அன்றும் இன்றும்`: first name only (rule 14), `printed_name` as the book printed it, the labelled
+fields and panels, both photos, and their closing quote. These pages are `noindex`.
+
+Titles here use `taPair` (Tamil required, English optional), because the magazine has no English
+titles for now. Both are written by `scripts/arivumalar/extract.py`; see
+`docs/decisions/2026-10-31-arivumalar-ebook-shape.md`.
+
 ### 10.5 Person: `src/content/people/<slug>.yaml`
 
 ```yaml

@@ -2,7 +2,7 @@
 
 Where the project stands, and what comes next. Update this file at the end of every working session. No private links, tokens or personal details: this repo is public.
 
-_Last updated: 2026-10-30_
+_Last updated: 2026-10-31_
 
 ## Live
 - https://f-section.org (English) and https://f-section.org/ta/ (Tamil). Served by the Cloudflare Worker `f-section-site`, which deploys from `main` through Workers Builds.
@@ -103,25 +103,50 @@ Running total if approved: 94 photos of 563 across four albums.
    - **Videos**: a "Start from the beginning" button under each one.
    - Six new interface strings. **The Tamil is Claude's draft and needs Saran's eye.**
 
+### Done on 2026-10-31
+10. **Arivu Malar 2026 e-book — checkpoint 1, the text is in.** Pulled the whole magazine out of
+   the Claude Design export (`/mnt/data/f-section/arivumalar/2026/incoming/claude-design-arivumalar-source/`)
+   and into repo content. **27 reading pages, 19 profile pages, about 5,000 words of Tamil,
+   69 photographs listed.** The export's `.dc.html` files carry the Tamil live in the markup, so
+   there was no OCR, no `.docx` pass and no retyping: every string is copied byte for byte.
+   `scripts/arivumalar/extract.py --verify` re-reads the export and reports **no text lost**.
+   - Saran's decisions on 2026-10-30/31 cut the plan from three modes to two (read online + the
+     39.5 MB PDF, no page-image book view), put the e-book in the **site's own look** rather than
+     the book's, made the profile pages `noindex`, and set **first names only** (rule 14) with the
+     printed name kept in each file. See `docs/decisions/2026-10-31-arivumalar-ebook-shape.md`.
+   - The reading order is the **printed** order for now; Saran reorders after reading it on the
+     web. It lives as one `order:` list in `src/content/arivumalar/2026.yaml`.
+   - `கவிதைகள்` is split into eight poem pages scattered through the book, as Saran asked. There
+     turned out to be **five** குமாரவேல் poems, not four: `மூச்சுவிடும் தூரம்` was tucked onto the
+     spot-the-difference answers page as filler, and now has its own page.
+   - New collections `arivumalarSections` and `arivumalarPeople`, plus a `taPair` type (Tamil
+     required, English optional) in `src/content.config.ts`. `npm run check` and `npm run build`
+     are clean.
+   - Review document for Saran: `/mnt/data/f-section/review/arivumalar-extract-2026-10-31.md`.
+   - Still open: alt text for 24 photos (including the four கான்ஸ்டன் pictures the design hand-over
+     left), the `அன்று` photos of வைரமுத்து and ஸ்ரீதர் plus மோகன்சுகுமார்'s `இன்று` photo (all
+     three to be cropped from the printed book), and three first names to confirm.
+
 ### Next
-10. **Arivu Malar 2026 as an online e-book** — Saran's choice on 2026-10-30, ahead of the
-   remaining albums and the montages. Plan:
-   `docs/decisions/2026-10-30-arivumalar-2026-ebook.md`.
-11. **Photo curation, remaining two albums** (deferred on 2026-10-30, picks already chosen and
+11. **Arivu Malar 2026 e-book — checkpoint 2, the proofread.** Saran reads it section by section;
+   Claude changes no Tamil wording, spelling, punctuation or names on its own. Then the three
+   photo crops from the printed book. Checkpoints 3–5 (pages on `staging`, media upload, PR) follow
+   in `docs/decisions/2026-10-31-arivumalar-ebook-shape.md`.
+12. **Photo curation, remaining two albums** (deferred on 2026-10-30, picks already chosen and
    waiting in `/mnt/data/f-section/work/curation/PICKS-PENDING-REVIEW.md`). Contact sheets per
    event, then picks. Weighting, as Saran restated on
    2026-10-25: strongly prefer natural and candid — friends talking, walking, unaware of the
    camera — over posed shots at the lens. Posed is acceptable occasionally, not as the default.
    Start from Mohanraj's `1st Cut` (208 Canon frames, the backbone).
-12. **Two montages, by day** (deferred on 2026-10-30; Saran changed this on 2026-10-26, replacing the three themed ones
+13. **Two montages, by day** (deferred on 2026-10-30; Saran changed this on 2026-10-26, replacing the three themed ones
    agreed the day before): **Day 1** and **Day 2**. Reason: each day mixes campus, temple, meals
    and evening material, so a day-shaped cut varies the imagery, where a theme-shaped cut would
    string together many near-identical scenes. Day 3 is only departure and tails Day 2.
    Music: `masters/Nanban-En_Frienda_Pola.mp3` (3:53), a different section under each montage.
    It is a loud master (-10.6 LUFS, +0.6 dBTP) and must be normalised down for web.
-13. **Review page.** Contact sheet in `review/` for approval before any ingest.
-14. **Ingest and upload.** R2 token and `r2` remote are in place since 2026-10-26.
-15. **Open a PR** from `staging` with the album pages and the video entries.
+14. **Review page.** Contact sheet in `review/` for approval before any ingest.
+15. **Ingest and upload.** R2 token and `r2` remote are in place since 2026-10-26.
+16. **Open a PR** from `staging` with the album pages and the video entries.
 
 ### Notes worth keeping
 - The kavithai source plays **mirrored** (a `-180` display matrix plus a selfie-camera mirror);
