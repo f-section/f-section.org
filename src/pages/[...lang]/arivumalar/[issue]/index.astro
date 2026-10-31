@@ -1,0 +1,107 @@
+---
+/**
+ * One issue of Arivu Malar: the cover, the way in, the printed book, and the contents.
+ * The contents list carries the id the phone's பொருளடக்கம் button falls back to when
+ * JavaScript is off, so that button always leads somewhere real.
+ */
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import Contents from '../../../../components/ebook/Contents.astro';
+import Tx from '../../../../components/Tx.astro';
+import { t, pick, href, LANGS, langParam, langFromParam } from '../../../../i18n';
+import { mediaUrl } from '../../../../site';
+import {
+  getIssues,
+  sectionsOf,
+  sectionHref,
+  imgSize,
+  megabytes,
+  type Issue,
+  type Section,
+} from '../../../../lib/arivumalar';
+
+export async function getStaticPaths() {
+  const issues = await getIssues();
+  const paths = [];
+  for (const issue of issues) {
+    const sections = await sectionsOf(issue);
+    paths.push(...LANGS.map((lang) => ({ params: { lang: langParam(lang), issue: issue.id }, props: { issue, sections } })));
+  }
+  return paths;
+}
+const { issue, sections } = Astro.props as { issue: Issue; sections: Section[] };
+const lang = langFromParam(Astro.params.lang);
+const { data } = issue;
+const cover = data.cover ? { src: mediaUrl(data.cover), ...imgSize(data.cover) } : undefined;
+const back = data.cover_back ? { src: mediaUrl(data.cover_back), ...imgSize(data.cover_back) } : undefined;
+const button = 'tap rounded-md border-2 font-semibold no-underline';
+---
+<BaseLayout
+  lang={lang}
+  title={pick(data.title, lang)}
+  description={t(lang, 'arivumalar.lead')}
+  image={cover?.src}
+>
+  <p class="mb-2">
+    <a href={href(lang, '/arivumalar/')} class="tap -ml-3 font-semibold">
+      <span>← <Tx lang={lang} k="arivumalar.title" /></span>
+    </a>
+  </p>
+
+  <div class="gap-8 sm:flex">
+    {
+      cover && (
+        <div class="mx-auto w-56 shrink-0 sm:mx-0 sm:w-64">
+          <div class="polaroid">
+            <img src={cover.src} alt="" width={cover.width} height={cover.height} loading="eager" decoding="async" class="h-auto w-full bg-rule" />
+          </div>
+        </div>
+      )
+    }
+    <div class="mt-6 min-w-0 flex-1 sm:mt-0">
+      <h1 class="hand text-4xl text-ink sm:text-5xl"><Tx lang={lang} pair={data.title} /></h1>
+      <p class="mt-2 text-sepia">
+        {data.pages} <Tx lang={lang} k="ebook.pages" />
+        {data.editors.length > 0 && (
+          <span> · <Tx lang={lang} k="ebook.editor" />: {data.editors.join(' · ')}</span>
+        )}
+      </p>
+
+      <div class="mt-5 flex flex-wrap gap-3">
+        {
+          sections[0] && (
+            <a href={sectionHref(lang, issue, sections[0])} class={`${button} border-ink bg-ink text-paper`}>
+              <Tx lang={lang} k="ebook.start" />
+            </a>
+          )
+        }
+        <a href="#contents" class={`${button} border-ink/80 text-ink`}>
+          <Tx lang={lang} k="ebook.contents" />
+        </a>
+        {
+          data.pdf && (
+            <a href={mediaUrl(data.pdf)} class={`${button} border-ink/80 text-ink`}>
+              <span>
+                <Tx lang={lang} k="ebook.download" />
+                {data.pdf_bytes && <span class="font-normal"> · {megabytes(data.pdf_bytes)}</span>}
+              </span>
+            </a>
+          )
+        }
+      </div>
+      {data.pdf && <Tx lang={lang} k="ebook.pdf_hint" as="p" class="mt-2 text-base text-sepia" />}
+    </div>
+  </div>
+
+  <h2 class="hand mt-12 text-3xl text-ink-red"><Tx lang={lang} k="ebook.contents" /></h2>
+  <Contents lang={lang} issue={issue} sections={sections} id="contents" class="mt-2 max-w-2xl scroll-mt-4" />
+
+  {
+    back && (
+      <div class="mx-auto mt-12 w-56 sm:w-64">
+        <div class="polaroid">
+          <img src={back.src} alt="" width={back.width} height={back.height} loading="lazy" decoding="async" class="h-auto w-full bg-rule" />
+        </div>
+      </div>
+    )
+  }
+</BaseLayout>

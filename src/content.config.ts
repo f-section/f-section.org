@@ -142,7 +142,11 @@ const ebookPhoto = z.object({
  * body is verbatim. `type` picks the layout.
  */
 const arivumalarSections = defineCollection({
-  loader: glob({ pattern: '*/sections/*.md', base: './src/content/arivumalar' }),
+  loader: glob({
+    pattern: '*/sections/*.md',
+    base: './src/content/arivumalar',
+    generateId: ({ entry }) => entry.replace('/sections/', '/').replace(/\.md$/, ''),
+  }),
   schema: z.object({
     issue: z.string(),
     slug: z.string().regex(SLUG),
@@ -169,8 +173,6 @@ const arivumalarSections = defineCollection({
     dedication: z.string().default(''),
     /** Shown on a dark page: the In Memoriam poem (2026-10-31). */
     dark: z.boolean().default(false),
-    /** An untitled poem: `title` is its own first line, so the page prints no heading. */
-    untitled: z.boolean().default(false),
     photos: z.array(ebookPhoto).default([]),
     // Puzzles.
     grid: z.array(z.string()).default([]),
@@ -199,7 +201,11 @@ const arivumalarSections = defineCollection({
  * Named by first name only (rule 14); `printed_name` keeps what the book printed.
  */
 const arivumalarPeople = defineCollection({
-  loader: glob({ pattern: '*/people/*.yaml', base: './src/content/arivumalar' }),
+  loader: glob({
+    pattern: '*/people/*.yaml',
+    base: './src/content/arivumalar',
+    generateId: ({ entry }) => entry.replace('/people/', '/').replace(/\.yaml$/, ''),
+  }),
   schema: z.object({
     slug: z.string().regex(SLUG),
     name: taPair,
@@ -211,6 +217,14 @@ const arivumalarPeople = defineCollection({
     panels: z.array(z.object({ label: z.string(), value: z.string() })).default([]),
     /** வைரமுத்து and ஸ்ரீதர் have no `அன்று` photo yet (2026-10-31). */
     photo_then: ebookPhoto.optional(),
+    /**
+     * Them speaking on the night the magazine was released (Saran, 2026-10-31).
+     * It points at a photo already in a gallery album, so nothing is uploaded twice;
+     * `id` must exist in that album's media.json or the build stops.
+     */
+    photo_event: z
+      .object({ album: z.string().regex(ALBUM_SLUG), id: z.string().min(1) })
+      .optional(),
     photo_now: ebookPhoto.optional(),
     quote: z.string().default(''),
   }),

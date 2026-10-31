@@ -1,15 +1,58 @@
 ---
+/** Arivu Malar: a card for each issue that can be read, newest first. */
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import PageIntro from '../../../components/PageIntro.astro';
 import Tx from '../../../components/Tx.astro';
 import { t, bothLangs, langFromParam } from '../../../i18n';
+import { mediaUrl } from '../../../site';
+import { getIssues, issueHref, imgSize, megabytes } from '../../../lib/arivumalar';
 
 export function getStaticPaths() {
   return bothLangs();
 }
 const lang = langFromParam(Astro.params.lang);
+const issues = await getIssues();
 ---
 <BaseLayout lang={lang} title={t(lang, 'arivumalar.title')} description={t(lang, 'arivumalar.lead')}>
   <PageIntro lang={lang} titleKey="arivumalar.title" leadKey="arivumalar.lead" />
-  <Tx lang={lang} k="common.coming_soon" as="p" class="text-xl" />
+
+  <ul class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      issues.map((issue) => {
+        const cover = issue.data.cover;
+        const size = cover ? imgSize(cover) : undefined;
+        return (
+          <li>
+            <a href={issueHref(lang, issue)} class="group block no-underline">
+              <div class="polaroid">
+                {cover ? (
+                  <img
+                    src={mediaUrl(cover)}
+                    alt=""
+                    width={size?.width}
+                    height={size?.height}
+                    loading="eager"
+                    decoding="async"
+                    class="h-auto w-full bg-rule"
+                  />
+                ) : (
+                  <div class="w-full bg-rule" style="aspect-ratio: 148 / 210" />
+                )}
+                <p class="hand mt-3 text-3xl text-ink group-hover:underline">
+                  <Tx lang={lang} pair={issue.data.title} />
+                </p>
+                <p class="text-base text-sepia">
+                  {issue.data.pages} <Tx lang={lang} k="ebook.pages" />
+                  {issue.data.pdf_bytes && <span> · PDF {megabytes(issue.data.pdf_bytes)}</span>}
+                </p>
+              </div>
+            </a>
+          </li>
+        );
+      })
+    }
+  </ul>
+
+  {issues.length === 0 && <Tx lang={lang} k="common.coming_soon" as="p" class="text-xl" />}
+  <Tx lang={lang} k="ebook.archive_later" as="p" class="mt-8 text-sepia" />
 </BaseLayout>

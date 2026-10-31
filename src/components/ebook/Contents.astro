@@ -1,0 +1,41 @@
+---
+/** The பொருளடக்கம் list of an issue. Used in the sidebar, in the phone panel and on the issue page. */
+import Tx from '../Tx.astro';
+import { type Lang } from '../../i18n';
+import { sectionHref, type Issue, type Section } from '../../lib/arivumalar';
+
+interface Props {
+  lang: Lang;
+  issue: Issue;
+  sections: Section[];
+  /** Slug of the page being read, marked in the list. */
+  current?: string;
+  id?: string;
+  class?: string;
+}
+const { lang, issue, sections, current, id, class: className = '' } = Astro.props;
+---
+<ol id={id} class={`list-none ${className}`}>
+  {
+    sections.map((section, i) => (
+      <li class="flex gap-2 border-b border-rule/60 last:border-0">
+        <span class="w-6 shrink-0 pt-2.5 text-right text-base tabular-nums text-sepia" aria-hidden="true">{i + 1}</span>
+        <a
+          href={sectionHref(lang, issue, section)}
+          class:list={[
+            'tap w-full justify-start px-2 py-2 leading-snug text-ink no-underline hover:bg-ink/5',
+            section.data.slug === current && 'bg-ink/5 font-semibold underline decoration-ink-red decoration-2',
+          ]}
+          aria-current={section.data.slug === current ? 'page' : undefined}
+        >
+          <span>
+            <Tx lang={lang} pair={section.data.title} />
+            {section.data.authors.length > 0 && (
+              <span class="block text-base font-normal text-sepia">{section.data.authors.join(' · ')}</span>
+            )}
+          </span>
+        </a>
+      </li>
+    ))
+  }
+</ol>

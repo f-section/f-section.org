@@ -106,7 +106,7 @@ Running total if approved: 94 photos of 563 across four albums.
 ### Done on 2026-10-31
 10. **Arivu Malar 2026 e-book — checkpoint 1, the text is in.** Pulled the whole magazine out of
    the Claude Design export (`/mnt/data/f-section/arivumalar/2026/incoming/claude-design-arivumalar-source/`)
-   and into repo content. **29 reading pages, 19 profile pages, about 5,000 words of Tamil,
+   and into repo content. **28 reading pages, 19 profile pages, about 5,000 words of Tamil,
    69 photographs listed.** The export's `.dc.html` files carry the Tamil live in the markup, so
    there was no OCR, no `.docx` pass and no retyping: every string is copied byte for byte.
    `scripts/arivumalar/extract.py --verify` re-reads the export and reports **no text lost**.
@@ -126,7 +126,7 @@ Running total if approved: 94 photos of 563 across four albums.
    - Names settled the same day: **இரமேஷ் கண்ணன்** and **மோகன் சுகுமார்** are two-word first
      names, not name plus surname; இஸ்மாயில் and சுகந்தி stay as they were. The two short poems
      printed inside குமாரவேல்'s profile (they filled the leftover half page in print) are now
-     scattered pages of their own, so **ten poem pages** in all. Alt text stays **empty** where
+     scattered pages of their own. Alt text stays **empty** where
      the print design had none, by Saran's call: the pages emit `alt=""`, the correct mark for a
      decorative picture.
    - `scripts/arivumalar/proof.py` renders the whole magazine as one HTML sheet at the site's
@@ -135,26 +135,50 @@ Running total if approved: 94 photos of 563 across four albums.
      hand-over), and the `அன்று` photos of வைரமுத்து and ஸ்ரீதர் plus மோகன் சுகுமார்'s `இன்று`
      photo, all three to be cropped from the printed book.
 
+11. **Arivu Malar 2026 e-book — checkpoints 2 and 3, the proofread and the pages.** Saran read the
+   proof sheet and sent three corrections, all applied: குமாரவேல்'s two short poems now share one
+   page (`நிழல்கள் · நீயிருக்கும் வகுப்பறை`); the `மூச்சுவிடும் தூரம்` provenance line is right as
+   it stands, because that poem really was printed on the spot-the-difference answers page as
+   filler; and each profile can now carry a third photograph of them speaking on release night.
+   - **The e-book is built: 98 pages.** `/arivumalar/` with a card per issue, `/arivumalar/2026/`
+     (cover, contents, **முகப்பு**, **தரவிறக்கம் · 39.5 MB**), 28 reading pages, the
+     `அன்றும் இன்றும்` index and 19 `noindex` profile pages — all of it in both languages.
+   - The contents sit beside the text from 1024px up and behind a **பொருளடக்கம்** button on a
+     phone (a `<dialog>`, falling back to a link to the issue page). Every page ends with
+     prev · next. The crossword is a real CSS grid, and both puzzles keep their answers behind a
+     **விடைகள்** button.
+   - The third profile photograph is a **tag, not an upload**: `photo_event: { album, id }` points
+     at a picture already in the `2026-reunion-arivu-malar` album, so the same object serves both
+     pages. The slot is built and empty — Saran tags them from
+     `/mnt/data/f-section/review/arivumalar-tagging.html`.
+   - 20 new `ebook.*` interface strings in both languages; the Tamil is Claude's draft under
+     rule 5 and wants Saran's eye.
+   - `scripts/arivumalar/media.py` converted **71 pictures** (8.3 MB) and staged them with the
+     printed book; `rclone copy --immutable --dry-run` reports 72 new objects, 46.0 MiB, nothing
+     overwritten. **The upload waits on Saran's yes.** R2 would go from 150.7 MiB to about 197 MiB.
+   - `npm run check` (0 errors), `npm run build` (124 pages) and `npm run check:links`
+     (5,546 links) are all clean.
+   - Still open: Saran's photo tags, captions for the four கான்ஸ்டன் photographs, and the three
+     photo crops from the printed book (வைரமுத்து and ஸ்ரீதர்'s `அன்று`, மோகன் சுகுமார்'s `இன்று`).
+
 ### Next
-11. **Arivu Malar 2026 e-book — checkpoint 2, the proofread.** Saran reads it section by section;
-   Claude changes no Tamil wording, spelling, punctuation or names on its own. Then the three
-   photo crops from the printed book. Checkpoints 3–5 (pages on `staging`, media upload, PR) follow
-   in `docs/decisions/2026-10-31-arivumalar-ebook-shape.md`.
-12. **Photo curation, remaining two albums** (deferred on 2026-10-30, picks already chosen and
+12. **Arivu Malar 2026 — upload the media and open the PR** (checkpoints 4 and 5). Then the
+   reorder pass, once Saran has read the book on the web.
+13. **Photo curation, remaining two albums** (deferred on 2026-10-30, picks already chosen and
    waiting in `/mnt/data/f-section/work/curation/PICKS-PENDING-REVIEW.md`). Contact sheets per
    event, then picks. Weighting, as Saran restated on
    2026-10-25: strongly prefer natural and candid — friends talking, walking, unaware of the
    camera — over posed shots at the lens. Posed is acceptable occasionally, not as the default.
    Start from Mohanraj's `1st Cut` (208 Canon frames, the backbone).
-13. **Two montages, by day** (deferred on 2026-10-30; Saran changed this on 2026-10-26, replacing the three themed ones
+14. **Two montages, by day** (deferred on 2026-10-30; Saran changed this on 2026-10-26, replacing the three themed ones
    agreed the day before): **Day 1** and **Day 2**. Reason: each day mixes campus, temple, meals
    and evening material, so a day-shaped cut varies the imagery, where a theme-shaped cut would
    string together many near-identical scenes. Day 3 is only departure and tails Day 2.
    Music: `masters/Nanban-En_Frienda_Pola.mp3` (3:53), a different section under each montage.
    It is a loud master (-10.6 LUFS, +0.6 dBTP) and must be normalised down for web.
-14. **Review page.** Contact sheet in `review/` for approval before any ingest.
-15. **Ingest and upload.** R2 token and `r2` remote are in place since 2026-10-26.
-16. **Open a PR** from `staging` with the album pages and the video entries.
+15. **Review page.** Contact sheet in `review/` for approval before any ingest.
+16. **Ingest and upload.** R2 token and `r2` remote are in place since 2026-10-26.
+17. **Open a PR** from `staging` with the album pages and the video entries.
 
 ### Notes worth keeping
 - The kavithai source plays **mirrored** (a `-180` display matrix plus a selfie-camera mirror);

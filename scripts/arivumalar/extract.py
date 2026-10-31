@@ -354,7 +354,7 @@ class Sec:
     title: str = ""  # only when the design heading is not the title we want
     start: str = ""  # take blocks from the one whose text starts with this
     stop: str = ""  # ...up to the one whose text starts with this
-    take: int = -1  # keep only this text block of the region, counting from 0
+    take: tuple[int, ...] = ()  # keep only these text blocks of the region, in this order
     dark: bool = False
 
 
@@ -372,7 +372,16 @@ SECTIONS = (
     Sec("tamil-in-ai", "கட்டுரை - செயற்கை நுண்ணறிவில் தமிழ் - சரவணன்.dc.html", "article", ("சரவணன்",)),
     Sec("thavam", POEMS, "poem", ("குமாரவேல்",), pages=(6,)),
     Sec("from-the-sea-to-life", "கடலிலிருந்து வாழ்க்கைக்கு - கான்ஸ்டன்.dc.html", "memoir", ("கான்ஸ்டன்",)),
-    Sec("shadows-still-talking", PROFILES, "poem", ("குமாரவேல்",), pages=(4,), start="கவிதைகள்", take=0),
+    Sec(
+        "shadows-still-talking",
+        PROFILES,
+        "poem",
+        ("குமாரவேல்",),
+        pages=(4,),
+        start="கவிதைகள்",
+        take=(0, 1),
+        title="நிழல்கள் · நீயிருக்கும் வகுப்பறை",
+    ),
     Sec("olithu-kol", "கதை - ஒலித்து கொல் - பாஞ்சாலை.dc.html", "story", ("பாஞ்சாலை",)),
     Sec("spot-six", SPOT, "spot-six", title="ஆறு வித்தியாசங்களைக் கண்டுபிடி", stop="கவிதை"),
     Sec("you-can-do-it", "கதை - உன்னால் முடியும் தம்பி - மோகன் சுகுமார்.dc.html", "story", ("மோகன்சுகுமார்",)),
@@ -380,7 +389,6 @@ SECTIONS = (
     Sec("tamils-in-the-uae", "கட்டுரை - அமீரக வளர்ச்சியில் தமிழர் தடம் - புவனேஷ்.dc.html", "article", ("புவனேஷ்",)),
     Sec("aval", POEMS, "poem", ("கலைச்செழியன்",), pages=(2,)),
     Sec("crossword", "குறுக்கெழுத்துப் போட்டி.dc.html", "crossword"),
-    Sec("your-classroom", PROFILES, "poem", ("குமாரவேல்",), pages=(4,), start="கவிதைகள்", take=1),
     Sec("why-this-alphabet-order", "கட்டுரை - வரிசையில் என்ன உள்ளது - சரவணன்.dc.html", "article", ("சரவணன்",)),
     Sec("my-poem-has-not-aged", POEMS, "poem", ("குமாரவேல்",), pages=(3, 4)),
     Sec("indian-steel-industry", "கட்டுரை - இந்தியாவின் எஃகு தொழில் - செந்தமிழ்ச் செல்வன்.dc.html", "article", ("செந்தமிழ்ச் செல்வன்",)),
@@ -431,9 +439,9 @@ def pick(blocks: list[Block], sec: Sec) -> list[Block]:
             if i and b.text.startswith(sec.stop):
                 out = out[:i]
                 break
-    if sec.take >= 0:
+    if sec.take:
         texts = [b for b in out if b.kind == "text"]
-        out = [texts[sec.take]] if sec.take < len(texts) else []
+        out = [texts[i] for i in sec.take if i < len(texts)]
     return out
 
 
@@ -548,9 +556,7 @@ def write_poem(sec: Sec, pages: list[list[Block]]) -> tuple[dict, str]:
                 flush()
                 note = b.text
                 continue
-            if sec.take >= 0:
-                title = b.text.split("\n")[0]
-                meta["untitled"] = True
+            if sec.take:
                 body.append(md_lines(b.text))
                 continue
             if not title:
@@ -573,7 +579,10 @@ def write_poem(sec: Sec, pages: list[list[Block]]) -> tuple[dict, str]:
         meta["photos"] = photos
     if sec.dark:
         meta["dark"] = True
-    return meta, "\n\n".join(body)
+    # Two short poems on one page: a thematic break between them, no inner heading,
+    # because the second poem's first line is also its title (Saran, 2026-10-31).
+    joiner = "\n\n***\n\n" if len(sec.take) > 1 else "\n\n"
+    return meta, joiner.join(body)
 
 
 def write_photos(sec: Sec, pages: list[list[Block]]) -> tuple[dict, str]:
@@ -781,6 +790,36 @@ def write_people(path: Path) -> list[dict]:
 # --------------------------------------------------------------------------- cli
 
 
+# A person record, in the order the fields are written out. `photo_event` is the
+# reunion photograph of them speaking; Saran tags it by hand, so a re-run keeps it.
+PERSON_KEYS = (
+    "slug",
+    "name",
+    "printed_name",
+    "order",
+    "city",
+    "fields",
+    "panels",
+    "photo_then",
+    "photo_event",
+    "photo_now",
+    "quote",
+)
+
+
+def person_file(p: dict, path: Path) -> dict:
+    """The record to write, keeping anything hand-added that this script cannot know."""
+    import yaml
+
+    if path.is_file():
+        old = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+        if old.get("photo_event"):
+            p = {**p, "photo_event": old["photo_event"]}
+    ordered = {k: p[k] for k in PERSON_KEYS if k in p}
+    ordered.update({k: v for k, v in p.items() if k not in ordered})
+    return ordered
+
+
 def front_matter(meta: dict, body: str) -> str:
     import yaml
 
@@ -881,8 +920,10 @@ def cmd_apply(src: Path, apply: bool) -> int:
     for slug, (meta, body) in sections.items():
         (OUT_SECTIONS / f"{slug}.md").write_text(front_matter(meta, body), encoding="utf-8")
     for p in people:
-        (OUT_PEOPLE / f"{p['slug']}.yaml").write_text(
-            yaml.dump(p, allow_unicode=True, sort_keys=False, width=100), encoding="utf-8"
+        path = OUT_PEOPLE / f"{p['slug']}.yaml"
+        path.write_text(
+            yaml.dump(person_file(p, path), allow_unicode=True, sort_keys=False, width=100),
+            encoding="utf-8",
         )
 
     issue = {

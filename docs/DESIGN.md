@@ -110,10 +110,13 @@ f-section.org
 ├── /videos                   [P/M] Montages, grouped by era
 ├── /voices                   [M] Audio: speeches, songs, recorded memories (Phase 4)
 │
-├── /arivumalar               [P] What Arivu Malar was, who ran it
-│   ├── /arivumalar/archive   [P/M] The hand-written 1992–96 issues
+├── /arivumalar               [P] What Arivu Malar is, a card per issue
+│   ├── /arivumalar/archive   [P/M] The hand-written 1992–96 issues (later)
 │   │     └── /arivumalar/archive/1993-08   one issue: cover, page viewer, contents
-│   ├── /arivumalar/2026      [P/M] 30th anniversary special
+│   ├── /arivumalar/2026      [P] The 2026 issue: cover, contents, the printed PDF
+│   │     ├── /arivumalar/2026/<slug>         [P] one reading page, 28 of them
+│   │     ├── /arivumalar/2026/then-and-now   [P] அன்றும் இன்றும்: the 19 of them
+│   │     └── /arivumalar/2026/people/<name>  [P] one person — noindex
 │   └── /arivumalar/2027 …    yearly releases
 │
 ├── /people                   [M] Then & Now directory (Phase 2)
@@ -223,7 +226,8 @@ These are proposals. Check every text colour pair for WCAG AA contrast in Phase 
 | Era ribbon | A strip across the top of the gallery for choosing the era |
 | Lightbox | Full-screen photo viewer: back, forward, back-to-the-first, a count, swipe, arrow keys and Escape (2026-10-30). Pictures only: no credit, no map link (2026-10-26). With no JavaScript the photo link still opens the large copy |
 | Then & Now slider | Two photos of the same spot (old and new); drag to compare |
-| Magazine viewer | One page at a time with next and previous buttons, plus a PDF download. A page-flip effect is optional (Phase 3). |
+| E-book reader | The Arivu Malar web edition (2026-10-31): the contents beside the text from 1024px up, the same contents behind a **பொருளடக்கம்** button on a phone (a `<dialog>`, falling back to a link to the issue page), prev · next at the end of every page, and the printed book as a PDF. The A5 page is not reproduced: the text reflows at the site's 18px (rule 7). |
+| Puzzle answers | The crossword and the six differences keep their answers behind a **விடைகள்** `<details>`, which leaves room to make them interactive later |
 | Video player | Native HTML5 `<video>` with a poster image and optional subtitles, plus a "Start from the beginning" button (2026-10-30) |
 | Language toggle | EN / தமிழ், at the top right |
 
@@ -417,9 +421,23 @@ break, and `![alt](r2:public/…)` is a photo in R2. `type` picks the layout —
 story · poem · humour · photos · scans · profiles · quotes · crossword · spot-six`. Puzzles carry
 their grid, clues and answers as data, so they can become interactive later.
 
+A poem that filled half a printed page can share a web page with another: the two short ones off
+குமாரவேல்'s profile sit on one, separated by a `***` break (2026-10-31).
+
 **People:** `src/content/arivumalar/<issue-id>/people/<slug>.yaml`, one per person in
 `அன்றும் இன்றும்`: first name only (rule 14), `printed_name` as the book printed it, the labelled
-fields and panels, both photos, and their closing quote. These pages are `noindex`.
+fields and panels, their photographs, and their closing quote. These pages are `noindex`.
+
+A person can carry a third photograph, `photo_event` (2026-10-31) — them speaking on release
+night. It is a tag, not a file: `{ album, id }` points at a picture already in a gallery album, so
+the same object serves both pages and nothing is uploaded twice. A tag naming a missing album or
+photo stops the build. The page then reads `அன்று` · release night · `இன்று`.
+
+**Pictures:** `scripts/arivumalar/media.py` writes one WebP copy of each (1600px, quality 80) into
+a tree that mirrors the R2 keys, and records every size in `src/lib/ebook-img.json`. A Sätteri hast
+plugin in `astro.config.mjs` turns each `r2:` picture in the Markdown into its real address at that
+recorded size, wrapped in the gallery's own `a[data-lb-item]` link, so the photo viewer picks it up
+and nothing jumps while the page loads.
 
 Titles here use `taPair` (Tamil required, English optional), because the magazine has no English
 titles for now. Both are written by `scripts/arivumalar/extract.py`; see

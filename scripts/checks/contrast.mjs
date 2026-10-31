@@ -7,6 +7,7 @@ const tokens = {
   'ink-red': '#A23B2A',
   sepia: '#846541',
   marigold: '#E0A100',
+  rule: '#D9CDB6',
 };
 
 // [foreground, background, minimum ratio, where it is used]
@@ -18,6 +19,7 @@ const pairs = [
   ['sepia', 'paper', 4.5, 'dates, credits, 1992–96 labels'],
   ['sepia', 'card', 4.5, 'dates and credits on cards'],
   ['paper', 'ink', 4.5, 'active toggle and buttons'],
+  ['rule', 'ink', 4.5, 'the quieter lines on the In Memoriam page'],
 ];
 
 const lum = (hex) => {

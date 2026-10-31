@@ -1,0 +1,38 @@
+---
+/** அன்றும் இன்றும்: the 19 of them, in the book's own numbered order. */
+import Tx from '../Tx.astro';
+import { personHref, picture, type Issue, type Person } from '../../lib/arivumalar';
+import { type Lang } from '../../i18n';
+
+interface Props {
+  lang: Lang;
+  issue: Issue;
+  people: Person[];
+}
+const { lang, issue, people } = Astro.props;
+---
+<ul class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+  {
+    people.map((person) => {
+      const photo = person.data.photo_now ?? person.data.photo_then;
+      const img = photo ? picture(photo) : undefined;
+      return (
+        <li>
+          <a href={personHref(lang, issue, person)} class="group block no-underline">
+            <div class="polaroid p-2">
+              {img ? (
+                <img {...img} loading="lazy" decoding="async" class="h-auto w-full bg-rule object-cover" style="aspect-ratio: 4 / 5" />
+              ) : (
+                <div class="w-full bg-rule" style="aspect-ratio: 4 / 5" />
+              )}
+              <p class="mt-2 font-semibold text-ink group-hover:underline">
+                <Tx lang={lang} pair={person.data.name} />
+              </p>
+              {person.data.city && <p class="text-base leading-snug text-sepia">{person.data.city}</p>}
+            </div>
+          </a>
+        </li>
+      );
+    })
+  }
+</ul>

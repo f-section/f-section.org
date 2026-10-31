@@ -1,0 +1,191 @@
+---
+/**
+ * One person in அன்றும் இன்றும். Kept out of search engines (noindex, 2026-10-30): these
+ * pages carry what friends wrote about their own families, and they are meant to be read
+ * from the magazine, not found by searching for somebody's name.
+ *
+ * Three photographs where we have them: their 1996 picture, them speaking on the night
+ * the book was released, and the family picture they sent (Saran, 2026-10-31). The middle
+ * one points at a gallery album, so the same file serves both pages.
+ */
+import BaseLayout from '../../../../../layouts/BaseLayout.astro';
+import Lightbox from '../../../../../components/Lightbox.astro';
+import Tx from '../../../../../components/Tx.astro';
+import { t, pick, LANGS, langParam, langFromParam, href } from '../../../../../i18n';
+import { eraSlug } from '../../../../../site';
+import {
+  getIssues,
+  sectionsOf,
+  peopleOf,
+  eventPhotosOf,
+  picture,
+  personHref,
+  sectionHref,
+  type EventPhoto,
+  type Issue,
+  type Person,
+  type Section,
+} from '../../../../../lib/arivumalar';
+
+export async function getStaticPaths() {
+  const issues = await getIssues();
+  const perIssue = await Promise.all(
+    issues.map(async (issue) => {
+      const people = await peopleOf(issue);
+      const sections = await sectionsOf(issue);
+      const index = sections.find((s) => s.data.type === 'profiles');
+      const events = await eventPhotosOf(people);
+      return people.flatMap((person, i) =>
+        LANGS.map((lang) => ({
+          params: { lang: langParam(lang), issue: issue.id, person: person.data.slug },
+          props: {
+            issue,
+            person,
+            index,
+            event: events.get(person.id),
+            prev: people[i - 1],
+            next: people[i + 1],
+          },
+        })),
+      );
+    }),
+  );
+  return perIssue.flat();
+}
+
+const { issue, person, index, event, prev, next } = Astro.props as {
+  issue: Issue;
+  person: Person;
+  index?: Section;
+  event?: EventPhoto;
+  prev?: Person;
+  next?: Person;
+};
+const lang = langFromParam(Astro.params.lang);
+const { data } = person;
+const name = pick(data.name, lang);
+
+// அன்று, then the release night, then இன்று — the order the book reads in.
+const frames = [
+  data.photo_then && { ...picture(data.photo_then), label: t(lang, 'ebook.then') },
+  event && { src: event.src, width: event.width, height: event.height, alt: '', label: t(lang, 'ebook.at_the_release') },
+  data.photo_now && { ...picture(data.photo_now), label: t(lang, 'ebook.now') },
+].filter(Boolean) as { src: string; width?: number; height?: number; alt: string; label: string }[];
+const link = 'tap max-w-[45%] items-start gap-1 rounded-md px-2 py-2 leading-snug no-underline hover:bg-ink/5';
+---
+<BaseLayout lang={lang} title={`${name} · ${pick(issue.data.title, lang)}`} noindex>
+  <p class="mb-2">
+    {
+      index && (
+        <a href={sectionHref(lang, issue, index)} class="tap -ml-3 font-semibold">
+          <span>← <Tx lang={lang} k="ebook.back_to_people" /></span>
+        </a>
+      )
+    }
+  </p>
+
+  <header>
+    <p class="text-base font-semibold uppercase tracking-wider text-sepia">
+      {index ? pick(index.data.title, lang) : ''} · {data.order}
+    </p>
+    <h1 class="hand mt-1 text-4xl text-ink sm:text-5xl"><Tx lang={lang} pair={data.name} /></h1>
+    <p class="mt-1 text-sepia">
+      {data.city}
+      {data.printed_name !== name && <span> · {data.printed_name}</span>}
+    </p>
+  </header>
+
+  {
+    frames.length > 0 && (
+      <ul class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3">
+        {frames.map((frame) => (
+          <li>
+            <figure class="polaroid p-2">
+              <a href={frame.src} class="block" data-lb-item>
+                <img
+                  src={frame.src}
+                  alt={frame.alt}
+                  width={frame.width}
+                  height={frame.height}
+                  loading="lazy"
+                  decoding="async"
+                  class="h-auto w-full bg-rule object-cover"
+                  style="aspect-ratio: 4 / 5"
+                />
+              </a>
+              <figcaption class="mt-2 text-base font-semibold text-sepia">{frame.label}</figcaption>
+            </figure>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+  {
+    event && (
+      <p class="mt-2 text-base">
+        <a href={href(lang, `/gallery/${eraSlug(event.album.data.era)}/${event.album.id}/`)}>
+          <Tx lang={lang} k="ebook.see_album" />
+        </a>
+      </p>
+    )
+  }
+
+  {
+    data.fields.length > 0 && (
+      <dl class="mt-8 max-w-prose">
+        {data.fields.map((field) => (
+          <div class="border-b border-rule/60 py-3">
+            <dt class="font-semibold text-ink-red">{field.label}</dt>
+            <dd class="mt-0.5">{field.value}</dd>
+          </div>
+        ))}
+      </dl>
+    )
+  }
+
+  {
+    data.panels.map((panel) => (
+      <section class="mt-8 max-w-prose border-l-4 border-rule bg-card p-4">
+        <h2 class="hand text-3xl text-ink-red">{panel.label}</h2>
+        <p class="mt-2">{panel.value}</p>
+      </section>
+    ))
+  }
+
+  {
+    data.quote && (
+      <figure class="mt-8 max-w-prose">
+        <blockquote class="border-l-4 border-ink-red pl-4 text-lg">{data.quote}</blockquote>
+      </figure>
+    )
+  }
+
+  <nav class="mt-10 flex items-start justify-between gap-2 border-t-2 border-rule pt-3" aria-label={t(lang, 'ebook.back_to_people')}>
+    {
+      prev ? (
+        <a href={personHref(lang, issue, prev)} class={`${link} -ml-2`} rel="prev">
+          <span>
+            <span class="block text-base text-sepia">← <Tx lang={lang} k="ebook.prev" /></span>
+            <Tx lang={lang} pair={prev.data.name} />
+          </span>
+        </a>
+      ) : (
+        <span />
+      )
+    }
+    {
+      next ? (
+        <a href={personHref(lang, issue, next)} class={`${link} -mr-2 text-right`} rel="next">
+          <span>
+            <span class="block text-base text-sepia"><Tx lang={lang} k="ebook.next" /> →</span>
+            <Tx lang={lang} pair={next.data.name} />
+          </span>
+        </a>
+      ) : (
+        <span />
+      )
+    }
+  </nav>
+
+  <Lightbox lang={lang} />
+</BaseLayout>

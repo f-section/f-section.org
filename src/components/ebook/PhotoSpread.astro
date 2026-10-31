@@ -1,0 +1,32 @@
+---
+/**
+ * A page of pictures: the 1995 pages photographed, and the two college spreads. Captions
+ * are shown where the book printed one; where it printed none, the picture stands alone
+ * (Saran, 2026-10-31).
+ */
+import { picture, type Photo } from '../../lib/arivumalar';
+
+interface Props {
+  photos: Photo[];
+  /** Sepia frame for the 1992–96 pictures, the same as the gallery's (DESIGN.md §6.1). */
+  then?: boolean;
+}
+const { photos, then = false } = Astro.props;
+---
+<ul class="columns-1 gap-4 sm:columns-2 [&>li]:mb-4">
+  {
+    photos.map((photo) => {
+      const img = picture(photo);
+      return (
+        <li class="break-inside-avoid">
+          <figure class:list={[then ? 'frame-then p-2' : 'polaroid p-2']}>
+            <a href={img.src} class="block" data-lb-item data-caption={photo.caption || undefined}>
+              <img {...img} loading="lazy" decoding="async" class:list={['h-auto w-full bg-rule', then && 'sepia-[.2]']} />
+            </a>
+            {photo.caption && <figcaption class="mt-2 leading-snug">{photo.caption}</figcaption>}
+          </figure>
+        </li>
+      );
+    })
+  }
+</ul>

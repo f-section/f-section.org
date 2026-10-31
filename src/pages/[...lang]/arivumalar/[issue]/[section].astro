@@ -1,0 +1,101 @@
+---
+/**
+ * One reading page of the e-book. The Tamil comes from the content file as the Claude
+ * Design export printed it; `type` decides how it is laid out.
+ */
+import { render } from 'astro:content';
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import Reader from '../../../../components/ebook/Reader.astro';
+import Crossword from '../../../../components/ebook/Crossword.astro';
+import SpotSix from '../../../../components/ebook/SpotSix.astro';
+import Humour from '../../../../components/ebook/Humour.astro';
+import Quotes from '../../../../components/ebook/Quotes.astro';
+import PhotoSpread from '../../../../components/ebook/PhotoSpread.astro';
+import PeopleIndex from '../../../../components/ebook/PeopleIndex.astro';
+import Tx from '../../../../components/Tx.astro';
+import { pick, LANGS, langParam, langFromParam } from '../../../../i18n';
+import { mediaUrl } from '../../../../site';
+import {
+  getIssues,
+  sectionsOf,
+  peopleOf,
+  type Issue,
+  type Person,
+  type Section,
+} from '../../../../lib/arivumalar';
+
+export async function getStaticPaths() {
+  const issues = await getIssues();
+  const paths = [];
+  for (const issue of issues) {
+    const sections = await sectionsOf(issue);
+    const people = await peopleOf(issue);
+    for (const section of sections) {
+      paths.push(
+        ...LANGS.map((lang) => ({
+          params: { lang: langParam(lang), issue: issue.id, section: section.data.slug },
+          props: { issue, sections, section, people },
+        })),
+      );
+    }
+  }
+  return paths;
+}
+
+const { issue, sections, section, people } = Astro.props as {
+  issue: Issue;
+  sections: Section[];
+  section: Section;
+  people: Person[];
+};
+const lang = langFromParam(Astro.params.lang);
+const { data } = section;
+const { Content } = await render(section);
+// The link preview shows the section's own first picture where it has one.
+const ogKey = data.photos[0]?.key ?? issue.data.cover;
+// The two college spreads are 1992–96 pictures, so they get the sepia frame.
+const then = data.slug === 'those-four-years' || data.slug === 'inside-cover-1995';
+---
+<BaseLayout
+  lang={lang}
+  title={pick(data.title, lang)}
+  description={`${pick(data.title, lang)} · ${pick(issue.data.title, lang)}`}
+  image={ogKey ? mediaUrl(ogKey) : undefined}
+>
+  <Reader lang={lang} issue={issue} sections={sections} section={section}>
+    <article class:list={[data.dark && 'ebook-dark -mx-4 px-4 py-6 sm:mx-0 sm:px-6']}>
+      <header>
+        {data.kicker && <p class="text-base font-semibold uppercase tracking-wider text-sepia">{data.kicker}</p>}
+        <h1 class="hand mt-1 text-4xl sm:text-5xl"><Tx lang={lang} pair={data.title} /></h1>
+        {data.byline && <p class="mt-2 text-lg text-sepia">{data.byline}</p>}
+        {
+          !data.byline && data.authors.length > 0 && (
+            <p class="mt-2 text-lg text-sepia">{data.authors.join(' · ')}</p>
+          )
+        }
+        {data.note && <p class="mt-3 max-w-prose text-base text-sepia">{data.note}</p>}
+        {data.dedication && <p class="mt-3 max-w-prose italic text-sepia">{data.dedication}</p>}
+      </header>
+
+      <div class="mt-6">
+        {data.type === 'crossword' && (
+          <Crossword lang={lang} grid={data.grid} numbers={data.numbers} across={data.across} down={data.down} />
+        )}
+        {data.type === 'spot-six' && (
+          <SpotSix lang={lang} photos={data.photos} answers={data.answers} answerPhoto={data.answer_photo} />
+        )}
+        {data.type === 'humour' && <Humour jokes={data.jokes} />}
+        {data.type === 'quotes' && <Quotes lang={lang} issue={issue} people={people} quotes={data.quotes} />}
+        {(data.type === 'photos' || data.type === 'scans') && <PhotoSpread photos={data.photos} then={then} />}
+        {data.type === 'profiles' && <PeopleIndex lang={lang} issue={issue} people={people} />}
+        {
+          !['crossword', 'spot-six', 'humour', 'quotes', 'photos', 'scans', 'profiles'].includes(data.type) && (
+            <div class="ebook">
+              <Content />
+            </div>
+          )
+        }
+      </div>
+    </article>
+  </Reader>
+</BaseLayout>

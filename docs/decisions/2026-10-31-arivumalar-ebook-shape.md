@@ -25,8 +25,8 @@ wherever the two disagree.
 |---|---|
 | `/arivumalar/` | What Arivu Malar is, a card for the 2026 issue, a note that the 1992–96 archive comes later |
 | `/arivumalar/2026/` | The issue page: front cover, **பொருளடக்கம்**, **முகப்பு** into the book, **தரவிறக்கம் · 39.5 MB** |
-| `/arivumalar/2026/<slug>/` | One reading page per section, 27 of them |
-| `/arivumalar/2026/people/` | The `அன்றும் இன்றும்` index: 19 names with their `இன்று` photo |
+| `/arivumalar/2026/<slug>/` | One reading page per section, 28 of them |
+| `/arivumalar/2026/then-and-now/` | The `அன்றும் இன்றும்` index: 19 names with their `இன்று` photo. It is a reading page like any other, so it keeps its place in the order — there is no second index at `/people/` |
 | `/arivumalar/2026/people/<name>/` | One page per person — **`noindex`** |
 
 The `/ta/` mirror carries the same pages; the chrome follows the language toggle and the magazine
@@ -47,10 +47,17 @@ are not carried over.
 
 **The poems are scattered, not collected.** In print, `கவிதைகள்` was a nine-page set and two more
 of குமாரவேல்'s short poems sat on the leftover half of his own profile page, filling space the A5
-sheet could not use. The web has no such constraint, so every poem is its own reading page placed
-between the essays and the stories: ten in all, five of them குமாரவேல்'s plus the two from his
-profile. `மூச்சுவிடும் தூரம்` was likewise filler on the puzzle answers page and now stands alone.
-The two from the profile page have no printed title, so each is headed and listed by its first line.
+sheet could not use. The web has no such constraint, so the poems are spread between the essays and
+the stories: nine reading pages, six of them குமாரவேல்'s. `மூச்சுவிடும் தூரம்` was likewise filler
+on the puzzle answers page and now stands alone. The two off the profile page are short, so they
+share one page — `நிழல்கள் · நீயிருக்கும் வகுப்பறை`, with a `***` break between them (Saran,
+2026-10-31). `நிழல்கள்` is the title Saran gave the first; the second had none in print, so its own
+first line stands as its title.
+
+**The third photograph.** Each profile can also show them speaking on the night the book was
+released (Saran, 2026-10-31): `அன்று`, then release night, then the family picture as `இன்று`. It
+is a tag pointing into the `2026-reunion-arivu-malar` album, not a new upload, so the picture is
+the one already on the site and the profile links back to the album.
 
 **Alt text stays empty** where the print design had none (Saran, 2026-10-31): a photo described
 for the sake of it reads awkwardly, and the text beside it already carries the meaning. The pages
@@ -101,6 +108,8 @@ behind a button). They are listed in `DROPPED` in the extract script, with the r
 - The reading order. It is the printed order for now, by Saran's decision, and he moves sections
   after reading them on the web.
 - Captions for the four கான்ஸ்டன் photographs, still waiting on Saran since the design hand-over.
+- Which release-night photograph goes on which profile page. The slot is built and empty; Saran
+  tags them from the contact sheet in `/mnt/data/f-section/review/arivumalar-tagging.html`.
 - The `அன்று` photos of வைரமுத்து and ஸ்ரீதர், and மோகன்சுகுமார்'s `இன்று` photo: all three are
   cropped from the printed book, which carries reworks made after the design was finished.
 - DESIGN.md §3 and §6.3 are updated when the pages are built (checkpoint 3). §10.4 is updated now,
@@ -108,11 +117,13 @@ behind a button). They are listed in `DROPPED` in the extract script, with the r
 
 ## Checkpoints
 
-1. **Extract** — done 2026-10-31. 27 reading pages, 19 profiles, 69 photos listed, no text lost.
-2. **Proof** — Saran reads it section by section; the three photo crops from the printed book.
-3. **Build on `staging`** — issue page, sections, profiles, contents panel, puzzles, prev/next.
-4. **Media** — convert, dry-run the upload, Saran's yes, upload.
-5. **PR → Saran merges**, then the reorder pass.
+1. **Extract** — done 2026-10-31. 28 reading pages, 19 profiles, 69 photos listed, no text lost.
+2. **Proof** — done 2026-10-31. Saran read it and sent three corrections, all applied.
+3. **Build on `staging`** — done 2026-10-31. 98 pages: the issue page, 28 reading pages, the
+   profiles index and 19 profile pages, in both languages.
+4. **Media** — 71 pictures and the printed book staged and dry-run on 2026-10-31; the upload waits
+   on Saran's yes.
+5. **PR → Saran merges**, then the reorder pass and the three photo crops from the printed book.
 
 ## Rollback
 

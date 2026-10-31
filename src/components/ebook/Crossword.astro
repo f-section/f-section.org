@@ -1,0 +1,84 @@
+---
+/**
+ * The குறுக்கெழுத்துப் போட்டி grid and its clues. The grid in the content file holds the
+ * finished answers, so the puzzle is the same grid with the letters left out; the filled
+ * one sits behind the விடைகள் button. It scrolls sideways on a phone rather than shrink
+ * the cells: Tamil letters come in clusters and need the room (rule 7).
+ */
+import Tx from '../Tx.astro';
+import { t, type Lang } from '../../i18n';
+
+interface Props {
+  lang: Lang;
+  grid: string[];
+  numbers: string[];
+  across: { n: number; answer: string; clue: string }[];
+  down: { n: number; answer: string; clue: string }[];
+}
+const { lang, grid, numbers, across, down } = Astro.props;
+
+const cells = grid.map((row) => row.split('|'));
+const nums = numbers.map((row) => row.split('|'));
+const columns = Math.max(...cells.map((r) => r.length));
+const clueList = [
+  { key: 'ebook.across' as const, clues: across },
+  { key: 'ebook.down' as const, clues: down },
+];
+---
+{
+  [false, true].map((filled) => {
+    const table = (
+      <div class="overflow-x-auto">
+        <div
+          class="grid w-max gap-px bg-rule p-px"
+          style={`grid-template-columns: repeat(${columns}, 2.4rem)`}
+          role="img"
+          aria-label={t(lang, filled ? 'ebook.answers' : 'ebook.crossword_grid')}
+        >
+          {cells.map((row, y) =>
+            Array.from({ length: columns }, (_, x) => {
+              const letter = row[x] ?? '';
+              const number = nums[y]?.[x] ?? '';
+              return letter ? (
+                <div class="relative flex h-10 items-center justify-center bg-card text-center text-base leading-none">
+                  {number && <span class="absolute left-0.5 top-0.5 text-[0.6rem] leading-none text-sepia">{number}</span>}
+                  {filled && <span class="pt-1 font-semibold">{letter}</span>}
+                </div>
+              ) : (
+                <div class="h-10 bg-ink/80" />
+              );
+            }),
+          )}
+        </div>
+      </div>
+    );
+    return filled ? (
+      <details class="mt-6 border-2 border-rule bg-card">
+        <summary class="tap cursor-pointer justify-start font-semibold [&::-webkit-details-marker]:hidden">
+          <Tx lang={lang} k="ebook.answers" />
+        </summary>
+        <div class="p-2">{table}</div>
+      </details>
+    ) : (
+      table
+    );
+  })
+}
+
+<div class="mt-8 gap-8 sm:flex">
+  {
+    clueList.map(({ key, clues }) => (
+      <div class="min-w-0 flex-1">
+        <h2 class="hand text-3xl text-ink-red"><Tx lang={lang} k={key} /></h2>
+        <dl class="mt-2">
+          {clues.map((c) => (
+            <div class="flex gap-2 border-b border-rule/60 py-1.5">
+              <dt class="w-6 shrink-0 text-right font-semibold tabular-nums">{c.n}</dt>
+              <dd class="min-w-0">{c.clue}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    ))
+  }
+</div>

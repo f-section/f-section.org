@@ -114,6 +114,64 @@
     background: var(--card);
     box-shadow: 4px 4px 0 var(--rule);
   }
+  /* The Arivu Malar e-book: reflowed reading pages (DESIGN.md §10.4). The printed A5
+     page is not reproduced -- at 8.2pt it would land near 6px on a phone, which rule 7
+     rules out. About 34em of text, which is a comfortable measure at an 18px base. */
+  .ebook {
+    max-width: 36rem;
+  }
+  .ebook > * + * {
+    margin-top: 1.1em;
+  }
+  .ebook h2 {
+    margin-top: 2em;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--ink-red);
+    line-height: 1.4;
+  }
+  .ebook blockquote {
+    border-left: 4px solid var(--rule);
+    padding-left: 1rem;
+    color: var(--sepia);
+  }
+  .ebook blockquote > * + * {
+    margin-top: 0.6em;
+  }
+  /* The design sets a byline in italics; Tamil has no italic face, so colour carries it. */
+  .ebook em {
+    font-style: normal;
+    color: var(--sepia);
+  }
+  .ebook a[data-lb-item] {
+    display: block;
+    margin-block: 1.6em;
+  }
+  .ebook img {
+    background: var(--rule);
+    height: auto;
+    width: 100%;
+  }
+  /* Between two poems on one page, and anywhere the book left a break. */
+  .ebook hr {
+    width: 3rem;
+    margin: 2.5rem auto;
+    border: 0;
+    border-top: 2px solid var(--rule);
+  }
+  /* The In Memoriam poem is printed on a dark page (2026-10-31). */
+  .ebook-dark {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .ebook-dark hr {
+    border-color: var(--rule);
+  }
+  .ebook-dark .ebook em,
+  .ebook-dark .ebook blockquote {
+    color: var(--rule);
+  }
+
   /* Polaroid-style album card. */
   .polaroid {
     background: var(--card);
