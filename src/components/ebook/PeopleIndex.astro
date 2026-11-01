@@ -1,0 +1,48 @@
+---
+/**
+ * அன்றும் இன்றும்: the 19 of them, in the book's own numbered order. A card carries the
+ * name and nothing else (Saran, 2026-10-31), and the picture is shown whole inside the
+ * frame rather than cropped to fit it, because many of the family photographs are wide
+ * and the crop was cutting people off at both ends.
+ *
+ * The names are in the site's heading face (Saran, 2026-10-31) — Caveat on the English
+ * pages, the same hand that writes "F Section" in the header. Caveat has no Tamil
+ * letters, so on the Tamil pages `.hand` falls through to Noto Sans Tamil, which is how
+ * every other Tamil heading on the site is drawn — at 62% of the size, so the name needs
+ * to be set as large as a card title (text-3xl, as on the album and issue cards) for the
+ * Tamil to land at reading size.
+ */
+import { personHref, picture, words, type Issue, type Person } from '../../lib/arivumalar';
+import { type Lang } from '../../i18n';
+
+interface Props {
+  lang: Lang;
+  issue: Issue;
+  people: Person[];
+}
+const { lang, issue, people } = Astro.props;
+---
+<ul class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+  {
+    people.map((person) => {
+      const photo = person.data.photo_now ?? person.data.photo_then;
+      const img = photo ? picture(photo) : undefined;
+      return (
+        <li>
+          <a href={personHref(lang, issue, person)} class="group block no-underline">
+            <div class="polaroid p-2">
+              {img ? (
+                <img {...img} loading="lazy" decoding="async" class="w-full object-contain" style="aspect-ratio: 4 / 5" />
+              ) : (
+                <div class="w-full bg-rule" style="aspect-ratio: 4 / 5" />
+              )}
+              <p class="hand mt-2 text-3xl text-ink group-hover:underline">
+                {words(person.data.name, lang)}
+              </p>
+            </div>
+          </a>
+        </li>
+      );
+    })
+  }
+</ul>

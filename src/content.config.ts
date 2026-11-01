@@ -24,6 +24,15 @@ const optionalPair = z
   })
   .default({ en: '', ta: '' });
 
+/**
+ * `{ ta, en }` pair for the Arivu Malar e-book: the magazine is Tamil, and there are
+ * no English titles for now (2026-10-30), so Tamil is required and English optional.
+ */
+const taPair = z.object({
+  ta: z.string().min(1),
+  en: z.string().nullish().transform((v) => v ?? ''),
+});
+
 /** Public-first (D-14): everything is public unless marked members. */
 const visibility = z.enum(['public', 'members']).default('public');
 
@@ -99,6 +108,15 @@ const arivumalar = defineCollection({
       visibility,
       pages: z.number().int().min(1),
       pdf: r2Key.optional(),
+      /** Size of the PDF in bytes, so the download link can state it (2026-10-31). */
+      pdf_bytes: z.number().int().positive().optional(),
+      cover: r2Key.optional(),
+      cover_back: r2Key.optional(),
+      /**
+       * The web reading order, as section slugs. It differs from the printed order,
+       * and this one list is the only place to change it.
+       */
+      order: z.array(z.string().regex(SLUG)).default([]),
       contents: z
         .array(z.object({ page: z.number().int().min(1), title: optionalPair.or(z.string()), author: z.string().default('') }))
         .default([]),
@@ -108,6 +126,105 @@ const arivumalar = defineCollection({
       message: 'pdf key must start with the visibility prefix',
       path: ['pdf'],
     }),
+});
+
+/** A photo used inside the e-book: `source` is its path in the Claude Design export. */
+const ebookPhoto = z.object({
+  key: r2Key,
+  source: z.string().min(1),
+  alt: z.string().default(''),
+  caption: z.string().optional(),
+});
+
+/**
+ * One reading page of an Arivu Malar annual: `src/content/arivumalar/<year>/sections/<slug>.md`.
+ * Written by `scripts/arivumalar/extract.py` out of the Claude Design export; the Tamil
+ * body is verbatim. `type` picks the layout.
+ */
+const arivumalarSections = defineCollection({
+  loader: glob({
+    pattern: '*/sections/*.md',
+    base: './src/content/arivumalar',
+    generateId: ({ entry }) => entry.replace('/sections/', '/').replace(/\.md$/, ''),
+  }),
+  schema: z.object({
+    issue: z.string(),
+    slug: z.string().regex(SLUG),
+    type: z.enum([
+      'article',
+      'memoir',
+      'story',
+      'poem',
+      'humour',
+      'photos',
+      'scans',
+      'profiles',
+      'crossword',
+      'spot-six',
+    ]),
+    title: taPair,
+    kicker: z.string().default(''),
+    byline: z.string().default(''),
+    /** `{ta, en}`: the Tamil name the book printed, and the Latin spelling (2026-10-31). */
+    authors: z.array(taPair).default([]),
+    /** Which design file and pages it came from, so a re-export can be checked. */
+    source: z.string().default(''),
+    note: z.string().default(''),
+    dedication: z.string().default(''),
+    /** Shown on a dark page: the In Memoriam poem (2026-10-31). */
+    dark: z.boolean().default(false),
+    photos: z.array(ebookPhoto).default([]),
+    // Puzzles.
+    grid: z.array(z.string()).default([]),
+    numbers: z.array(z.string()).default([]),
+    across: z.array(z.object({ n: z.number().int(), answer: z.string(), clue: z.string() })).default([]),
+    down: z.array(z.object({ n: z.number().int(), answer: z.string(), clue: z.string() })).default([]),
+    answers: z.array(z.object({ n: z.number().int(), text: z.string() })).default([]),
+    answer_photo: ebookPhoto.optional(),
+    // Humour.
+    jokes: z
+      .array(
+        z.object({
+          setup: z.string().default(''),
+          lines: z.array(z.object({ speaker: z.string(), text: z.string().default('') })).default([]),
+        }),
+      )
+      .default([]),
+  }),
+});
+
+/**
+ * One person in `அன்றும் இன்றும்`: `src/content/arivumalar/<year>/people/<slug>.yaml`.
+ * Named by first name only (rule 14); `printed_name` keeps what the book printed.
+ */
+const arivumalarPeople = defineCollection({
+  loader: glob({
+    pattern: '*/people/*.yaml',
+    base: './src/content/arivumalar',
+    generateId: ({ entry }) => entry.replace('/people/', '/').replace(/\.yaml$/, ''),
+  }),
+  schema: z.object({
+    slug: z.string().regex(SLUG),
+    name: taPair,
+    printed_name: z.string().min(1),
+    /** The number printed on the badge: the book's Tamil alphabetical order. */
+    order: z.number().int().min(1),
+    city: z.string().default(''),
+    fields: z.array(z.object({ label: z.string(), value: z.string() })).default([]),
+    panels: z.array(z.object({ label: z.string(), value: z.string() })).default([]),
+    /** வைரமுத்து and ஸ்ரீதர் have no `அன்று` photo yet (2026-10-31). */
+    photo_then: ebookPhoto.optional(),
+    /**
+     * Them speaking on the night the magazine was released (Saran, 2026-10-31).
+     * It points at a photo already in a gallery album, so nothing is uploaded twice;
+     * `id` must exist in that album's media.json or the build stops.
+     */
+    photo_event: z
+      .object({ album: z.string().regex(ALBUM_SLUG), id: z.string().min(1) })
+      .optional(),
+    photo_now: ebookPhoto.optional(),
+    quote: z.string().default(''),
+  }),
 });
 
 const people = defineCollection({
@@ -135,4 +252,13 @@ const memoriam = defineCollection({
   }),
 });
 
-export const collections = { places, albums, videos, arivumalar, people, memoriam };
+export const collections = {
+  places,
+  albums,
+  videos,
+  arivumalar,
+  arivumalarSections,
+  arivumalarPeople,
+  people,
+  memoriam,
+};

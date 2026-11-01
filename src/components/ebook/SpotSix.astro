@@ -1,0 +1,55 @@
+---
+/** ஆறு வித்தியாசங்களைக் கண்டுபிடி: the two pictures, then the marked copy and the list behind விடைகள். */
+import Tx from '../Tx.astro';
+import { picture, type Photo } from '../../lib/arivumalar';
+import { type Lang } from '../../i18n';
+
+interface Props {
+  lang: Lang;
+  photos: Photo[];
+  answers: { n: number; text: string }[];
+  answerPhoto?: Photo;
+}
+const { lang, photos, answers, answerPhoto } = Astro.props;
+---
+<div class="grid gap-4 sm:grid-cols-2">
+  {
+    photos.map((photo) => {
+      const img = picture(photo);
+      return (
+        <figure class="polaroid p-2">
+          <a href={img.src} class="block" data-lb-item>
+            <img {...img} loading="lazy" decoding="async" class="h-auto w-full bg-rule" />
+          </a>
+        </figure>
+      );
+    })
+  }
+</div>
+
+<details class="mt-6 border-2 border-rule bg-card">
+  <summary class="tap cursor-pointer justify-start font-semibold [&::-webkit-details-marker]:hidden">
+    <Tx lang={lang} k="ebook.answers" />
+  </summary>
+  <div class="p-3">
+    {
+      answerPhoto && (
+        <figure class="mb-3">
+          <a href={picture(answerPhoto).src} class="block" data-lb-item>
+            <img {...picture(answerPhoto)} loading="lazy" decoding="async" class="h-auto w-full bg-rule" />
+          </a>
+        </figure>
+      )
+    }
+    <ol class="list-none">
+      {
+        answers.map((a) => (
+          <li class="flex gap-2 py-1">
+            <span class="w-6 shrink-0 text-right font-semibold tabular-nums">{a.n}</span>
+            <span>{a.text}</span>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</details>

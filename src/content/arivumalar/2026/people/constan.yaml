@@ -1,0 +1,32 @@
+slug: constan
+name:
+  ta: கான்ஸ்டன்
+  en: Constan
+printed_name: கான்ஸ்டன்
+order: 2
+city: சிங்கப்பூர்
+fields:
+- label: பணி
+  value: ChubbLife இன்சூரன்ஸ் நிறுவனத்தில் உள்கட்டமைப்புத் தலைவர் (Head of Infrastructure)
+- label: பொழுதுபோக்கு
+  value: உடற்பயிற்சி
+- label: இணையர்
+  value: கிரண் கான்ஸ்டன்
+- label: திருமண நாள்
+  value: 21 Oct 2002
+- label: பிள்ளைகள்
+  value: 'மகள் ஒனீகா — 21 வயது
+
+    மகன் நிவென் — 16 வயது'
+panels:
+- label: முப்பது ஆண்டுச் சாதனை
+  value: கடவுளின் ஆசியுடன் — இதுவரை தன்னிறைவோடு வாழ்வது.
+photo_then:
+  key: public/arivumalar/2026/then/constan.webp
+  source: assets/family/old/constan.png
+  alt: கான்ஸ்டன் — அன்று
+photo_now:
+  key: public/arivumalar/2026/img/family-constan-1.webp
+  source: assets/family/constan-1.jpeg
+  alt: கான்ஸ்டன் — இன்று
+quote: “எப்போதும் மகிழ்ச்சியுடனும் மனநிறைவுடனும் இருங்கள்.”

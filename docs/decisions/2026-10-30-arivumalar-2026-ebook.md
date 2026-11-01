@@ -1,5 +1,10 @@
 # Arivu Malar 2026 as an online e-book
 
+> **Superseded in part on 2026-10-31.** Saran settled the open questions at checkpoint 1: two modes
+> instead of three, reflowed text in the site's own look, and the Claude Design HTML as the only
+> source of text. Read [2026-10-31-arivumalar-ebook-shape.md](2026-10-31-arivumalar-ebook-shape.md)
+> first; this note is kept for the history of how we got there.
+
 **Date:** 2026-10-30
 **Approved by:** Saran (the four answers below). The rest is a proposal: Claude Code confirms it with Saran at checkpoint 1, before building.
 **Affects:** DESIGN.md §3 (site map), §10.4 (Arivu Malar schema); `src/content.config.ts`; `src/pages/[...lang]/arivumalar/`; R2 prefix `public/arivumalar/2026/`
