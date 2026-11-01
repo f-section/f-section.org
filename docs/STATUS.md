@@ -2,7 +2,7 @@
 
 Where the project stands, and what comes next. Update this file at the end of every working session. No private links, tokens or personal details: this repo is public.
 
-_Last updated: 2026-10-31 (late, after Saran's first read on the web)_
+_Last updated: 2026-11-01, when Arivu Malar 2026 went live_
 
 ## Live
 - https://f-section.org (English) and https://f-section.org/ta/ (Tamil). Served by the Cloudflare Worker `f-section-site`, which deploys from `main` through Workers Builds.
@@ -14,8 +14,10 @@ _Last updated: 2026-10-31 (late, after Saran's first read on the web)_
   dependency to it), with `shot.mjs <out-dir> <width> <path>…` for full-page screenshots of the
   preview. It scrolls each page before capturing, or `loading="lazy"` pictures come out blank.
 - Two videos on Videos, Reunions and Gallery → 2026: the montage ("30 years on: Reunion 2026", 4:28)
-  and the kavithai (1:36). The kavithai is in R2 and in the repo, but reaches the live site only
-  once `staging` is merged to `main`.
+  and the kavithai (1:36). Both are live since the 2026-11-01 merge.
+- **Arivu Malar 2026, the web edition**: `/arivumalar/`, the issue page, 27 reading pages, the
+  `அன்றும் இன்றும்` index and 19 `noindex` profile pages, in both languages, plus the printed book
+  as a 39.5 MB PDF. Live since 2026-11-01 (PR #10).
 
 ## Done (PRs 1–5, all merged)
 1. Site scaffold: bilingual routing, fonts, sepia theme, checks, CI, branch protection.
@@ -202,10 +204,12 @@ Running total if approved: 94 photos of 563 across four albums.
      in `extract.py`; every other Latin spelling comes from the person's own slug.
 
 ### Next
-13. **Arivu Malar 2026 — Saran's second read, then the merge.** The media is in R2 and
-   [PR #10](https://github.com/f-section/f-section.org/pull/10) carries everything; what is left is
-   his read of the preview after these seven changes, the reorder pass, his eye over the 18 Tamil
-   interface strings, the Latin spelling of கலைச்செழியன் and மகேந்திரன், and his photo tags.
+13. **Arivu Malar 2026 — what is left after going live.** [PR #10](https://github.com/f-section/f-section.org/pull/10)
+   was merged on 2026-11-01 and the book is on f-section.org. Still to come: the reading order,
+   which Saran settles after reading it through (one `order:` list in
+   `src/content/arivumalar/2026.yaml`); his eye over the 18 Tamil interface strings; his
+   `photo_event` tags from `/mnt/data/f-section/review/arivumalar-tagging.html`; and the three
+   photo crops from the printed book, which he is supplying.
 14. **Photo curation, remaining two albums** (deferred on 2026-10-30, picks already chosen and
    waiting in `/mnt/data/f-section/work/curation/PICKS-PENDING-REVIEW.md`). Contact sheets per
    event, then picks. Weighting, as Saran restated on
