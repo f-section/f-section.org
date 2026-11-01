@@ -13,7 +13,8 @@ photos:
   source: assets/articles/sapphire-hostel.png
   alt: ''
 authors:
-- இஸ்மாயில்
+- ta: இஸ்மாயில்
+  en: Ismail
 source: கட்டுரை - காலத்தால் அழியாத F பிரிவு - இஸ்மாயில்.dc.html
 ---
 

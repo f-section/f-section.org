@@ -2,7 +2,7 @@
 
 Where the project stands, and what comes next. Update this file at the end of every working session. No private links, tokens or personal details: this repo is public.
 
-_Last updated: 2026-10-31_
+_Last updated: 2026-10-31 (late, after Saran's first read on the web)_
 
 ## Live
 - https://f-section.org (English) and https://f-section.org/ta/ (Tamil). Served by the Cloudflare Worker `f-section-site`, which deploys from `main` through Workers Builds.
@@ -140,48 +140,72 @@ Running total if approved: 94 photos of 563 across four albums.
    page (`நிழல்கள் · நீயிருக்கும் வகுப்பறை`); the `மூச்சுவிடும் தூரம்` provenance line is right as
    it stands, because that poem really was printed on the spot-the-difference answers page as
    filler; and each profile can now carry a third photograph of them speaking on release night.
-   - **The e-book is built: 98 pages.** `/arivumalar/` with a card per issue, `/arivumalar/2026/`
-     (cover, contents, **முகப்பு**, **தரவிறக்கம் · 39.5 MB**), 28 reading pages, the
+   - **The e-book is built: 96 pages.** `/arivumalar/` with a card per issue, `/arivumalar/2026/`
+     (cover, contents, **முகப்பு**, **தரவிறக்கம் · 39.5 MB**), 27 reading pages, the
      `அன்றும் இன்றும்` index and 19 `noindex` profile pages — all of it in both languages.
-   - The contents sit beside the text from 1024px up and behind a **பொருளடக்கம்** button on a
-     phone (a `<dialog>`, falling back to a link to the issue page). Every page ends with
-     prev · next. The crossword is a real CSS grid, and both puzzles keep their answers behind a
-     **விடைகள்** button.
+   - The contents live behind a **பொருளடக்கம்** button at every width (a `<dialog>`, falling back
+     to a link to the issue page), so the reading column has the screen to itself. Every page ends
+     with prev · next. The crossword is a real CSS grid, and both puzzles keep their answers behind
+     a **விடைகள்** button.
    - The third profile photograph is a **tag, not an upload**: `photo_event: { album, id }` points
      at a picture already in the `2026-reunion-arivu-malar` album, so the same object serves both
      pages. The slot is built and empty — Saran tags them from
      `/mnt/data/f-section/review/arivumalar-tagging.html`. Only `அன்று` and `இன்று` are captioned
      (Saran, 2026-10-31): two labels for the three pictures, with the album link below the row.
-   - 20 new `ebook.*` interface strings in both languages; the Tamil is Claude's draft under
+   - 18 new `ebook.*` interface strings in both languages; the Tamil is Claude's draft under
      rule 5 and wants Saran's eye.
    - `scripts/arivumalar/media.py` converted **71 pictures** (8.3 MB) and staged them with the
      printed book. **Uploaded on 2026-10-31** with Saran's yes: `rclone copy --immutable` put 72
      new objects / 46.0 MiB in place, overwriting nothing, and the covers, the pictures and the
      39.5 MB book all answer 200 from `media.f-section.org`. R2 is now 196.7 MiB of the 10 GB.
-   - `npm run check` (0 errors), `npm run build` (124 pages) and `npm run check:links`
-     (5,546 links) are all clean.
+   - `npm run check` (0 errors), `npm run build` (122 pages) and `npm run check:links`
+     (3,794 links) are all clean.
    - Still open: Saran's photo tags, captions for the four கான்ஸ்டன் photographs, and the three
      photo crops from the printed book (வைரமுத்து and ஸ்ரீதர்'s `அன்று`, மோகன் சுகுமார்'s `இன்று`).
 
+12. **Arivu Malar 2026 — the first read on the web, and seven changes** (2026-10-31, same evening).
+   Saran read the preview and sent seven corrections, all applied and pushed to the open PR. They
+   come down to one thing: where the web edition still behaved like a printed book, it read badly.
+   - **The pictures.** `அன்று` is a thumbnail now — those are scans of a page printed 30 years ago,
+     and the design export had framed them the size of a modern photograph, so they showed nothing
+     but their own pixels. And nothing is cropped to a 4:5 box any more: many of the family
+     pictures are wide, and the crop was cutting people off at both ends, two of them off Saran's
+     own. The `அன்றும் இன்றும்` cards letterbox theirs inside the frame instead, so the grid of 19
+     stays even, and they carry the person's name alone, not the city.
+   - **`சொல்ல மறந்த கதை` is no longer a page.** Those closing words were a spread in print because
+     the profile pages had no room left; online they do, so each one now ends its own profile page
+     under that heading. `extract.py` still reads the spread — it is where the quotes come from —
+     but no longer writes it as a reading page, so the book is 27 pages, not 28.
+   - **The English pages print the magazine's own Tamil titles.** They had been showing the
+     author's name and nothing else, because `title.en` is empty for every section and the contents
+     fell back to it. Only names change language now, and the Latin spelling comes from the slug
+     already in that person's URL and photo file names — nothing is transliterated here (rule 14).
+     கலைச்செழியன் and மகேந்திரன் have no profile page, so no slug: their names stay Tamil until
+     Saran gives a spelling.
+   - **The contents sidebar is gone** at every width, and the issue page has lost the page count,
+     the editor's line and the note under the download button.
+   - `/arivumalar/` now carries its Tamil caption, in Saran's own words.
+
 ### Next
-12. **Arivu Malar 2026 — Saran reads it on the web.** The media is in R2 and the PR is open
-   (checkpoints 4 and 5 done on 2026-10-31); what is left is his read of the staging preview, the
-   reorder pass that follows it, his eye over the 19 Tamil interface strings, and his photo tags.
-13. **Photo curation, remaining two albums** (deferred on 2026-10-30, picks already chosen and
+13. **Arivu Malar 2026 — Saran's second read, then the merge.** The media is in R2 and
+   [PR #10](https://github.com/f-section/f-section.org/pull/10) carries everything; what is left is
+   his read of the preview after these seven changes, the reorder pass, his eye over the 18 Tamil
+   interface strings, the Latin spelling of கலைச்செழியன் and மகேந்திரன், and his photo tags.
+14. **Photo curation, remaining two albums** (deferred on 2026-10-30, picks already chosen and
    waiting in `/mnt/data/f-section/work/curation/PICKS-PENDING-REVIEW.md`). Contact sheets per
    event, then picks. Weighting, as Saran restated on
    2026-10-25: strongly prefer natural and candid — friends talking, walking, unaware of the
    camera — over posed shots at the lens. Posed is acceptable occasionally, not as the default.
    Start from Mohanraj's `1st Cut` (208 Canon frames, the backbone).
-14. **Two montages, by day** (deferred on 2026-10-30; Saran changed this on 2026-10-26, replacing the three themed ones
+15. **Two montages, by day** (deferred on 2026-10-30; Saran changed this on 2026-10-26, replacing the three themed ones
    agreed the day before): **Day 1** and **Day 2**. Reason: each day mixes campus, temple, meals
    and evening material, so a day-shaped cut varies the imagery, where a theme-shaped cut would
    string together many near-identical scenes. Day 3 is only departure and tails Day 2.
    Music: `masters/Nanban-En_Frienda_Pola.mp3` (3:53), a different section under each montage.
    It is a loud master (-10.6 LUFS, +0.6 dBTP) and must be normalised down for web.
-15. **Review page.** Contact sheet in `review/` for approval before any ingest.
-16. **Ingest and upload.** R2 token and `r2` remote are in place since 2026-10-26.
-17. **Open a PR** from `staging` with the album pages and the video entries.
+16. **Review page.** Contact sheet in `review/` for approval before any ingest.
+17. **Ingest and upload.** R2 token and `r2` remote are in place since 2026-10-26.
+18. **Open a PR** from `staging` with the album pages and the video entries.
 
 ### Notes worth keeping
 - The kavithai source plays **mirrored** (a `-180` display matrix plus a selfie-camera mirror);

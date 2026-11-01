@@ -1,8 +1,7 @@
 ---
 /** The பொருளடக்கம் list of an issue. Used in the sidebar, in the phone panel and on the issue page. */
-import Tx from '../Tx.astro';
 import { type Lang } from '../../i18n';
-import { sectionHref, type Issue, type Section } from '../../lib/arivumalar';
+import { sectionHref, words, authorsOf, type Issue, type Section } from '../../lib/arivumalar';
 
 interface Props {
   lang: Lang;
@@ -29,9 +28,9 @@ const { lang, issue, sections, current, id, class: className = '' } = Astro.prop
           aria-current={section.data.slug === current ? 'page' : undefined}
         >
           <span>
-            <Tx lang={lang} pair={section.data.title} />
+            {words(section.data.title, lang)}
             {section.data.authors.length > 0 && (
-              <span class="block text-base font-normal text-sepia">{section.data.authors.join(' · ')}</span>
+              <span class="block text-base font-normal text-sepia">{authorsOf(section, lang)}</span>
             )}
           </span>
         </a>

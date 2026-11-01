@@ -11,6 +11,10 @@
  * Only two of them are labelled, அன்று and இன்று (Saran, 2026-10-31): the release-night
  * picture belongs to இன்று as much as the family one does, and a third caption only
  * crowded the row. The album link under the row says where it comes from.
+ *
+ * Their closing word from சொல்ல மறந்த கதை ends the page under that heading (Saran,
+ * 2026-10-31). The print edition had to gather those words into a spread of their own
+ * for want of room; here each one sits with the person who wrote it.
  */
 import BaseLayout from '../../../../../layouts/BaseLayout.astro';
 import Lightbox from '../../../../../components/Lightbox.astro';
@@ -23,6 +27,7 @@ import {
   peopleOf,
   eventPhotosOf,
   picture,
+  words,
   personHref,
   sectionHref,
   type EventPhoto,
@@ -67,12 +72,22 @@ const { issue, person, index, event, prev, next } = Astro.props as {
 };
 const lang = langFromParam(Astro.params.lang);
 const { data } = person;
-const name = pick(data.name, lang);
+const name = words(data.name, lang);
 
-// அன்று, then the release night, then இன்று — the order the book reads in. The middle
-// picture carries no caption; see the note at the head of this file.
-const frames = [
-  data.photo_then && { ...picture(data.photo_then), label: t(lang, 'ebook.then') },
+/**
+ * அன்று comes first and small (Saran, 2026-10-31). It is a scan of a page printed
+ * 30 years ago, so blown up to the width of a modern photograph it shows nothing but
+ * its own pixels; at a thumbnail's size it reads as what it is.
+ */
+const then = data.photo_then ? picture(data.photo_then) : undefined;
+
+/**
+ * Then the release-night picture and the family one, each shown whole. Nothing is
+ * cropped to a 4:5 box any more (Saran, 2026-10-31): many of the family photographs
+ * are wide, and the crop was cutting people off at both ends. The middle one carries
+ * no caption; see the note at the head of this file.
+ */
+const current = [
   event && { src: event.src, width: event.width, height: event.height, alt: '', label: '' },
   data.photo_now && { ...picture(data.photo_now), label: t(lang, 'ebook.now') },
 ].filter(Boolean) as { src: string; width?: number; height?: number; alt: string; label: string }[];
@@ -91,9 +106,9 @@ const link = 'tap max-w-[45%] items-start gap-1 rounded-md px-2 py-2 leading-snu
 
   <header>
     <p class="text-base font-semibold uppercase tracking-wider text-sepia">
-      {index ? pick(index.data.title, lang) : ''} · {data.order}
+      {index ? words(index.data.title, lang) : ''} · {data.order}
     </p>
-    <h1 class="hand mt-1 text-4xl text-ink sm:text-5xl"><Tx lang={lang} pair={data.name} /></h1>
+    <h1 class="hand mt-1 text-4xl text-ink sm:text-5xl">{name}</h1>
     <p class="mt-1 text-sepia">
       {data.city}
       {data.printed_name !== name && <span> · {data.printed_name}</span>}
@@ -101,9 +116,29 @@ const link = 'tap max-w-[45%] items-start gap-1 rounded-md px-2 py-2 leading-snu
   </header>
 
   {
-    frames.length > 0 && (
-      <ul class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3">
-        {frames.map((frame) => (
+    then && (
+      <figure class="polaroid mt-6 w-28 p-2 sm:w-32">
+        <a href={then.src} class="block" data-lb-item>
+          <img
+            src={then.src}
+            alt={then.alt}
+            width={then.width}
+            height={then.height}
+            loading="eager"
+            decoding="async"
+            class="h-auto w-full bg-rule"
+          />
+        </a>
+        <figcaption class="mt-2 text-base font-semibold text-sepia">
+          <Tx lang={lang} k="ebook.then" />
+        </figcaption>
+      </figure>
+    )
+  }
+  {
+    current.length > 0 && (
+      <ul class="mt-6 grid gap-4 sm:grid-cols-2">
+        {current.map((frame) => (
           <li>
             <figure class="polaroid p-2">
               <a href={frame.src} class="block" data-lb-item>
@@ -114,8 +149,7 @@ const link = 'tap max-w-[45%] items-start gap-1 rounded-md px-2 py-2 leading-snu
                   height={frame.height}
                   loading="lazy"
                   decoding="async"
-                  class="h-auto w-full bg-rule object-cover"
-                  style="aspect-ratio: 4 / 5"
+                  class="h-auto w-full bg-rule"
                 />
               </a>
               {frame.label && (
@@ -161,9 +195,12 @@ const link = 'tap max-w-[45%] items-start gap-1 rounded-md px-2 py-2 leading-snu
 
   {
     data.quote && (
-      <figure class="mt-8 max-w-prose">
-        <blockquote class="border-l-4 border-ink-red pl-4 text-lg">{data.quote}</blockquote>
-      </figure>
+      <section class="mt-10 max-w-prose">
+        <h2 class="hand text-3xl text-ink-red"><Tx lang={lang} k="ebook.untold_story" /></h2>
+        <figure class="mt-2">
+          <blockquote class="border-l-4 border-ink-red pl-4 text-lg">{data.quote}</blockquote>
+        </figure>
+      </section>
     )
   }
 
@@ -173,7 +210,7 @@ const link = 'tap max-w-[45%] items-start gap-1 rounded-md px-2 py-2 leading-snu
         <a href={personHref(lang, issue, prev)} class={`${link} -ml-2`} rel="prev">
           <span>
             <span class="block text-base text-sepia">← <Tx lang={lang} k="ebook.prev" /></span>
-            <Tx lang={lang} pair={prev.data.name} />
+            {words(prev.data.name, lang)}
           </span>
         </a>
       ) : (
@@ -185,7 +222,7 @@ const link = 'tap max-w-[45%] items-start gap-1 rounded-md px-2 py-2 leading-snu
         <a href={personHref(lang, issue, next)} class={`${link} -mr-2 text-right`} rel="next">
           <span>
             <span class="block text-base text-sepia"><Tx lang={lang} k="ebook.next" /> →</span>
-            <Tx lang={lang} pair={next.data.name} />
+            {words(next.data.name, lang)}
           </span>
         </a>
       ) : (

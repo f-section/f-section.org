@@ -159,14 +159,14 @@ const arivumalarSections = defineCollection({
       'photos',
       'scans',
       'profiles',
-      'quotes',
       'crossword',
       'spot-six',
     ]),
     title: taPair,
     kicker: z.string().default(''),
     byline: z.string().default(''),
-    authors: z.array(z.string()).default([]),
+    /** `{ta, en}`: the Tamil name the book printed, and the Latin spelling (2026-10-31). */
+    authors: z.array(taPair).default([]),
     /** Which design file and pages it came from, so a re-export can be checked. */
     source: z.string().default(''),
     note: z.string().default(''),
@@ -181,7 +181,7 @@ const arivumalarSections = defineCollection({
     down: z.array(z.object({ n: z.number().int(), answer: z.string(), clue: z.string() })).default([]),
     answers: z.array(z.object({ n: z.number().int(), text: z.string() })).default([]),
     answer_photo: ebookPhoto.optional(),
-    // Humour and the closing quotes.
+    // Humour.
     jokes: z
       .array(
         z.object({
@@ -189,9 +189,6 @@ const arivumalarSections = defineCollection({
           lines: z.array(z.object({ speaker: z.string(), text: z.string().default('') })).default([]),
         }),
       )
-      .default([]),
-    quotes: z
-      .array(z.object({ text: z.string(), by: z.string().default(''), printed_by: z.string().default('') }))
       .default([]),
   }),
 });

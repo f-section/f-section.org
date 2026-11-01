@@ -11,7 +11,8 @@ photos:
   source: assets/articles/dubai-skyline-sketch.jpeg
   alt: ''
 authors:
-- புவனேஷ்
+- ta: புவனேஷ்
+  en: Bhuvanesh
 source: கட்டுரை - அமீரக வளர்ச்சியில் தமிழர் தடம் - புவனேஷ்.dc.html
 ---
 

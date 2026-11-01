@@ -11,7 +11,8 @@ photos:
   source: assets/articles/varisai-hero-wide.jpeg
   alt: ''
 authors:
-- சரவணன்
+- ta: சரவணன்
+  en: Saravanan
 source: கட்டுரை - வரிசையில் என்ன உள்ளது - சரவணன்.dc.html
 ---
 

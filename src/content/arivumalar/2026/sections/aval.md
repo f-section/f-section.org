@@ -5,7 +5,8 @@ type: poem
 title:
   ta: அவள்...
 authors:
-- கலைச்செழியன்
+- ta: கலைச்செழியன்
+  en: கலைச்செழியன்
 source: கவிதைகள்.dc.html · pages 2
 ---
 

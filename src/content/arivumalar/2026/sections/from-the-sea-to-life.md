@@ -19,7 +19,8 @@ photos:
   source: assets/articles/constan-trophy.jpeg
   alt: ''
 authors:
-- கான்ஸ்டன்
+- ta: கான்ஸ்டன்
+  en: Constan
 source: கடலிலிருந்து வாழ்க்கைக்கு - கான்ஸ்டன்.dc.html
 ---
 

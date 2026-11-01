@@ -10,7 +10,8 @@ photos:
   source: assets/family/parineetha-author.jpeg
   alt: பரிணீதா
 authors:
-- பரிணீதா
+- ta: பரிணீதா
+  en: Parineetha
 source: நினைவலைகள் - பரிணீதா.dc.html
 ---
 

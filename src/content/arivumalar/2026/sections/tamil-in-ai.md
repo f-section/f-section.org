@@ -11,7 +11,8 @@ photos:
   source: assets/articles/ai-tamil-token-v2.jpeg
   alt: ''
 authors:
-- சரவணன்
+- ta: சரவணன்
+  en: Saravanan
 source: கட்டுரை - செயற்கை நுண்ணறிவில் தமிழ் - சரவணன்.dc.html
 ---
 

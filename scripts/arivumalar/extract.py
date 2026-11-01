@@ -342,6 +342,23 @@ PEOPLE_SLUGS = {
 }
 
 
+def english_name(first: str) -> str:
+    """
+    The Latin spelling of a first name: the slug Saran approved for the URLs and the
+    photo file names, in title case. The two poets with no profile page have no slug,
+    so their name stays in Tamil until Saran gives one (2026-10-31). Claude never
+    invents a spelling of a friend's name (rule 14).
+    """
+    slug = PEOPLE_SLUGS.get(first)
+    return slug.replace("-", " ").title() if slug else first
+
+
+def name_pair(printed: str) -> dict:
+    """`{ta, en}` for a name as the book printed it."""
+    first = NAMES.get(printed, printed)
+    return {"ta": first, "en": english_name(first)}
+
+
 @dataclass(frozen=True)
 class Sec:
     """One reading page of the web edition, and where it comes from in the export."""
@@ -356,6 +373,7 @@ class Sec:
     stop: str = ""  # ...up to the one whose text starts with this
     take: tuple[int, ...] = ()  # keep only these text blocks of the region, in this order
     dark: bool = False
+    page: bool = True  # False: read for what it feeds, but not written as a reading page
 
 
 POEMS = "கவிதைகள்.dc.html"
@@ -398,7 +416,10 @@ SECTIONS = (
     Sec("twenty-years-on", "2016 இருபது ஆண்டுகளுக்குப் பின்.dc.html", "photos"),
     Sec("the-addressless", POEMS, "poem", ("மகேந்திரன்",), pages=(9,), dark=True),
     Sec("then-and-now", PROFILES, "profiles", title="அன்றும் இன்றும்", pages=()),
-    Sec("the-untold-story", PROFILES, "quotes", title="சொல்ல மறந்த கதை", pages=(21, 22)),
+    # Not a page of the web edition (Saran, 2026-10-31). In print these closing words
+    # were pulled out into a spread of their own for want of room on the profile pages;
+    # online there is room, so each one is read here and printed on its own profile.
+    Sec("the-untold-story", PROFILES, "quotes", title="சொல்ல மறந்த கதை", pages=(21, 22), page=False),
     Sec("f-section-vairamuthu", "F Section - வைரமுத்து.dc.html", "article", ("வைரமுத்து",), title="F Section"),
 )
 
@@ -780,7 +801,7 @@ def write_people(path: Path) -> list[dict]:
         if not slug:
             raise SystemExit(f"no slug for {first!r} — add it to PEOPLE_SLUGS")
         p["slug"] = slug
-        p["name"] = {"ta": first}
+        p["name"] = {"ta": first, "en": english_name(first)}
         for key in ("photo_then", "photo_now"):
             if key in p:
                 p[key]["alt"] = f"{first} — {'அன்று' if key == 'photo_then' else 'இன்று'}"
@@ -864,11 +885,13 @@ def build(src: Path) -> tuple[dict[str, tuple[dict, str]], list[dict], list[dict
             "slug": sec.slug,
             "type": sec.type,
             **meta,
-            "authors": [NAMES.get(a, a) for a in sec.authors],
+            "authors": [name_pair(a) for a in sec.authors],
             "source": f"{sec.source}" + (f" · pages {','.join(map(str, sec.pages))}" if sec.pages else ""),
         }
         if sec.type == "quotes":
             quotes_meta = full
+        if not sec.page:
+            continue
         sections[sec.slug] = (full, body)
         for p in full.get("photos", []) or []:
             photos.append(p)
@@ -891,14 +914,16 @@ def build(src: Path) -> tuple[dict[str, tuple[dict, str]], list[dict], list[dict
 
 def cmd_apply(src: Path, apply: bool) -> int:
     sections, people, photos = build(src)
-    order = [s.slug for s in SECTIONS]
+    order = [s.slug for s in SECTIONS if s.page]
 
     print(f"{len(sections)} reading pages, {len(people)} people, {len(photos)} photos\n")
     for sec in SECTIONS:
+        if not sec.page:
+            continue
         meta, body = sections[sec.slug]
         bits = [f"{meta['type']:9}", f"{meta['title']['ta'][:34]:36}"]
         if meta.get("authors"):
-            bits.append("· ".join(meta["authors"]))
+            bits.append("· ".join(f"{a['ta']} ({a['en']})" for a in meta["authors"]))
         print(f"  {sec.slug:26} {' '.join(bits)}  ({len(body)} chars)")
     print()
     missing = [p["name"]["ta"] for p in people if "photo_then" not in p]
@@ -919,6 +944,10 @@ def cmd_apply(src: Path, apply: bool) -> int:
     OUT_PEOPLE.mkdir(parents=True, exist_ok=True)
     for slug, (meta, body) in sections.items():
         (OUT_SECTIONS / f"{slug}.md").write_text(front_matter(meta, body), encoding="utf-8")
+    for stale in sorted(OUT_SECTIONS.glob("*.md")):
+        if stale.stem not in sections:
+            print(f"  removed {stale.name}, no longer a reading page")
+            stale.unlink()
     for p in people:
         path = OUT_PEOPLE / f"{p['slug']}.yaml"
         path.write_text(
@@ -984,6 +1013,7 @@ DROPPED = {
     "விளையாட்டு · விடைகள்": "the answers sit behind a விடைகள் button, not on their own page",
     "ஆறு வித்தியாசங்கள்": "the answers' own page heading, not needed once they are inline",
     "குறுக்கெழுத்துப் போட்டி — விடைகள்": "same, for the crossword",
+    "சொல்ல மறந்த கதை": "now the heading above each person's own closing quote (ebook.untold_story)",
 }
 
 
@@ -1007,7 +1037,7 @@ def cmd_verify(src: Path) -> int:
             for b in blocks:
                 if b.kind in ("furniture", "image") or not b.text:
                     continue
-                if bare(b.text) in written[sec.slug] or bare(b.text) in everything:
+                if bare(b.text) in written.get(sec.slug, "") or bare(b.text) in everything:
                     continue
                 if b.text in DROPPED:
                     continue

@@ -65,6 +65,20 @@ export function picture(photo: Photo) {
   return { src: mediaUrl(photo.key), alt: photo.alt, ...imgSize(photo.key) };
 }
 
+/**
+ * Text of the book itself: a title, a name. The magazine is Tamil, so the English
+ * pages print the Tamil words too (Saran, 2026-10-31) — only people's names have a
+ * Latin spelling, and `taPair` leaves `en` empty where there is none.
+ */
+export function words(pair: { ta: string; en?: string | null }, lang: Lang): string {
+  return lang === 'en' && pair.en ? pair.en : pair.ta;
+}
+
+/** The names under a page's title, in the language of the page. */
+export function authorsOf(section: Section, lang: Lang): string {
+  return section.data.authors.map((a) => words(a, lang)).join(' · ');
+}
+
 /** Megabytes as a browser shows them, for the download link. */
 export function megabytes(bytes: number): string {
   return `${(bytes / 1e6).toFixed(1)} MB`;

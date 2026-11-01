@@ -6,7 +6,8 @@ kicker: தொகுப்பு
 title:
   ta: நட்பு
 authors:
-- மோகன் சுகுமார்
+- ta: மோகன் சுகுமார்
+  en: Mohan Sugumar
 source: கவிதைகள்.dc.html · pages 1
 ---
 

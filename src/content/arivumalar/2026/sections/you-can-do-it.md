@@ -11,7 +11,8 @@ photos:
   source: assets/articles/mohan-stage-award.jpeg
   alt: ''
 authors:
-- மோகன் சுகுமார்
+- ta: மோகன் சுகுமார்
+  en: Mohan Sugumar
 source: கதை - உன்னால் முடியும் தம்பி - மோகன் சுகுமார்.dc.html
 ---
 

@@ -9,7 +9,8 @@ photos:
   source: assets/articles/f-section-whatsapp.jpg
   alt: F Section குழு
 authors:
-- குமாரவேல்
+- ta: குமாரவேல்
+  en: Kumaravel
 source: கவிதைகள்.dc.html · pages 7
 ---
 

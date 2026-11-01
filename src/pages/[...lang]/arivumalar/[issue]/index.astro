@@ -1,6 +1,9 @@
 ---
 /**
  * One issue of Arivu Malar: the cover, the way in, the printed book, and the contents.
+ * The page count, the editor's line and the note under the download button are gone
+ * (Saran, 2026-10-31): the title and the three buttons are the whole of what this page
+ * has to say.
  * The contents list carries the id the phone's பொருளடக்கம் button falls back to when
  * JavaScript is off, so that button always leads somewhere real.
  */
@@ -59,12 +62,6 @@ const button = 'tap rounded-md border-2 font-semibold no-underline';
     }
     <div class="mt-6 min-w-0 flex-1 sm:mt-0">
       <h1 class="hand text-4xl text-ink sm:text-5xl"><Tx lang={lang} pair={data.title} /></h1>
-      <p class="mt-2 text-sepia">
-        {data.pages} <Tx lang={lang} k="ebook.pages" />
-        {data.editors.length > 0 && (
-          <span> · <Tx lang={lang} k="ebook.editor" />: {data.editors.join(' · ')}</span>
-        )}
-      </p>
 
       <div class="mt-5 flex flex-wrap gap-3">
         {
@@ -88,7 +85,6 @@ const button = 'tap rounded-md border-2 font-semibold no-underline';
           )
         }
       </div>
-      {data.pdf && <Tx lang={lang} k="ebook.pdf_hint" as="p" class="mt-2 text-base text-sepia" />}
     </div>
   </div>
 

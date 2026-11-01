@@ -5,7 +5,8 @@ type: poem
 title:
   ta: மாறாத மனிதர்கள்
 authors:
-- குமாரவேல்
+- ta: குமாரவேல்
+  en: Kumaravel
 source: கவிதைகள்.dc.html · pages 5
 ---
 

@@ -5,7 +5,8 @@ type: poem
 title:
   ta: நிழல்கள் · நீயிருக்கும் வகுப்பறை
 authors:
-- குமாரவேல்
+- ta: குமாரவேல்
+  en: Kumaravel
 source: அன்றும் இன்றும்.dc.html · pages 4
 ---
 

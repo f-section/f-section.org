@@ -114,7 +114,7 @@ f-section.org
 │   ├── /arivumalar/archive   [P/M] The hand-written 1992–96 issues (later)
 │   │     └── /arivumalar/archive/1993-08   one issue: cover, page viewer, contents
 │   ├── /arivumalar/2026      [P] The 2026 issue: cover, contents, the printed PDF
-│   │     ├── /arivumalar/2026/<slug>         [P] one reading page, 28 of them
+│   │     ├── /arivumalar/2026/<slug>         [P] one reading page, 27 of them
 │   │     ├── /arivumalar/2026/then-and-now   [P] அன்றும் இன்றும்: the 19 of them
 │   │     └── /arivumalar/2026/people/<name>  [P] one person — noindex
 │   └── /arivumalar/2027 …    yearly releases
@@ -226,7 +226,7 @@ These are proposals. Check every text colour pair for WCAG AA contrast in Phase 
 | Era ribbon | A strip across the top of the gallery for choosing the era |
 | Lightbox | Full-screen photo viewer: back, forward, back-to-the-first, a count, swipe, arrow keys and Escape (2026-10-30). Pictures only: no credit, no map link (2026-10-26). With no JavaScript the photo link still opens the large copy |
 | Then & Now slider | Two photos of the same spot (old and new); drag to compare |
-| E-book reader | The Arivu Malar web edition (2026-10-31): the contents beside the text from 1024px up, the same contents behind a **பொருளடக்கம்** button on a phone (a `<dialog>`, falling back to a link to the issue page), prev · next at the end of every page, and the printed book as a PDF. The A5 page is not reproduced: the text reflows at the site's 18px (rule 7). |
+| E-book reader | The Arivu Malar web edition (2026-10-31): the reading column has the screen to itself at every width, with the contents behind a **பொருளடக்கம்** button (a `<dialog>`, falling back to a link to the issue page), prev · next at the end of every page, and the printed book as a PDF. A standing sidebar of 27 titles was tried and dropped on 2026-10-31: it took the eye off the page it was there to serve. The A5 page is not reproduced: the text reflows at the site's 18px (rule 7). |
 | Puzzle answers | The crossword and the six differences keep their answers behind a **விடைகள்** `<details>`, which leaves room to make them interactive later |
 | Video player | Native HTML5 `<video>` with a poster image and optional subtitles, plus a "Start from the beginning" button (2026-10-30) |
 | Language toggle | EN / தமிழ், at the top right |
@@ -418,8 +418,13 @@ order: [inside-cover-1995, …]  # the web reading order, as section slugs
 **Sections:** `src/content/arivumalar/<issue-id>/sections/<slug>.md`, one per reading page. The
 Tamil body is Markdown, verbatim from the Claude Design export; a trailing `\` keeps a printed line
 break, and `![alt](r2:public/…)` is a photo in R2. `type` picks the layout — `article · memoir ·
-story · poem · humour · photos · scans · profiles · quotes · crossword · spot-six`. Puzzles carry
+story · poem · humour · photos · scans · profiles · crossword · spot-six`. Puzzles carry
 their grid, clues and answers as data, so they can become interactive later.
+
+`authors` is a list of `taPair`s: the Tamil name the book printed, and the Latin spelling the site
+already uses in that person's URL and photo file names. Everything else on these pages stays Tamil
+in both languages (2026-10-31) — it is a Tamil magazine, and an English page of it would be a
+different book. Only the names change.
 
 A poem that filled half a printed page can share a web page with another: the two short ones off
 குமாரவேல்'s profile sit on one, separated by a `***` break (2026-10-31).
@@ -427,6 +432,11 @@ A poem that filled half a printed page can share a web page with another: the tw
 **People:** `src/content/arivumalar/<issue-id>/people/<slug>.yaml`, one per person in
 `அன்றும் இன்றும்`: first name only (rule 14), `printed_name` as the book printed it, the labelled
 fields and panels, their photographs, and their closing quote. These pages are `noindex`.
+
+Their closing word from `சொல்ல மறந்த கதை` ends the profile page under that heading (2026-10-31).
+In print those words were gathered into a spread of their own for want of room on the profile
+pages; the web edition has room, so the spread is no longer a page — `extract.py` still reads it,
+to give each person their quote.
 
 A person can carry a third photograph, `photo_event` (2026-10-31) — them speaking on release
 night. It is a tag, not a file: `{ album, id }` points at a picture already in a gallery album, so
@@ -436,6 +446,13 @@ the two outer ones captioned (Saran, 2026-10-31): the release-night picture is a
 the family one, so a third caption said nothing and crowded the row. The album link below it says
 where that picture comes from.
 
+`அன்று` is shown at a thumbnail's size and the others whole (2026-10-31). The 1996 picture is a
+scan of a page printed 30 years ago, so at the width of a modern photograph it shows nothing but
+its own pixels; and nothing is cropped to a 4:5 box any more, because many of the family
+photographs are wide and the crop was cutting people off at both ends. The `அன்றும் இன்றும்` cards
+letterbox their picture inside the frame instead, so the grid of 19 stays even, and carry the
+person's name and nothing else.
+
 **Pictures:** `scripts/arivumalar/media.py` writes one WebP copy of each (1600px, quality 80) into
 a tree that mirrors the R2 keys, and records every size in `src/lib/ebook-img.json`. A Sätteri hast
 plugin in `astro.config.mjs` turns each `r2:` picture in the Markdown into its real address at that
@@ -443,7 +460,8 @@ recorded size, wrapped in the gallery's own `a[data-lb-item]` link, so the photo
 and nothing jumps while the page loads.
 
 Titles here use `taPair` (Tamil required, English optional), because the magazine has no English
-titles for now. Both are written by `scripts/arivumalar/extract.py`; see
+titles. `words()` in `src/lib/arivumalar.ts` is what reads one: the Tamil unless an English
+spelling exists, so the English pages print the magazine's own words. Both are written by `scripts/arivumalar/extract.py`; see
 `docs/decisions/2026-10-31-arivumalar-ebook-shape.md`.
 
 ### 10.5 Person: `src/content/people/<slug>.yaml`

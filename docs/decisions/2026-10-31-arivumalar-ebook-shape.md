@@ -25,17 +25,18 @@ wherever the two disagree.
 |---|---|
 | `/arivumalar/` | What Arivu Malar is, a card for the 2026 issue, a note that the 1992–96 archive comes later |
 | `/arivumalar/2026/` | The issue page: front cover, **பொருளடக்கம்**, **முகப்பு** into the book, **தரவிறக்கம் · 39.5 MB** |
-| `/arivumalar/2026/<slug>/` | One reading page per section, 28 of them |
+| `/arivumalar/2026/<slug>/` | One reading page per section, 27 of them |
 | `/arivumalar/2026/then-and-now/` | The `அன்றும் இன்றும்` index: 19 names with their `இன்று` photo. It is a reading page like any other, so it keeps its place in the order — there is no second index at `/people/` |
 | `/arivumalar/2026/people/<name>/` | One page per person — **`noindex`** |
 
 The `/ta/` mirror carries the same pages; the chrome follows the language toggle and the magazine
 text is Tamil on both, since there are no English titles for now.
 
-**Reading UI.** A sticky contents sidebar from 1024px up, with the current section marked. On a
-phone a **பொருளடக்கம்** button in the page header opens the contents over the page — the same
-native `<dialog>` as the Lightbox, so no new dependency. Each section ends with prev · next in the
-configured order and a link back to the issue page.
+**Reading UI.** A **பொருளடக்கம்** button in the page header opens the contents over the page — the
+same native `<dialog>` as the Lightbox, so no new dependency — and the reading column has the
+screen to itself at every width. A sticky sidebar of the 27 titles from 1024px up was built first
+and dropped on 2026-10-31 (see below). Each section ends with prev · next in the configured order
+and a link back to the issue page.
 
 **Typography.** 18px Noto Sans Tamil, 1.8 line height, a ~34em measure, paper/ink/ink-red. The A5
 design is not reproduced: at 8.2pt a scaled A5 page lands near 6px on a phone, which rule 7 rules
@@ -93,7 +94,8 @@ the edits made during design. The printed HTML is the authority.
   Markdown, verbatim; a trailing `\` keeps a printed line break. `![alt](r2:public/…)` marks a
   photo that lives in R2, and the `r2:` scheme keeps Astro's image pipeline out of it.
   `type` picks the layout: `article · memoir · story · poem · humour · photos · scans · profiles ·
-  quotes · crossword · spot-six`. An `untitled` poem is headed and listed by its own first line.
+  crossword · spot-six`. `authors` is a list of `taPair`s: the printed Tamil name and the Latin
+  spelling of it.
 - **`src/content/arivumalar/2026/people/<slug>.yaml`** — one person: first name, `printed_name`,
   city, the labelled fields and panels as printed, both photos, and their closing quote.
 - **`taPair`** — Tamil required, English optional, because the magazine has no English titles. The
@@ -119,13 +121,44 @@ behind a button). They are listed in `DROPPED` in the extract script, with the r
 
 ## Checkpoints
 
-1. **Extract** — done 2026-10-31. 28 reading pages, 19 profiles, 69 photos listed, no text lost.
+1. **Extract** — done 2026-10-31. 27 reading pages, 19 profiles, 69 photos listed, no text lost.
 2. **Proof** — done 2026-10-31. Saran read it and sent three corrections, all applied.
-3. **Build on `staging`** — done 2026-10-31. 98 pages: the issue page, 28 reading pages, the
-   profiles index and 19 profile pages, in both languages.
-4. **Media** — 71 pictures and the printed book staged and dry-run on 2026-10-31; the upload waits
-   on Saran's yes.
-5. **PR → Saran merges**, then the reorder pass and the three photo crops from the printed book.
+3. **Build on `staging`** — done 2026-10-31, reworked the same evening. 96 pages: the issue page, 27
+   reading pages, the profiles index and 19 profile pages, in both languages.
+4. **Media** — 71 pictures and the printed book uploaded to R2 on 2026-10-31 with Saran's yes:
+   72 objects, 46.0 MiB, `rclone copy --immutable`, nothing overwritten.
+5. **Saran reads it on the preview** — first pass 2026-10-31, seven changes, all applied below.
+6. **PR → Saran merges**, then the reorder pass and the three photo crops from the printed book.
+
+## The first read on the web (Saran, 2026-10-31, the same evening)
+
+Seven changes after reading it on the preview. They are all about the same thing: the web edition
+is not the printed one, and the places where it still behaved like a printed book were the places
+that read worst.
+
+1. **`அன்று` is a thumbnail now.** The design export had put those scans in frames the size of a
+   modern photograph. They are scans of a page printed 30 years ago, so at that size they showed
+   nothing but their own pixels.
+2. **Nothing is cropped to a 4:5 box.** Many of the family photographs are wide; the crop was
+   cutting people off at both ends — two of them off Saran's own. Every picture is now shown whole,
+   and the `அன்றும் இன்றும்` cards letterbox theirs inside the frame so the grid of 19 stays even.
+3. **`சொல்ல மறந்த கதை` moved onto the profile pages**, under that heading, and is no longer a page
+   of its own. In print it was a spread because the profile pages had no room left; online they do.
+   `extract.py` still reads the spread — that is where each person's quote comes from — but no
+   longer writes it as a reading page.
+4. **The `அன்றும் இன்றும்` cards carry the name alone**, not the city as a subtitle.
+5. **The English pages print the magazine's own Tamil titles.** They had been showing nothing but
+   the author's name, because `title.en` is empty for every section and the English contents fell
+   back to it. Only people's names change language now: the Latin spelling comes from the slug
+   already in that person's URL and photo file names. கலைச்செழியன் and மகேந்திரன் have no profile
+   page, so no slug and no Latin spelling — their names stay in Tamil until Saran gives one.
+6. **The contents sidebar is gone at every width.** A standing list of 27 titles beside the text
+   took the eye off the page it was there to serve. The button and the dialog do the same job and
+   leave the reading column the screen.
+7. **The issue page lost the page count, the editor's line and the note under the download
+   button.** The title and the three buttons are the whole of what that page has to say.
+
+`/arivumalar/` also gained its Tamil caption, in Saran's own words.
 
 ## Rollback
 

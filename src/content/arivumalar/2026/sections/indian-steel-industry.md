@@ -11,7 +11,8 @@ photos:
   source: assets/articles/steel-mill-sketch.jpeg
   alt: ''
 authors:
-- செந்தமிழ்ச் செல்வன்
+- ta: செந்தமிழ்ச் செல்வன்
+  en: Senthamilselvan
 source: கட்டுரை - இந்தியாவின் எஃகு தொழில் - செந்தமிழ்ச் செல்வன்.dc.html
 ---
 

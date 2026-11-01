@@ -6,7 +6,8 @@ kicker: கவிதை
 title:
   ta: மூச்சுவிடும் தூரம்
 authors:
-- குமாரவேல்
+- ta: குமாரவேல்
+  en: Kumaravel
 source: வித்தியாசங்களைக் கண்டுபிடி.dc.html · pages 2
 ---
 

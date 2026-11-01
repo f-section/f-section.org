@@ -5,7 +5,8 @@ type: poem
 title:
   ta: தவம்
 authors:
-- குமாரவேல்
+- ta: குமாரவேல்
+  en: Kumaravel
 source: கவிதைகள்.dc.html · pages 6
 ---
 

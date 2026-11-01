@@ -13,7 +13,8 @@ photos:
   source: assets/articles/dipping-sonar.jpg
   alt: ஹெலிகாப்டரில் இருந்து கடலில் இறக்கப்படும் டிப்பிங் சோனார்
 authors:
-- பாஞ்சாலை
+- ta: பாஞ்சாலை
+  en: Panchalai
 source: கதை - ஒலித்து கொல் - பாஞ்சாலை.dc.html
 ---
 

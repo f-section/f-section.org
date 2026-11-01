@@ -10,7 +10,8 @@ photos:
   source: assets/articles/fsection-friends.png
   alt: ''
 authors:
-- வைரமுத்து
+- ta: வைரமுத்து
+  en: Vairamuthu
 source: F Section - வைரமுத்து.dc.html
 ---
 
