@@ -141,7 +141,7 @@ def section_html(n: int, slug: str, m: dict, body: str) -> str:
     if m.get("dedication"):
         bits.append(f'<p class="note">{"<br>".join(esc(x) for x in m["dedication"].split(chr(10)))}</p>')
     bits.append(f'<h2>{esc(m["title"]["ta"])}</h2>')
-    who = ", ".join(m.get("authors") or [])
+    who = ", ".join(a["ta"] for a in m.get("authors") or [])
     meta = [x for x in (who, m.get("byline", ""), m["type"], f"<code>{slug}</code>") if x]
     bits.append(f'<p class="meta">{" · ".join(meta)}<br>{esc(m.get("source", ""))}</p>')
 
@@ -203,6 +203,7 @@ def person_html(p: dict) -> str:
         value = "<br>".join(esc(x) for x in panel["value"].split("\n"))
         bits.append(f'<div class="panel"><span class="lbl">{esc(panel["label"])}</span>{value}</div>')
     if p.get("quote"):
+        bits.append('<p class="kicker">சொல்ல மறந்த கதை</p>')
         bits.append(f'<blockquote><p>{esc(p["quote"])}</p></blockquote>')
     else:
         bits.append('<p class="note">No closing quote in the book.</p>')
