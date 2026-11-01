@@ -160,6 +160,13 @@ that read worst.
 
 `/arivumalar/` also gained its Tamil caption, in Saran's own words.
 
+**And two more, after that pass.** The `அன்று` scans are published as even thumbnails of their own
+(`public/arivumalar/2026/then/`, 320×400, 150 KB for all seventeen), not as the 1200px blow-ups the
+design exported: trimmed, pulled to one tone, the print screen softened, the same 4:5 frame. The
+originals stay in R2, unreferenced; nothing was overwritten. And the names on the
+`அன்றும் இன்றும்` cards are in the site's heading face — Caveat on the English pages, Noto Sans
+Tamil on the Tamil ones, since Caveat has no Tamil letters.
+
 ## Rollback
 
 Everything is new. `git revert` removes the content and the pages, and the R2 keys are all new

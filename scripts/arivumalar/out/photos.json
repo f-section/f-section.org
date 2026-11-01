@@ -162,91 +162,6 @@
     "alt": "மோகன் சுகுமார் — இன்று"
   },
   {
-    "key": "public/arivumalar/2026/img/family-old-bhuvanesh.webp",
-    "source": "assets/family/old/bhuvanesh.png",
-    "alt": "புவனேஷ் — அன்று"
-  },
-  {
-    "key": "public/arivumalar/2026/img/family-old-constan.webp",
-    "source": "assets/family/old/constan.png",
-    "alt": "கான்ஸ்டன் — அன்று"
-  },
-  {
-    "key": "public/arivumalar/2026/img/family-old-ganesh.webp",
-    "source": "assets/family/old/ganesh.png",
-    "alt": "கணேஷ் — அன்று"
-  },
-  {
-    "key": "public/arivumalar/2026/img/family-old-ismail.webp",
-    "source": "assets/family/old/ismail.png",
-    "alt": "இஸ்மாயில் — அன்று"
-  },
-  {
-    "key": "public/arivumalar/2026/img/family-old-kumaravel.webp",
-    "source": "assets/family/old/kumaravel.png",
-    "alt": "குமாரவேல் — அன்று"
-  },
-  {
-    "key": "public/arivumalar/2026/img/family-old-manikandan.webp",
-    "source": "assets/family/old/manikandan.png",
-    "alt": "மணிகண்டன் — அன்று"
-  },
-  {
-    "key": "public/arivumalar/2026/img/family-old-maragathavalli.webp",
-    "source": "assets/family/old/maragathavalli.jpeg",
-    "alt": "மரகதவல்லி — அன்று"
-  },
-  {
-    "key": "public/arivumalar/2026/img/family-old-mohanraj.webp",
-    "source": "assets/family/old/mohanraj.png",
-    "alt": "மோகன்ராஜ் — அன்று"
-  },
-  {
-    "key": "public/arivumalar/2026/img/family-old-mohansugumar.webp",
-    "source": "assets/family/old/mohansugumar.png",
-    "alt": "மோகன் சுகுமார் — அன்று"
-  },
-  {
-    "key": "public/arivumalar/2026/img/family-old-panchalai.webp",
-    "source": "assets/family/old/panchalai.png",
-    "alt": "பாஞ்சாலை — அன்று"
-  },
-  {
-    "key": "public/arivumalar/2026/img/family-old-parineetha.webp",
-    "source": "assets/family/old/parineetha.jpeg",
-    "alt": "பரிணீதா — அன்று"
-  },
-  {
-    "key": "public/arivumalar/2026/img/family-old-ramesh.webp",
-    "source": "assets/family/old/ramesh.png",
-    "alt": "இரமேஷ் கண்ணன் — அன்று"
-  },
-  {
-    "key": "public/arivumalar/2026/img/family-old-rammohan.webp",
-    "source": "assets/family/old/rammohan.png",
-    "alt": "ராம்மோகன் — அன்று"
-  },
-  {
-    "key": "public/arivumalar/2026/img/family-old-saravanan.webp",
-    "source": "assets/family/old/saravanan.png",
-    "alt": "சரவணன் — அன்று"
-  },
-  {
-    "key": "public/arivumalar/2026/img/family-old-senthamil.webp",
-    "source": "assets/family/old/senthamil.png",
-    "alt": "செந்தமிழ்ச் செல்வன் — அன்று"
-  },
-  {
-    "key": "public/arivumalar/2026/img/family-old-srinivasan.webp",
-    "source": "assets/family/old/srinivasan.png",
-    "alt": "சீனிவாசன் — அன்று"
-  },
-  {
-    "key": "public/arivumalar/2026/img/family-old-suganthi.webp",
-    "source": "assets/family/old/suganthi.jpeg",
-    "alt": "சுகந்தி — அன்று"
-  },
-  {
     "key": "public/arivumalar/2026/img/family-panchalai-1.webp",
     "source": "assets/family/panchalai-1.jpg",
     "alt": "பாஞ்சாலை — இன்று"
@@ -345,5 +260,90 @@
     "key": "public/arivumalar/2026/img/reunion-6.webp",
     "source": "assets/reunion/6.jpg",
     "alt": ""
+  },
+  {
+    "key": "public/arivumalar/2026/then/bhuvanesh.webp",
+    "source": "assets/family/old/bhuvanesh.png",
+    "alt": "புவனேஷ் — அன்று"
+  },
+  {
+    "key": "public/arivumalar/2026/then/constan.webp",
+    "source": "assets/family/old/constan.png",
+    "alt": "கான்ஸ்டன் — அன்று"
+  },
+  {
+    "key": "public/arivumalar/2026/then/ganesh.webp",
+    "source": "assets/family/old/ganesh.png",
+    "alt": "கணேஷ் — அன்று"
+  },
+  {
+    "key": "public/arivumalar/2026/then/ismail.webp",
+    "source": "assets/family/old/ismail.png",
+    "alt": "இஸ்மாயில் — அன்று"
+  },
+  {
+    "key": "public/arivumalar/2026/then/kumaravel.webp",
+    "source": "assets/family/old/kumaravel.png",
+    "alt": "குமாரவேல் — அன்று"
+  },
+  {
+    "key": "public/arivumalar/2026/then/manikandan.webp",
+    "source": "assets/family/old/manikandan.png",
+    "alt": "மணிகண்டன் — அன்று"
+  },
+  {
+    "key": "public/arivumalar/2026/then/maragathavalli.webp",
+    "source": "assets/family/old/maragathavalli.jpeg",
+    "alt": "மரகதவல்லி — அன்று"
+  },
+  {
+    "key": "public/arivumalar/2026/then/mohanraj.webp",
+    "source": "assets/family/old/mohanraj.png",
+    "alt": "மோகன்ராஜ் — அன்று"
+  },
+  {
+    "key": "public/arivumalar/2026/then/mohansugumar.webp",
+    "source": "assets/family/old/mohansugumar.png",
+    "alt": "மோகன் சுகுமார் — அன்று"
+  },
+  {
+    "key": "public/arivumalar/2026/then/panchalai.webp",
+    "source": "assets/family/old/panchalai.png",
+    "alt": "பாஞ்சாலை — அன்று"
+  },
+  {
+    "key": "public/arivumalar/2026/then/parineetha.webp",
+    "source": "assets/family/old/parineetha.jpeg",
+    "alt": "பரிணீதா — அன்று"
+  },
+  {
+    "key": "public/arivumalar/2026/then/ramesh.webp",
+    "source": "assets/family/old/ramesh.png",
+    "alt": "இரமேஷ் கண்ணன் — அன்று"
+  },
+  {
+    "key": "public/arivumalar/2026/then/rammohan.webp",
+    "source": "assets/family/old/rammohan.png",
+    "alt": "ராம்மோகன் — அன்று"
+  },
+  {
+    "key": "public/arivumalar/2026/then/saravanan.webp",
+    "source": "assets/family/old/saravanan.png",
+    "alt": "சரவணன் — அன்று"
+  },
+  {
+    "key": "public/arivumalar/2026/then/senthamil.webp",
+    "source": "assets/family/old/senthamil.png",
+    "alt": "செந்தமிழ்ச் செல்வன் — அன்று"
+  },
+  {
+    "key": "public/arivumalar/2026/then/srinivasan.webp",
+    "source": "assets/family/old/srinivasan.png",
+    "alt": "சீனிவாசன் — அன்று"
+  },
+  {
+    "key": "public/arivumalar/2026/then/suganthi.webp",
+    "source": "assets/family/old/suganthi.jpeg",
+    "alt": "சுகந்தி — அன்று"
   }
 ]

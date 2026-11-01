@@ -20,7 +20,7 @@ panels:
 - label: முப்பது ஆண்டுச் சாதனை
   value: நல்ல ஆரோக்கியம்
 photo_then:
-  key: public/arivumalar/2026/img/family-old-manikandan.webp
+  key: public/arivumalar/2026/then/manikandan.webp
   source: assets/family/old/manikandan.png
   alt: மணிகண்டன் — அன்று
 photo_now:

@@ -7,7 +7,7 @@ _Last updated: 2026-10-31 (late, after Saran's first read on the web)_
 ## Live
 - https://f-section.org (English) and https://f-section.org/ta/ (Tamil). Served by the Cloudflare Worker `f-section-site`, which deploys from `main` through Workers Builds.
 - Staging preview: https://staging-f-section-site.asaravanan75.workers.dev
-- Media: R2 bucket `f-section-media`, served at https://media.f-section.org. About 196.7 MiB of the 10 GB free tier across 217 objects: the link-preview image, two videos with posters, the first two 30th reunion albums, and Arivu Malar 2026 (71 pictures and the printed book, uploaded 2026-10-31). Six of those objects (three photos dropped from Arivu Malar on 2026-10-30) are no longer referenced; nothing is deleted from R2 without Saran's explicit yes.
+- Media: R2 bucket `f-section-media`, served at https://media.f-section.org. About 196.8 MiB of the 10 GB free tier across 234 objects: the link-preview image, two videos with posters, the first two 30th reunion albums, and Arivu Malar 2026 (71 pictures and the printed book, uploaded 2026-10-31). Six of those objects (three photos dropped from Arivu Malar on 2026-10-30) are no longer referenced; nothing is deleted from R2 without Saran's explicit yes.
 - Pages: Home, About, Gallery (by era, with the first two real 30th reunion albums), Videos, Reunions, Arivu Malar.
 - Two videos on Videos, Reunions and Gallery → 2026: the montage ("30 years on: Reunion 2026", 4:28)
   and the kavithai (1:36). The kavithai is in R2 and in the repo, but reaches the live site only
@@ -185,6 +185,14 @@ Running total if approved: 94 photos of 563 across four albums.
    - **The contents sidebar is gone** at every width, and the issue page has lost the page count,
      the editor's line and the note under the download button.
    - `/arivumalar/` now carries its Tamil caption, in Saran's own words.
+   - **The 1996 portraits were then rebuilt as even thumbnails** (`public/arivumalar/2026/then/`,
+     320×400): the odd scanned edge trimmed, every one pulled to the same brightness and contrast,
+     the print screen softened in proportion to the shrink, the same 4:5 frame. மரகதவல்லி's gains
+     most — her scan still had the photograph's dark mount around it. 17 objects, 150 KB in all,
+     uploaded on 2026-10-31; the 1200px originals stay in R2 unreferenced, and nothing was
+     overwritten. R2 is now 196.8 MiB across 234 objects.
+   - The names on the `அன்றும் இன்றும்` cards are in the site's heading face: Caveat on the English
+     pages, the hand that writes "F Section" in the header, and Noto Sans Tamil on the Tamil ones.
 
 ### Next
 13. **Arivu Malar 2026 — Saran's second read, then the merge.** The media is in R2 and

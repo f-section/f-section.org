@@ -4,6 +4,11 @@
  * name and nothing else (Saran, 2026-10-31), and the picture is shown whole inside the
  * frame rather than cropped to fit it, because many of the family photographs are wide
  * and the crop was cutting people off at both ends.
+ *
+ * The names are in the site's heading face (Saran, 2026-10-31) — Caveat on the English
+ * pages, the same hand that writes "F Section" in the header. Caveat has no Tamil
+ * letters, so on the Tamil pages `.hand` falls through to Noto Sans Tamil, which is how
+ * every other Tamil heading on the site is drawn.
  */
 import { personHref, picture, words, type Issue, type Person } from '../../lib/arivumalar';
 import { type Lang } from '../../i18n';
@@ -29,7 +34,9 @@ const { lang, issue, people } = Astro.props;
               ) : (
                 <div class="w-full bg-rule" style="aspect-ratio: 4 / 5" />
               )}
-              <p class="mt-2 font-semibold text-ink group-hover:underline">{words(person.data.name, lang)}</p>
+              <p class="hand mt-2 text-2xl text-ink group-hover:underline sm:text-3xl">
+                {words(person.data.name, lang)}
+              </p>
             </div>
           </a>
         </li>

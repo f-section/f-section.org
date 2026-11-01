@@ -22,7 +22,7 @@ panels:
 - label: முப்பது ஆண்டுச் சாதனை
   value: கடவுளின் ஆசியுடன் — இதுவரை தன்னிறைவோடு வாழ்வது.
 photo_then:
-  key: public/arivumalar/2026/img/family-old-constan.webp
+  key: public/arivumalar/2026/then/constan.webp
   source: assets/family/old/constan.png
   alt: கான்ஸ்டன் — அன்று
 photo_now:

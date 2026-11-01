@@ -77,7 +77,9 @@ const name = words(data.name, lang);
 /**
  * அன்று comes first and small (Saran, 2026-10-31). It is a scan of a page printed
  * 30 years ago, so blown up to the width of a modern photograph it shows nothing but
- * its own pixels; at a thumbnail's size it reads as what it is.
+ * its own pixels; at a thumbnail's size it reads as what it is. It is published at
+ * 320x400 and shown at 128, and it does not open in the viewer: there is nothing more
+ * of it to see.
  */
 const then = data.photo_then ? picture(data.photo_then) : undefined;
 
@@ -118,17 +120,15 @@ const link = 'tap max-w-[45%] items-start gap-1 rounded-md px-2 py-2 leading-snu
   {
     then && (
       <figure class="polaroid mt-6 w-28 p-2 sm:w-32">
-        <a href={then.src} class="block" data-lb-item>
-          <img
-            src={then.src}
-            alt={then.alt}
-            width={then.width}
-            height={then.height}
-            loading="eager"
-            decoding="async"
-            class="h-auto w-full bg-rule"
-          />
-        </a>
+        <img
+          src={then.src}
+          alt={then.alt}
+          width={then.width}
+          height={then.height}
+          loading="eager"
+          decoding="async"
+          class="h-auto w-full bg-rule"
+        />
         <figcaption class="mt-2 text-base font-semibold text-sepia">
           <Tx lang={lang} k="ebook.then" />
         </figcaption>

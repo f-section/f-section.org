@@ -27,7 +27,7 @@ panels:
 - label: மறக்க முடியாத நினைவு
   value: நவம்பர் 6, 1992 கல்லூரியில் சேர்ந்த நிகழ்வு மற்றும் SAIL இல் வேலை கிடைத்த நாள்
 photo_then:
-  key: public/arivumalar/2026/img/family-old-senthamil.webp
+  key: public/arivumalar/2026/then/senthamil.webp
   source: assets/family/old/senthamil.png
   alt: செந்தமிழ்ச் செல்வன் — அன்று
 photo_now:

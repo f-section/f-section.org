@@ -22,7 +22,7 @@ panels:
 - label: மறக்க முடியாத நினைவு
   value: வளாகத் தேர்வு (Campus Selection)
 photo_then:
-  key: public/arivumalar/2026/img/family-old-ganesh.webp
+  key: public/arivumalar/2026/then/ganesh.webp
   source: assets/family/old/ganesh.png
   alt: கணேஷ் — அன்று
 photo_now:

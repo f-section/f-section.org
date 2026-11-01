@@ -24,7 +24,7 @@ panels:
 - label: மறக்க முடியாத நினைவு
   value: ஏராளமான நினைவுகள் உள்ளன, ஆனால் குறிப்பாக எதுவும் இல்லை
 photo_then:
-  key: public/arivumalar/2026/img/family-old-mohansugumar.webp
+  key: public/arivumalar/2026/then/mohansugumar.webp
   source: assets/family/old/mohansugumar.png
   alt: மோகன் சுகுமார் — அன்று
 photo_now:

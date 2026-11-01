@@ -427,6 +427,18 @@ SECTIONS = (
 # --------------------------------------------------------------------------- writing
 
 
+# The 1996 portraits are published as even thumbnails, not as the 1200px scans the
+# design scaled them up to (Saran, 2026-10-31); media.py makes them, and they get a
+# prefix of their own so nothing in R2 is overwritten.
+THEN_SRC = "assets/family/old/"
+
+
+def then_key(src: str) -> str:
+    """`assets/family/old/constan.png` -> `public/arivumalar/2026/then/constan.webp`"""
+    stem = re.sub(r"\.[a-z]+$", "", src.removeprefix(THEN_SRC), flags=re.I)
+    return f"public/arivumalar/2026/then/{re.sub(r'[^a-z0-9]+', '-', stem.lower()).strip('-')}.webp"
+
+
 def flat_key(src: str) -> str:
     """`assets/family/old/constan.png` -> `public/arivumalar/2026/img/family-old-constan.webp`"""
     stem = re.sub(r"\.[a-z]+$", "", src, flags=re.I)
@@ -764,7 +776,8 @@ def write_people(path: Path) -> list[dict]:
             if b.kind == "label":
                 if b.text in ("அன்று", "இன்று") and photo_slot:
                     key = "photo_then" if b.text == "அன்று" else "photo_now"
-                    person[key] = {"key": flat_key(photo_slot), "source": photo_slot}
+                    where = then_key if photo_slot.startswith(THEN_SRC) else flat_key
+                    person[key] = {"key": where(photo_slot), "source": photo_slot}
                     photo_slot = ""
                 elif b.text == "அன்றும் இன்றும்":
                     pass  # the kicker

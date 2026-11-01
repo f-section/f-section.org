@@ -448,10 +448,20 @@ where that picture comes from.
 
 `அன்று` is shown at a thumbnail's size and the others whole (2026-10-31). The 1996 picture is a
 scan of a page printed 30 years ago, so at the width of a modern photograph it shows nothing but
-its own pixels; and nothing is cropped to a 4:5 box any more, because many of the family
-photographs are wide and the crop was cutting people off at both ends. The `அன்றும் இன்றும்` cards
+its own pixels; it is published at 320×400 under `public/arivumalar/2026/then/`, drawn at 128, and
+it does not open in the viewer, because there is nothing more of it to see. Nothing is cropped to a
+4:5 box any more, because many of the family photographs are wide and the crop was cutting people
+off at both ends. The `அன்றும் இன்றும்` cards
 letterbox their picture inside the frame instead, so the grid of 19 stays even, and carry the
-person's name and nothing else.
+person's name and nothing else, in the site's heading face (2026-10-31): Caveat on the English
+pages, the hand that writes "F Section" in the header. Caveat has no Tamil letters, so on the Tamil
+pages `.hand` falls through to Noto Sans Tamil, as every other Tamil heading does.
+
+The 1996 portraits go through a pass of their own in `media.py` (2026-10-31), because they are
+photographs of a printed halftone page: the odd scanned edge trimmed, the brightness and contrast
+pulled to the same place as the rest of the set, the print screen softened in proportion to how far
+the picture is being shrunk, then the shared 4:5 frame and a light unsharp. All seventeen are
+monochrome already, so the tone work reads the brightness only and leaves any colour alone.
 
 **Pictures:** `scripts/arivumalar/media.py` writes one WebP copy of each (1600px, quality 80) into
 a tree that mirrors the R2 keys, and records every size in `src/lib/ebook-img.json`. A Sätteri hast
