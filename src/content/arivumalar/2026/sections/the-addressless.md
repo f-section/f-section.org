@@ -11,7 +11,7 @@ dedication: 'நம்மை விட்டுப் பிரிந்த ம�
 dark: true
 authors:
 - ta: மகேந்திரன்
-  en: மகேந்திரன்
+  en: Mahendran
 source: கவிதைகள்.dc.html · pages 9
 ---
 

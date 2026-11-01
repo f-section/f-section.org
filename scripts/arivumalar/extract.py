@@ -342,13 +342,22 @@ PEOPLE_SLUGS = {
 }
 
 
+# The Latin spelling for someone with no profile page, and so no slug to take it from.
+# Both of these are Saran's own (2026-10-31); Claude never invents a spelling of a
+# friend's name (rule 14).
+ENGLISH_NAMES = {
+    "கலைச்செழியன்": "Kalaichezhian",
+    "மகேந்திரன்": "Mahendran",
+}
+
+
 def english_name(first: str) -> str:
     """
     The Latin spelling of a first name: the slug Saran approved for the URLs and the
-    photo file names, in title case. The two poets with no profile page have no slug,
-    so their name stays in Tamil until Saran gives one (2026-10-31). Claude never
-    invents a spelling of a friend's name (rule 14).
+    photo file names, in title case, or ENGLISH_NAMES where there is no slug.
     """
+    if first in ENGLISH_NAMES:
+        return ENGLISH_NAMES[first]
     slug = PEOPLE_SLUGS.get(first)
     return slug.replace("-", " ").title() if slug else first
 

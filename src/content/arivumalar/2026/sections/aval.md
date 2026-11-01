@@ -6,7 +6,7 @@ title:
   ta: அவள்...
 authors:
 - ta: கலைச்செழியன்
-  en: கலைச்செழியன்
+  en: Kalaichezhian
 source: கவிதைகள்.dc.html · pages 2
 ---
 

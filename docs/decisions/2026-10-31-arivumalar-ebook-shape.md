@@ -65,9 +65,11 @@ belongs to today as much as the family one does.
 **Alt text stays empty** where the print design had none (Saran, 2026-10-31): a photo described
 for the sake of it reads awkwardly, and the text beside it already carries the meaning. The pages
 therefore emit `alt=""`, which is the correct way to mark a picture as decorative — not a missing
-attribute. The exception is கான்ஸ்டன்'s essay, whose four photographs get real captions when Saran
-sends them; the design hand-over left those open too. This is the e-book only: DESIGN.md §6.4 still
-holds for the gallery.
+attribute. **No exceptions** (Saran, 2026-10-31): கான்ஸ்டன்'s four essay photographs were held
+open for captions through the design hand-over, and Saran has now closed it — the magazine is in
+Tamil, and an English caption under a Tamil page's photograph would be the one piece of the book
+written for the website rather than taken from it. They stay as the design had them, uncaptioned.
+This is the e-book only: DESIGN.md §6.4 still holds for the gallery.
 
 **Puzzles** stay HTML, not page images: the crossword is a real CSS grid with its clues, and the six
 differences are two pictures. Both keep their answers behind a **விடைகள்** button, which also
@@ -111,7 +113,6 @@ behind a button). They are listed in `DROPPED` in the extract script, with the r
 
 - The reading order. It is the printed order for now, by Saran's decision, and he moves sections
   after reading them on the web.
-- Captions for the four கான்ஸ்டன் photographs, still waiting on Saran since the design hand-over.
 - Which release-night photograph goes on which profile page. The slot is built and empty; Saran
   tags them from the contact sheet in `/mnt/data/f-section/review/arivumalar-tagging.html`.
 - The `அன்று` photos of வைரமுத்து and ஸ்ரீதர், and மோகன்சுகுமார்'s `இன்று` photo: all three are

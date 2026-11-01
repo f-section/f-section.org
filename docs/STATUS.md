@@ -7,8 +7,12 @@ _Last updated: 2026-10-31 (late, after Saran's first read on the web)_
 ## Live
 - https://f-section.org (English) and https://f-section.org/ta/ (Tamil). Served by the Cloudflare Worker `f-section-site`, which deploys from `main` through Workers Builds.
 - Staging preview: https://staging-f-section-site.asaravanan75.workers.dev
-- Media: R2 bucket `f-section-media`, served at https://media.f-section.org. About 196.8 MiB of the 10 GB free tier across 234 objects: the link-preview image, two videos with posters, the first two 30th reunion albums, and Arivu Malar 2026 (71 pictures and the printed book, uploaded 2026-10-31). Six of those objects (three photos dropped from Arivu Malar on 2026-10-30) are no longer referenced; nothing is deleted from R2 without Saran's explicit yes.
+- Media: R2 bucket `f-section-media`, served at https://media.f-section.org. About 196.8 MiB of the 10 GB free tier across 234 objects: the link-preview image, two videos with posters, the first two 30th reunion albums, and Arivu Malar 2026 (71 pictures and the printed book, uploaded 2026-10-31). Twenty-three of those objects are no longer referenced — three photos dropped from Arivu Malar on 2026-10-30, three thumbnails they belonged to, and the seventeen 1200px `அன்று` scans the thumbnails replaced; nothing is deleted from R2 without Saran's explicit yes.
 - Pages: Home, About, Gallery (by era, with the first two real 30th reunion albums), Videos, Reunions, Arivu Malar.
+- minnaham has a headless Chromium since 2026-11-01, for looking at a built page rather than reading
+  its HTML: Playwright in `/mnt/data/f-section/tools/browser/` (outside the repo, so it adds no
+  dependency to it), with `shot.mjs <out-dir> <width> <path>…` for full-page screenshots of the
+  preview. It scrolls each page before capturing, or `loading="lazy"` pictures come out blank.
 - Two videos on Videos, Reunions and Gallery → 2026: the montage ("30 years on: Reunion 2026", 4:28)
   and the kavithai (1:36). The kavithai is in R2 and in the repo, but reaches the live site only
   once `staging` is merged to `main`.
@@ -131,9 +135,9 @@ Running total if approved: 94 photos of 563 across four albums.
      decorative picture.
    - `scripts/arivumalar/proof.py` renders the whole magazine as one HTML sheet at the site's
      18px Noto Sans Tamil for proofreading: `/mnt/data/f-section/review/arivumalar-proof.html`.
-   - Still open: captions for the four கான்ஸ்டன் photographs (waiting on Saran since the design
-     hand-over), and the `அன்று` photos of வைரமுத்து and ஸ்ரீதர் plus மோகன் சுகுமார்'s `இன்று`
-     photo, all three to be cropped from the printed book.
+   - Still open: the `அன்று` photos of வைரமுத்து and ஸ்ரீதர் plus மோகன் சுகுமார்'s `இன்று` photo,
+     all three to be cropped from the printed book. கான்ஸ்டன்'s four essay photographs were held
+     open for captions and are now settled: none, as the design had them (Saran, 2026-10-31).
 
 11. **Arivu Malar 2026 e-book — checkpoints 2 and 3, the proofread and the pages.** Saran read the
    proof sheet and sent three corrections, all applied: குமாரவேல்'s two short poems now share one
@@ -160,8 +164,8 @@ Running total if approved: 94 photos of 563 across four albums.
      39.5 MB book all answer 200 from `media.f-section.org`. R2 is now 196.7 MiB of the 10 GB.
    - `npm run check` (0 errors), `npm run build` (122 pages) and `npm run check:links`
      (3,794 links) are all clean.
-   - Still open: Saran's photo tags, captions for the four கான்ஸ்டன் photographs, and the three
-     photo crops from the printed book (வைரமுத்து and ஸ்ரீதர்'s `அன்று`, மோகன் சுகுமார்'s `இன்று`).
+   - Still open: Saran's photo tags and the three photo crops from the printed book
+     (வைரமுத்து and ஸ்ரீதர்'s `அன்று`, மோகன் சுகுமார்'s `இன்று`).
 
 12. **Arivu Malar 2026 — the first read on the web, and seven changes** (2026-10-31, same evening).
    Saran read the preview and sent seven corrections, all applied and pushed to the open PR. They
@@ -193,6 +197,9 @@ Running total if approved: 94 photos of 563 across four albums.
      overwritten. R2 is now 196.8 MiB across 234 objects.
    - The names on the `அன்றும் இன்றும்` cards are in the site's heading face: Caveat on the English
      pages, the hand that writes "F Section" in the header, and Noto Sans Tamil on the Tamil ones.
+   - **கலைச்செழியன் is `Kalaichezhian` and மகேந்திரன் is `Mahendran`** (Saran, 2026-10-31), the two
+     poets with no profile page and so no slug to take a spelling from. They are in `ENGLISH_NAMES`
+     in `extract.py`; every other Latin spelling comes from the person's own slug.
 
 ### Next
 13. **Arivu Malar 2026 — Saran's second read, then the merge.** The media is in R2 and
