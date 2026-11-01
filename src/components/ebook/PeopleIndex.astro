@@ -8,7 +8,9 @@
  * The names are in the site's heading face (Saran, 2026-10-31) — Caveat on the English
  * pages, the same hand that writes "F Section" in the header. Caveat has no Tamil
  * letters, so on the Tamil pages `.hand` falls through to Noto Sans Tamil, which is how
- * every other Tamil heading on the site is drawn.
+ * every other Tamil heading on the site is drawn — at 62% of the size, so the name needs
+ * to be set as large as a card title (text-3xl, as on the album and issue cards) for the
+ * Tamil to land at reading size.
  */
 import { personHref, picture, words, type Issue, type Person } from '../../lib/arivumalar';
 import { type Lang } from '../../i18n';
@@ -34,7 +36,7 @@ const { lang, issue, people } = Astro.props;
               ) : (
                 <div class="w-full bg-rule" style="aspect-ratio: 4 / 5" />
               )}
-              <p class="hand mt-2 text-2xl text-ink group-hover:underline sm:text-3xl">
+              <p class="hand mt-2 text-3xl text-ink group-hover:underline">
                 {words(person.data.name, lang)}
               </p>
             </div>
