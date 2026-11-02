@@ -2,12 +2,12 @@
 
 Where the project stands, and what comes next. Update this file at the end of every working session. No private links, tokens or personal details: this repo is public.
 
-_Last updated: 2026-11-01, when Arivu Malar 2026 went live_
+_Last updated: 2026-11-02, after the second read of Arivu Malar on the web_
 
 ## Live
 - https://f-section.org (English) and https://f-section.org/ta/ (Tamil). Served by the Cloudflare Worker `f-section-site`, which deploys from `main` through Workers Builds.
 - Staging preview: https://staging-f-section-site.asaravanan75.workers.dev
-- Media: R2 bucket `f-section-media`, served at https://media.f-section.org. About 196.8 MiB of the 10 GB free tier across 234 objects: the link-preview image, two videos with posters, the first two 30th reunion albums, and Arivu Malar 2026 (71 pictures and the printed book, uploaded 2026-10-31). Twenty-three of those objects are no longer referenced — three photos dropped from Arivu Malar on 2026-10-30, three thumbnails they belonged to, and the seventeen 1200px `அன்று` scans the thumbnails replaced; nothing is deleted from R2 without Saran's explicit yes.
+- Media: R2 bucket `f-section-media`, served at https://media.f-section.org. About 196.8 MiB of the 10 GB free tier across 237 objects: the link-preview image, two videos with posters, the first two 30th reunion albums, and Arivu Malar 2026 (71 pictures and the printed book, uploaded 2026-10-31). Twenty-four of those objects are no longer referenced — three photos dropped from Arivu Malar on 2026-10-30, three thumbnails they belonged to, the seventeen 1200px `அன்று` scans the thumbnails replaced, and மோகன் சுகுமார்'s first thumbnail, replaced on 2026-11-02 by his crop from the printed book; nothing is deleted from R2 without Saran's explicit yes.
 - Pages: Home, About, Gallery (by era, with the first two real 30th reunion albums), Videos, Reunions, Arivu Malar.
 - minnaham has a headless Chromium since 2026-11-01, for looking at a built page rather than reading
   its HTML: Playwright in `/mnt/data/f-section/tools/browser/` (outside the repo, so it adds no
@@ -203,28 +203,58 @@ Running total if approved: 94 photos of 563 across four albums.
      poets with no profile page and so no slug to take a spelling from. They are in `ENGLISH_NAMES`
      in `extract.py`; every other Latin spelling comes from the person's own slug.
 
+### Done on 2026-11-02
+13. **Arivu Malar 2026 — the second read: the type, the pictures and the headings.** Saran read the
+   live book and sent five more changes, all in one PR off `staging`. The through-line this time is
+   that the web edition still looked like a website, not like a book.
+   - **The reading column is set as a book now.** Noto Serif Tamil at 17px over a 36em measure,
+     where it was the screen sans at 18px: a four-thousand-word Tamil article was tiring to read.
+     This one column is the site's only exception to the 18px base of rule 7 — everything else,
+     including the issue and index pages, is untouched. One number in `global.css` moves it.
+   - **A picture inside an article** is capped at about two-thirds of the column and centred (21em
+     tall, 16em on a phone). At the full measure one filled a phone screen and stopped the reading;
+     the viewer still opens it full size.
+   - **The headings follow the printed book**: the kind of piece above in small letterspaced
+     capitals, the title in red with the half after a colon pushed out to the right margin, and the
+     author's name under a short red rule. Tamil has no italic face, so the rule, the colour and the
+     letterspacing do what the print's italic did. On the In Memoriam page, which prints on ink, the
+     title takes the paper colour and the rest `rule`. The English pages now print the author's
+     Latin name even where the Tamil page keeps the printed byline with its role or city.
+   - **Every poem says `கவிதை`**, the way the stories say `கதை` and the articles `கட்டுரை`, then the
+     issue's name. Where the print used a word that is not a kind it is kept after it, so the In
+     Memoriam poem reads `கவிதை · நினைவஞ்சலி`. `kicker_for()` in `extract.py` does it, so a re-run
+     of the extractor keeps it.
+   - **The three 1996 portraits are in**, cropped from the printed book by Saran. வைரமுத்து and
+     ஸ்ரீதர் had none at all; மோகன் சுகுமார்'s replaces the export's own scan, under a key of its
+     own, so nothing in R2 was overwritten. They are 105–158px wide, so `media.py` stops the frame
+     at twice the crop rather than inventing detail, and reads them as grey — a photograph of a
+     printed page carries a colour cast the page never had.
+   - Seen in the headless browser at 1280 and 390px, both languages, including the dark In Memoriam
+     page and the three new profiles. `npm run check` (0 errors) and `npm run build` (122 pages)
+     clean. See `docs/decisions/2026-11-02-arivumalar-reading-type.md`.
+
+
 ### Next
-13. **Arivu Malar 2026 — what is left after going live.** [PR #10](https://github.com/f-section/f-section.org/pull/10)
+14. **Arivu Malar 2026 — what is left after going live.** [PR #10](https://github.com/f-section/f-section.org/pull/10)
    was merged on 2026-11-01 and the book is on f-section.org. Still to come: the reading order,
    which Saran settles after reading it through (one `order:` list in
    `src/content/arivumalar/2026.yaml`); his eye over the 18 Tamil interface strings; his
-   `photo_event` tags from `/mnt/data/f-section/review/arivumalar-tagging.html`; and the three
-   photo crops from the printed book, which he is supplying.
-14. **Photo curation, remaining two albums** (deferred on 2026-10-30, picks already chosen and
+   `photo_event` tags from `/mnt/data/f-section/review/arivumalar-tagging.html`. The three photo crops arrived on 2026-11-02 and are in.
+15. **Photo curation, remaining two albums** (deferred on 2026-10-30, picks already chosen and
    waiting in `/mnt/data/f-section/work/curation/PICKS-PENDING-REVIEW.md`). Contact sheets per
    event, then picks. Weighting, as Saran restated on
    2026-10-25: strongly prefer natural and candid — friends talking, walking, unaware of the
    camera — over posed shots at the lens. Posed is acceptable occasionally, not as the default.
    Start from Mohanraj's `1st Cut` (208 Canon frames, the backbone).
-15. **Two montages, by day** (deferred on 2026-10-30; Saran changed this on 2026-10-26, replacing the three themed ones
+16. **Two montages, by day** (deferred on 2026-10-30; Saran changed this on 2026-10-26, replacing the three themed ones
    agreed the day before): **Day 1** and **Day 2**. Reason: each day mixes campus, temple, meals
    and evening material, so a day-shaped cut varies the imagery, where a theme-shaped cut would
    string together many near-identical scenes. Day 3 is only departure and tails Day 2.
    Music: `masters/Nanban-En_Frienda_Pola.mp3` (3:53), a different section under each montage.
    It is a loud master (-10.6 LUFS, +0.6 dBTP) and must be normalised down for web.
-16. **Review page.** Contact sheet in `review/` for approval before any ingest.
-17. **Ingest and upload.** R2 token and `r2` remote are in place since 2026-10-26.
-18. **Open a PR** from `staging` with the album pages and the video entries.
+17. **Review page.** Contact sheet in `review/` for approval before any ingest.
+18. **Ingest and upload.** R2 token and `r2` remote are in place since 2026-10-26.
+19. **Open a PR** from `staging` with the album pages and the video entries.
 
 ### Notes worth keeping
 - The kavithai source plays **mirrored** (a `-180` display matrix plus a selfie-camera mirror);
