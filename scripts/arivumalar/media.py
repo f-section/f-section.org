@@ -26,6 +26,8 @@ SIZES = REPO / "src" / "lib" / "ebook-img.json"
 WORK = Path("/mnt/data/f-section/arivumalar/2026")
 EXPORT = WORK / "incoming" / "claude-design-arivumalar-source"
 DESIGN = EXPORT / "design"
+# Pictures Saran cropped out of the printed book himself, beside the export (2026-11-02).
+CROPS = WORK / "incoming"
 PDF_SRC = WORK / "incoming" / "Arivumalar-Full-book.pdf"
 STAGE = WORK / "r2"  # STAGE/<r2 key> — so `rclone copy STAGE r2:bucket` lands right
 
@@ -44,11 +46,16 @@ WEBP_QUALITY = 80
 # softened just enough to lose the print screen, and cut to the same 4:5 frame, so the
 # nineteen read as one set rather than nineteen different photocopies.
 THEN_SRC = "assets/family/old/"
+CROP_SRC = "crops/"  # a 1996 portrait Saran cut out of the printed book
 THEN_W, THEN_H = 320, 400  # twice what the page ever draws, for a sharp screen
 THEN_MEAN, THEN_STD = 134.0, 58.0
 THEN_ANCHOR = 0.35  # where the crop sits when a scan is too tall: heads are near the top
 # A scan with the mount or the page edge still in it, as a fraction of each side.
-THEN_TRIM = {"maragathavalli": (0.075, 0.045, 0.045, 0.015)}
+THEN_TRIM = {
+    "maragathavalli": (0.075, 0.045, 0.045, 0.015),
+    "vairamuthu": (0.05, 0.04, 0.05, 0.03),  # the printed frame, rounded corners and all
+    "sridhar": (0.05, 0.05, 0.05, 0.05),
+}
 
 # The two covers live at the root of the export, under their Tamil names.
 COVERS = {
@@ -127,7 +134,11 @@ def portrait(src: Path, dest: Path) -> tuple[int, int]:
     from PIL import Image, ImageFilter
 
     with Image.open(src) as im:
-        im = im.convert("L" if im.mode == "L" else "RGB")
+        # The 1996 pages were printed in black and white, and a crop off the printed book
+        # carries a photograph-of-a-page colour cast, so it is read as grey to match the
+        # rest. The export's own scans are left in the mode they came in: they are already
+        # grey in content, and re-encoding them would change objects that are live in R2.
+        im = im.convert("L" if src.parent.name == "crops" or im.mode == "L" else "RGB")
         left, top, right, bottom = THEN_TRIM.get(src.stem, (0, 0, 0, 0))
         w, h = im.size
         im = im.crop((round(w * left), round(h * top), w - round(w * right), h - round(h * bottom)))
@@ -135,10 +146,19 @@ def portrait(src: Path, dest: Path) -> tuple[int, int]:
         # Soften the print screen before the resize. A scan only a little larger than the
         # thumbnail needs more of this, not less: there is no downscale to average the
         # dots away, which is why the two photographs of photographs were the grainy ones.
+        # A crop already smaller than the frame gets none, and nothing to sharpen either:
+        # its dots are as soft as they go.
         shrink = im.height / THEN_H
-        im = im.filter(ImageFilter.GaussianBlur(min(1.2, max(0.4, 1.7 / shrink))))
-        im = crop_45(im).resize((THEN_W, THEN_H), Image.LANCZOS)
-        im = im.filter(ImageFilter.UnsharpMask(radius=1.2, percent=70, threshold=3))
+        if shrink > 1.05:
+            im = im.filter(ImageFilter.GaussianBlur(min(1.2, max(0.4, 1.7 / shrink))))
+        im = crop_45(im)
+        # Saran's own crops out of the printed book are small — 105 to 158px wide. Pulling
+        # one up to 320px invents detail that is not there, so the frame stops at twice the
+        # crop; the page draws it at 112–128px either way. A multiple of four keeps 4:5 exact.
+        out_w = max(4, (min(THEN_W, 2 * im.width) // 4) * 4)
+        out_h = out_w * THEN_H // THEN_W
+        im = im.resize((out_w, out_h), Image.LANCZOS)
+        im = im.filter(ImageFilter.UnsharpMask(radius=1.2, percent=70 if shrink > 1.05 else 40, threshold=3))
         dest.parent.mkdir(parents=True, exist_ok=True)
         im.save(dest, "WEBP", quality=82, method=6)
         return im.size
@@ -163,7 +183,11 @@ def main(argv: list[str] | None = None) -> int:
     photos = json.loads(MANIFEST.read_text(encoding="utf-8"))
     # (r2 key, source file, how to convert it)
     jobs: list[tuple[str, Path, object]] = [
-        (p["key"], DESIGN / p["source"], portrait if p["source"].startswith(THEN_SRC) else convert)
+        (
+            p["key"],
+            (CROPS if p["source"].startswith(CROP_SRC) else DESIGN) / p["source"],
+            portrait if p["source"].startswith((THEN_SRC, CROP_SRC)) else convert,
+        )
         for p in photos
     ]
     jobs += [(key, EXPORT / name, convert) for key, name in COVERS.items()]

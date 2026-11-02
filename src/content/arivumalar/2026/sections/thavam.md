@@ -8,6 +8,7 @@ authors:
 - ta: குமாரவேல்
   en: Kumaravel
 source: கவிதைகள்.dc.html · pages 6
+kicker: கவிதை · அறிவு மலர் 2026
 ---
 
 வயதாக ஆக\

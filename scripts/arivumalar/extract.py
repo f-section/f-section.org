@@ -441,10 +441,22 @@ SECTIONS = (
 # prefix of their own so nothing in R2 is overwritten.
 THEN_SRC = "assets/family/old/"
 
+# Three 1996 portraits the design export never had (Saran, 2026-11-02): he cropped them
+# out of the printed book himself. They sit beside the export, not in it, so the export
+# stays exactly as Claude Design wrote it. மோகன் சுகுமார் had a scan already; his crop
+# replaces it, under its own key, so nothing in R2 is overwritten.
+CROP_SRC = "crops/"
+THEN_CROPS = {
+    "மோகன் சுகுமார்": "crops/mohan-sugumar.jpg",
+    "வைரமுத்து": "crops/vairamuthu.jpg",
+    "ஸ்ரீதர்": "crops/sridhar.jpg",
+}
+
 
 def then_key(src: str) -> str:
     """`assets/family/old/constan.png` -> `public/arivumalar/2026/then/constan.webp`"""
-    stem = re.sub(r"\.[a-z]+$", "", src.removeprefix(THEN_SRC), flags=re.I)
+    bare = src.removeprefix(THEN_SRC).removeprefix(CROP_SRC)
+    stem = re.sub(r"\.[a-z]+$", "", bare, flags=re.I)
     return f"public/arivumalar/2026/then/{re.sub(r'[^a-z0-9]+', '-', stem.lower()).strip('-')}.webp"
 
 
@@ -824,6 +836,9 @@ def write_people(path: Path) -> list[dict]:
             raise SystemExit(f"no slug for {first!r} — add it to PEOPLE_SLUGS")
         p["slug"] = slug
         p["name"] = {"ta": first, "en": english_name(first)}
+        crop = THEN_CROPS.get(first)
+        if crop:
+            p["photo_then"] = {"key": then_key(crop), "source": crop}
         for key in ("photo_then", "photo_now"):
             if key in p:
                 p[key]["alt"] = f"{first} — {'அன்று' if key == 'photo_then' else 'இன்று'}"
@@ -861,6 +876,27 @@ def person_file(p: dict, path: Path) -> dict:
     ordered = {k: p[k] for k in PERSON_KEYS if k in p}
     ordered.update({k: v for k, v in p.items() if k not in ordered})
     return ordered
+
+
+# What kind of piece a reading page is, in the word the printed book used. The book put
+# one over most of the prose and nothing over the poems; online every poem says கவிதை
+# the way the stories say கதை (Saran, 2026-11-02). A word the print put there that is
+# not a kind -- நினைவஞ்சலி, தொகுப்பு -- is kept after it; otherwise the issue's name is.
+KINDS = {"poem": "கவிதை", "story": "கதை", "article": "கட்டுரை", "memoir": "கட்டுரை"}
+ISSUE_KICKER = "அறிவு மலர் 2026"
+
+
+def kicker_for(kind: str, printed: str) -> str:
+    word = KINDS.get(kind)
+    if not word:
+        return printed  # the puzzles and the picture spreads keep the book's own line
+    rest = [bit.strip() for bit in printed.split("·")]
+    rest = [
+        bit
+        for bit in rest
+        if bit and not bit.isdigit() and bit not in KINDS.values() and "அறிவு மலர்" not in bit
+    ]
+    return " · ".join([word, *rest]) if rest else f"{word} · {ISSUE_KICKER}"
 
 
 def front_matter(meta: dict, body: str) -> str:
@@ -910,6 +946,9 @@ def build(src: Path) -> tuple[dict[str, tuple[dict, str]], list[dict], list[dict
             "authors": [name_pair(a) for a in sec.authors],
             "source": f"{sec.source}" + (f" · pages {','.join(map(str, sec.pages))}" if sec.pages else ""),
         }
+        kick = kicker_for(sec.type, full.get("kicker", ""))
+        if kick:
+            full["kicker"] = kick
         if sec.type == "quotes":
             quotes_meta = full
         if not sec.page:

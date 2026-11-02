@@ -12,6 +12,7 @@ authors:
 - ta: குமாரவேல்
   en: Kumaravel
 source: கவிதைகள்.dc.html · pages 7
+kicker: கவிதை · அறிவு மலர் 2026
 ---
 
 ![F Section குழு](r2:public/arivumalar/2026/img/articles-f-section-whatsapp.webp)

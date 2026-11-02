@@ -2,7 +2,7 @@
 issue: '2026'
 slug: olithu-kol
 type: story
-kicker: கதை
+kicker: கதை · அறிவு மலர் 2026
 title:
   ta: ஒலித்து கொல்
 photos:

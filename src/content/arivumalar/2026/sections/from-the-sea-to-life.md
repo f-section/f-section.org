@@ -2,7 +2,7 @@
 issue: '2026'
 slug: from-the-sea-to-life
 type: memoir
-kicker: அறிவு மலர் · 2026
+kicker: கட்டுரை · அறிவு மலர் 2026
 title:
   ta: கடலிலிருந்து வாழ்க்கைக்கு
 photos:

@@ -2,7 +2,7 @@
 issue: '2026'
 slug: editors-note
 type: article
-kicker: அறிவு மலர் · 2026
+kicker: கட்டுரை · அறிவு மலர் 2026
 title:
   ta: ஆசிரியர் நெஞ்சம்
 authors: []

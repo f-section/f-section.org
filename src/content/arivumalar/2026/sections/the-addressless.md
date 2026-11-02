@@ -2,7 +2,7 @@
 issue: '2026'
 slug: the-addressless
 type: poem
-kicker: நினைவஞ்சலி
+kicker: கவிதை · நினைவஞ்சலி
 title:
   ta: முகவரியற்றவர்கள்
 dedication: 'நம்மை விட்டுப் பிரிந்த மகேந்திரன் நினைவாக —

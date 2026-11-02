@@ -27,6 +27,10 @@ panels:
   value: ‘தேவர் மகன்’ திரைப்படம் வெளியானபோது, அவரைப் போலவே வேடமிட்டு உணவுக்காக மெஸ்ஸுக்குச் சென்றது. மேலும்,
     ரஜினியின் ஒரு படத்திற்கு ஈவினிங் ஷோ சென்று, அது கிடைக்காமல் கடைசியில் நைட் ஷோ பார்த்துவிட்டு காலையில்
     நண்பர்களுடன் திரும்பி வந்தது.
+photo_then:
+  key: public/arivumalar/2026/then/sridhar.webp
+  source: crops/sridhar.jpg
+  alt: ஸ்ரீதர் — அன்று
 photo_now:
   key: public/arivumalar/2026/img/family-sridhar-1.webp
   source: assets/family/sridhar-1.jpeg

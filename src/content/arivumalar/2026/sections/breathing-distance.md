@@ -2,7 +2,7 @@
 issue: '2026'
 slug: breathing-distance
 type: poem
-kicker: கவிதை
+kicker: கவிதை · அறிவு மலர் 2026
 title:
   ta: மூச்சுவிடும் தூரம்
 authors:

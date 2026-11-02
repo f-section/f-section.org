@@ -9,6 +9,7 @@ authors:
 - ta: குமாரவேல்
   en: Kumaravel
 source: கவிதைகள்.dc.html · pages 3,4
+kicker: கவிதை · அறிவு மலர் 2026
 ---
 
 இருபது வயதில்\

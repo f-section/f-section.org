@@ -2,7 +2,7 @@
 issue: '2026'
 slug: natpu
 type: poem
-kicker: தொகுப்பு
+kicker: கவிதை · தொகுப்பு
 title:
   ta: நட்பு
 authors:

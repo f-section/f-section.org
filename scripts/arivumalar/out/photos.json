@@ -297,14 +297,14 @@
     "alt": "மரகதவல்லி — அன்று"
   },
   {
+    "key": "public/arivumalar/2026/then/mohan-sugumar.webp",
+    "source": "crops/mohan-sugumar.jpg",
+    "alt": "மோகன் சுகுமார் — அன்று"
+  },
+  {
     "key": "public/arivumalar/2026/then/mohanraj.webp",
     "source": "assets/family/old/mohanraj.png",
     "alt": "மோகன்ராஜ் — அன்று"
-  },
-  {
-    "key": "public/arivumalar/2026/then/mohansugumar.webp",
-    "source": "assets/family/old/mohansugumar.png",
-    "alt": "மோகன் சுகுமார் — அன்று"
   },
   {
     "key": "public/arivumalar/2026/then/panchalai.webp",
@@ -337,6 +337,11 @@
     "alt": "செந்தமிழ்ச் செல்வன் — அன்று"
   },
   {
+    "key": "public/arivumalar/2026/then/sridhar.webp",
+    "source": "crops/sridhar.jpg",
+    "alt": "ஸ்ரீதர் — அன்று"
+  },
+  {
     "key": "public/arivumalar/2026/then/srinivasan.webp",
     "source": "assets/family/old/srinivasan.png",
     "alt": "சீனிவாசன் — அன்று"
@@ -345,5 +350,10 @@
     "key": "public/arivumalar/2026/then/suganthi.webp",
     "source": "assets/family/old/suganthi.jpeg",
     "alt": "சுகந்தி — அன்று"
+  },
+  {
+    "key": "public/arivumalar/2026/then/vairamuthu.webp",
+    "source": "crops/vairamuthu.jpg",
+    "alt": "வைரமுத்து — அன்று"
   }
 ]
