@@ -9,6 +9,12 @@
 @import "@fontsource/noto-sans-tamil/tamil-400.css";
 @import "@fontsource/noto-sans-tamil/tamil-600.css";
 @import "@fontsource/caveat/latin-700.css";
+/* The Arivu Malar reading pages only (DESIGN.md §10.4): a Tamil book is set in a serif,
+   not a screen sans. Same family as the body face, so the two sit together. */
+@import "@fontsource/noto-serif-tamil/latin-400.css";
+@import "@fontsource/noto-serif-tamil/latin-600.css";
+@import "@fontsource/noto-serif-tamil/tamil-400.css";
+@import "@fontsource/noto-serif-tamil/tamil-600.css";
 
 /* Tamil letters inside handwriting-style headings. Same Noto Sans Tamil SemiBold file,
    drawn at 62% so long Tamil words fit beside Caveat-sized English and on phones. */
@@ -44,6 +50,7 @@
 
   --font-sans: "Noto Sans Tamil", system-ui, sans-serif;
   --font-hand: "Caveat", "Noto Sans Tamil Heading", "Noto Sans Tamil", cursive;
+  --font-serif: "Noto Serif Tamil", Georgia, serif;
 }
 
 @layer base {
@@ -116,19 +123,27 @@
   }
   /* The Arivu Malar e-book: reflowed reading pages (DESIGN.md §10.4). The printed A5
      page is not reproduced -- at 8.2pt it would land near 6px on a phone, which rule 7
-     rules out. About 34em of text, which is a comfortable measure at an 18px base. */
+     rules out.
+
+     This one column is the site's exception to the 18px base (Saran, 2026-11-02): read
+     at 18px in the screen sans, a 4,000-word Tamil article is tiring, so the book is set
+     as a book -- the serif at 17px over a 36em measure, with the leading Tamil needs.
+     Everything outside the reading column stays at 18px sans. */
   .ebook {
-    max-width: 36rem;
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
+    line-height: 1.85;
+    max-width: 36em;
   }
   .ebook > * + * {
     margin-top: 1.1em;
   }
   .ebook h2 {
     margin-top: 2em;
-    font-size: 1.25rem;
+    font-size: 1.2em;
     font-weight: 600;
     color: var(--ink-red);
-    line-height: 1.4;
+    line-height: 1.45;
   }
   .ebook blockquote {
     border-left: 4px solid var(--rule);
@@ -143,14 +158,28 @@
     font-style: normal;
     color: var(--sepia);
   }
+  /* A picture in the middle of an article is a glance, not a stop (Saran, 2026-11-02):
+     at the full measure one filled a phone screen and broke the reading. It is centred
+     at about two-thirds of the column, in either orientation, and the viewer still
+     opens it full size. */
   .ebook a[data-lb-item] {
     display: block;
     margin-block: 1.6em;
+    text-align: center;
   }
   .ebook img {
     background: var(--rule);
+    width: auto;
     height: auto;
-    width: 100%;
+    max-width: min(100%, 23em);
+    max-height: 21em;
+    margin-inline: auto; /* Tailwind makes images block-level, so text-align cannot centre them */
+  }
+  /* On a phone the same picture would still fill the screen, so it gives up more of it. */
+  @media (max-width: 39.99rem) {
+    .ebook img {
+      max-height: 16em;
+    }
   }
   /* Between two poems on one page, and anywhere the book left a break. */
   .ebook hr {
@@ -158,6 +187,65 @@
     margin: 2.5rem auto;
     border: 0;
     border-top: 2px solid var(--rule);
+  }
+  /* The heading of a reading page, set the way the printed book sets it (Saran,
+     2026-11-02): the kind of piece above in small letterspaced capitals, the title in
+     red with the half after the colon pushed out to the right margin, and the author's
+     name under a short rule. It stands over its own column, not the whole screen. */
+  .eb-head {
+    max-width: 34.2rem; /* the reading column's 36em at 0.95rem, so it stands over its own text */
+  }
+  .eb-kicker {
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--sepia);
+  }
+  .eb-title {
+    margin-top: 0.4rem;
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--ink-red);
+    overflow-wrap: break-word;
+  }
+  .eb-title > span {
+    display: block;
+  }
+  /* The second half of a two-part title, as the book prints it: out to the right. */
+  .eb-title .eb-sub {
+    text-align: right;
+  }
+  @media (min-width: 40rem) {
+    .eb-title {
+      font-size: 1.6rem;
+    }
+  }
+  /* Tamil has no italic face, so the author's name is marked by a rule, a lighter
+     colour and letterspacing rather than a slant. */
+  .eb-by {
+    margin-top: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    color: var(--sepia);
+  }
+  /* The line under the title that says where a piece came from, or who it is for. */
+  .eb-note {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: var(--sepia);
+  }
+  .eb-by::before {
+    content: "";
+    display: block;
+    flex: none;
+    width: 2.4rem;
+    height: 2px;
+    background: var(--ink-red);
   }
   /* The In Memoriam poem is printed on a dark page (2026-10-31). */
   .ebook-dark {
@@ -168,8 +256,18 @@
     border-color: var(--rule);
   }
   .ebook-dark .ebook em,
-  .ebook-dark .ebook blockquote {
+  .ebook-dark .ebook blockquote,
+  .ebook-dark .eb-kicker,
+  .ebook-dark .eb-note,
+  .ebook-dark .eb-by {
     color: var(--rule);
+  }
+  /* Red on the dark page would not carry; the title keeps the paper colour there. */
+  .ebook-dark .eb-title {
+    color: var(--paper);
+  }
+  .ebook-dark .eb-by::before {
+    background: var(--rule);
   }
 
   /* Polaroid-style album card. */
