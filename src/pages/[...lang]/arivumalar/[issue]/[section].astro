@@ -55,6 +55,15 @@ const { Content } = await render(section);
 const ogKey = data.photos[0]?.key ?? issue.data.cover;
 // The two college spreads are 1992–96 pictures, so they get the sepia frame.
 const then = data.slug === 'those-four-years' || data.slug === 'inside-cover-1995';
+// The book breaks a two-part title at the colon and pushes the second half out to the
+// right margin (Saran, 2026-11-02); one title in this issue is built that way.
+const title = words(data.title, lang);
+const cut = title.indexOf(':');
+const head = cut > 0 ? title.slice(0, cut + 1) : title;
+const sub = cut > 0 ? title.slice(cut + 1).trim() : '';
+// The printed byline carries a role or a city as well as the name, so Tamil keeps it as
+// printed; the English pages name the author in Latin letters (Saran, 2026-10-31).
+const by = lang === 'en' && data.authors.length > 0 ? authorsOf(section, lang) : data.byline || authorsOf(section, lang);
 ---
 <BaseLayout
   lang={lang}
@@ -64,13 +73,15 @@ const then = data.slug === 'those-four-years' || data.slug === 'inside-cover-199
 >
   <Reader lang={lang} issue={issue} sections={sections} section={section}>
     <article class:list={[data.dark && 'ebook-dark -mx-4 px-4 py-6 sm:mx-0 sm:px-6']}>
-      <header>
-        {data.kicker && <p class="text-base font-semibold uppercase tracking-wider text-sepia">{data.kicker}</p>}
-        <h1 class="hand mt-1 text-4xl sm:text-5xl">{words(data.title, lang)}</h1>
-        {data.byline && <p class="mt-2 text-lg text-sepia">{data.byline}</p>}
-        {!data.byline && data.authors.length > 0 && <p class="mt-2 text-lg text-sepia">{authorsOf(section, lang)}</p>}
-        {data.note && <p class="mt-3 max-w-prose text-base text-sepia">{data.note}</p>}
-        {data.dedication && <p class="mt-3 max-w-prose italic text-sepia">{data.dedication}</p>}
+      <header class="eb-head">
+        {data.kicker && <p class="eb-kicker">{data.kicker}</p>}
+        <h1 class="eb-title">
+          <span>{head}</span>
+          {sub && <span class="eb-sub">{sub}</span>}
+        </h1>
+        {by && <p class="eb-by">{by}</p>}
+        {data.note && <p class="eb-note">{data.note}</p>}
+        {data.dedication && <p class="eb-note">{data.dedication}</p>}
       </header>
 
       <div class="mt-6">

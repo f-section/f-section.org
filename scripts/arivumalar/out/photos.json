@@ -7,22 +7,22 @@
   {
     "key": "public/arivumalar/2026/img/articles-constan-deck.webp",
     "source": "assets/articles/constan-deck.jpeg",
-    "alt": ""
+    "alt": "சக வீரர்களுடன் கப்பல் மேல்தளத்தில்"
   },
   {
     "key": "public/arivumalar/2026/img/articles-constan-pinning.webp",
     "source": "assets/articles/constan-pinning.jpeg",
-    "alt": ""
+    "alt": "பெற்றோர் பதவிச் சின்னம் அணிவித்த நாள்"
   },
   {
     "key": "public/arivumalar/2026/img/articles-constan-portrait.webp",
     "source": "assets/articles/constan-portrait.jpeg",
-    "alt": ""
+    "alt": "கான்ஸ்டன்"
   },
   {
     "key": "public/arivumalar/2026/img/articles-constan-trophy.webp",
     "source": "assets/articles/constan-trophy.jpeg",
-    "alt": ""
+    "alt": "கடற்படை உயர் அதிகாரியுடன் ஒரு சந்திப்பு"
   },
   {
     "key": "public/arivumalar/2026/img/articles-dipping-sonar.webp",
@@ -32,7 +32,7 @@
   {
     "key": "public/arivumalar/2026/img/articles-dubai-skyline-sketch.webp",
     "source": "assets/articles/dubai-skyline-sketch.jpeg",
-    "alt": ""
+    "alt": "துபாய் மரீனா"
   },
   {
     "key": "public/arivumalar/2026/img/articles-f-section-whatsapp.webp",
@@ -47,7 +47,7 @@
   {
     "key": "public/arivumalar/2026/img/articles-madras-high-court.webp",
     "source": "assets/articles/madras-high-court.jpg",
-    "alt": ""
+    "alt": "சென்னை உயர் நீதிமன்றம்"
   },
   {
     "key": "public/arivumalar/2026/img/articles-mohan-stage-award.webp",
@@ -69,7 +69,7 @@
   {
     "key": "public/arivumalar/2026/img/articles-sapphire-hostel.webp",
     "source": "assets/articles/sapphire-hostel.png",
-    "alt": ""
+    "alt": "சஃபையர் விடுதி"
   },
   {
     "key": "public/arivumalar/2026/img/articles-sonar-console.webp",
@@ -297,14 +297,14 @@
     "alt": "மரகதவல்லி — அன்று"
   },
   {
+    "key": "public/arivumalar/2026/then/mohan-sugumar.webp",
+    "source": "crops/mohan-sugumar.jpg",
+    "alt": "மோகன் சுகுமார் — அன்று"
+  },
+  {
     "key": "public/arivumalar/2026/then/mohanraj.webp",
     "source": "assets/family/old/mohanraj.png",
     "alt": "மோகன்ராஜ் — அன்று"
-  },
-  {
-    "key": "public/arivumalar/2026/then/mohansugumar.webp",
-    "source": "assets/family/old/mohansugumar.png",
-    "alt": "மோகன் சுகுமார் — அன்று"
   },
   {
     "key": "public/arivumalar/2026/then/panchalai.webp",
@@ -337,6 +337,11 @@
     "alt": "செந்தமிழ்ச் செல்வன் — அன்று"
   },
   {
+    "key": "public/arivumalar/2026/then/sridhar.webp",
+    "source": "crops/sridhar.jpg",
+    "alt": "ஸ்ரீதர் — அன்று"
+  },
+  {
     "key": "public/arivumalar/2026/then/srinivasan.webp",
     "source": "assets/family/old/srinivasan.png",
     "alt": "சீனிவாசன் — அன்று"
@@ -345,5 +350,10 @@
     "key": "public/arivumalar/2026/then/suganthi.webp",
     "source": "assets/family/old/suganthi.jpeg",
     "alt": "சுகந்தி — அன்று"
+  },
+  {
+    "key": "public/arivumalar/2026/then/vairamuthu.webp",
+    "source": "crops/vairamuthu.jpg",
+    "alt": "வைரமுத்து — அன்று"
   }
 ]

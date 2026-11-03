@@ -8,6 +8,7 @@ authors:
 - ta: குமாரவேல்
   en: Kumaravel
 source: கவிதைகள்.dc.html · pages 5
+kicker: கவிதை · அறிவு மலர் 2026
 ---
 
 உலகம் மாறிவிட்டதாகச்\

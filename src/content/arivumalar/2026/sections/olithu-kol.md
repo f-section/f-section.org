@@ -2,7 +2,7 @@
 issue: '2026'
 slug: olithu-kol
 type: story
-kicker: கதை
+kicker: கதை · அறிவு மலர் 2026
 title:
   ta: ஒலித்து கொல்
 photos:
@@ -17,8 +17,6 @@ authors:
   en: Panchalai
 source: கதை - ஒலித்து கொல் - பாஞ்சாலை.dc.html
 ---
-
-பாஞ்சாலை நடராஜன்
 
 ![நீர்மூழ்கிக் கப்பலில் சோனார் கண்காணிப்பு](r2:public/arivumalar/2026/img/articles-sonar-console.webp)
 

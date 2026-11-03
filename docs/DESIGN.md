@@ -463,6 +463,61 @@ pulled to the same place as the rest of the set, the print screen softened in pr
 the picture is being shrunk, then the shared 4:5 frame and a light unsharp. All seventeen are
 monochrome already, so the tone work reads the brightness only and leaves any colour alone.
 
+Three of the nineteen never had a 1996 portrait in the design export; Saran cropped them out of the
+printed book himself (2026-11-02), and மோகன் சுகுமார்'s crop replaces the export's own scan of him.
+They live beside the export, in `incoming/crops/`, so the export stays exactly as Claude Design
+wrote it, and `THEN_CROPS` in `extract.py` is the list. A crop is 105–158px wide, so the pass stops
+the frame at twice the crop rather than pulling it to 320 and inventing detail that is not there —
+the page draws it at 112–128px either way — softens nothing and sharpens less, because its dots are
+already as soft as they go, and reads it as grey, since a photograph of a printed page carries a
+colour cast the printed page never had.
+
+**Reading type (2026-11-02, smaller again 2026-11-03).** The reading column is the one place on the
+site set below the 18px base of rule 7, and it is set at the size a Tamil book is set at: Noto Serif
+Tamil (self-hosted from @fontsource, like the rest) at 14.6px over a 38em measure, with the leading
+Tamil script needs. Age does not decide this one — the readers are not only the ones past fifty, and
+those are reading smaller type everywhere else all day (Saran, 2026-11-02); read on the site at
+15.75px, he asked for a step smaller still. Everything outside the column, the whole rest of the
+site included, stays at 18px in Noto Sans Tamil, rule 7 unchanged.
+
+A picture inside an article sits **in** the text, the way a magazine sets one (2026-11-02), and how
+it sits depends on what follows it (2026-11-03). With a paragraph after it, its own paragraph floats
+to about 15em and the article runs on beside it, the pictures alternating sides down the page; a
+standing portrait is held by its height instead and comes out as the narrow strip a printed page
+would give it. Where the book put a picture just before a heading, a pull-quote or the end of a
+piece there is nothing to run beside it, so it stands on its own, centred and as wide as the column:
+floated there it was a small picture pinned to the right of an empty line. Two pictures in a row
+stand side by side, each half the column. Below 40rem every picture keeps its own line, centred, at
+16em tall. The viewer still opens one full size.
+
+CSS cannot ask what follows an element — `:has()` does not nest — so the hast plugin in
+`astro.config.mjs` decides it and writes `eb-flow` / `eb-pair` / `eb-wide` on the picture's
+paragraph. The book's caption line under a picture is gone from the page (Saran, 2026-11-03): it
+stood between a picture and the text it belonged to. `extract.py` keeps the words as the picture's
+`alt`, which is what the viewer and a screen reader read out, so nothing printed is lost.
+
+Both ends of a reading page turn to the next one (2026-11-03): `முன்` and `பின்` as two short
+labels above the heading, and the same pair with the titles they lead to at the foot. A long piece
+otherwise meant scrolling to the bottom to turn the page. The book printed the author's name again
+at the top of some pieces, under the heading that already carries it; only one name stands over a
+piece now, and `extract.py` drops the repeat.
+
+The heading of a reading page follows the printed book (2026-11-02): the kind of piece above in
+small letterspaced capitals, the title in `ink-red` at 1.35–1.6rem with the half after a colon
+pushed out to the right margin, and the author's name under a short red rule, letterspaced and in
+`sepia`. Tamil has no italic face, so the rule, the colour and the letterspacing do what the print's
+italic did. On the In Memoriam page the title takes the paper colour and the rest `rule`, because
+red would not carry on ink. The English pages print the author's Latin name even where the Tamil
+page keeps the printed byline with its role or city.
+
+Every prose page says what kind of piece it is, in the book's own word — `கவிதை · கதை · கட்டுரை`,
+then the issue's name (2026-11-02). The print put one over most of the prose and nothing over the
+poems; `kicker_for()` in `extract.py` fills the gaps. It is the same word on every page of a kind
+and nothing else (Saran, 2026-11-03): the first pass kept a second word the print carried —
+`நினைவஞ்சலி` over the tribute, `தொகுப்பு` over the collected poems — and read one after another
+those looked like different kinds of piece. The puzzles and the picture spreads keep the line the
+book gave them.
+
 **Pictures:** `scripts/arivumalar/media.py` writes one WebP copy of each (1600px, quality 80) into
 a tree that mirrors the R2 keys, and records every size in `src/lib/ebook-img.json`. A Sätteri hast
 plugin in `astro.config.mjs` turns each `r2:` picture in the Markdown into its real address at that

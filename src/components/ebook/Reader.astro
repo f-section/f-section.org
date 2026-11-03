@@ -1,7 +1,9 @@
 ---
 /**
  * The frame around one reading page of the e-book: a பொருளடக்கம் button at the top, the
- * contents behind it, and prev · next at the end. The reading column has the screen to
+ * contents behind it, and prev · next at both ends -- at the top as two short labels, at
+ * the end with the titles they lead to. A long piece used to mean scrolling all the way
+ * down to turn the page (Saran, 2026-11-03). The reading column has the screen to
  * itself at every width (Saran, 2026-10-31): a list of 27 titles standing permanently
  * beside the text took the eye off the page it was there to serve.
  *
@@ -25,6 +27,7 @@ const at = sections.findIndex((s) => s.data.slug === section.data.slug);
 const prev = sections[at - 1];
 const next = sections[at + 1];
 const link = 'tap max-w-[45%] items-start gap-1 rounded-md px-2 py-2 leading-snug no-underline hover:bg-ink/5';
+const step = 'tap rounded-md px-2 font-semibold no-underline hover:bg-ink/5';
 ---
 <div class="flex items-center justify-between gap-2">
   <a href={issueHref(lang, issue)} class="tap -ml-3 font-semibold">
@@ -39,11 +42,32 @@ const link = 'tap max-w-[45%] items-start gap-1 rounded-md px-2 py-2 leading-snu
   </a>
 </div>
 
-<div class="mt-2">
+<nav class="mt-2 flex items-center justify-between gap-2 border-y-2 border-rule" aria-label={t(lang, 'ebook.page_nav')}>
+  {
+    prev ? (
+      <a href={sectionHref(lang, issue, prev)} class={`${step} -ml-2`} rel="prev">
+        <span>← <Tx lang={lang} k="ebook.prev" /></span>
+      </a>
+    ) : (
+      <span />
+    )
+  }
+  {
+    next ? (
+      <a href={sectionHref(lang, issue, next)} class={`${step} -mr-2`} rel="next">
+        <span><Tx lang={lang} k="ebook.next" /> →</span>
+      </a>
+    ) : (
+      <span />
+    )
+  }
+</nav>
+
+<div class="mt-4">
   <div class="min-w-0">
     <slot />
 
-    <nav class="mt-10 flex items-start justify-between gap-2 border-t-2 border-rule pt-3" aria-label={t(lang, 'ebook.contents')}>
+    <nav class="mt-10 flex items-start justify-between gap-2 border-t-2 border-rule pt-3" aria-label={t(lang, 'ebook.page_nav')}>
       {
         prev ? (
           <a href={sectionHref(lang, issue, prev)} class={`${link} -ml-2`} rel="prev">

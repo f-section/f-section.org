@@ -25,6 +25,10 @@ panels:
 - label: மறக்க முடியாத நினைவு
   value: RECT-யில் கழித்த 4 ஆண்டுகளுமே ஒவ்வொரு நாளும் சிறப்புதான் — முதலாம் ஆண்டு கொண்டாட்டத்தை ஏற்பாடு
     செய்தது மற்றும் முக்கொம்பு சென்றது.
+photo_then:
+  key: public/arivumalar/2026/then/vairamuthu.webp
+  source: crops/vairamuthu.jpg
+  alt: வைரமுத்து — அன்று
 photo_now:
   key: public/arivumalar/2026/img/family-vairamuthu-1.webp
   source: assets/family/vairamuthu-1.jpeg

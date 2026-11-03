@@ -2,7 +2,7 @@
 issue: '2026'
 slug: memories-that-never-fade
 type: memoir
-kicker: கட்டுரை
+kicker: கட்டுரை · அறிவு மலர் 2026
 title:
   ta: என்றென்றும் அழியாத நினைவுகள்
 photos:

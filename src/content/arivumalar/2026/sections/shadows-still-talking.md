@@ -8,6 +8,7 @@ authors:
 - ta: குமாரவேல்
   en: Kumaravel
 source: அன்றும் இன்றும்.dc.html · pages 4
+kicker: கவிதை · அறிவு மலர் 2026
 ---
 
 இரண்டு நாள்களாக\
