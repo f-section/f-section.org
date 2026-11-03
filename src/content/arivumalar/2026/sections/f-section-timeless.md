@@ -8,10 +8,10 @@ title:
 photos:
 - key: public/arivumalar/2026/img/articles-madras-high-court.webp
   source: assets/articles/madras-high-court.jpg
-  alt: ''
+  alt: சென்னை உயர் நீதிமன்றம்
 - key: public/arivumalar/2026/img/articles-sapphire-hostel.webp
   source: assets/articles/sapphire-hostel.png
-  alt: ''
+  alt: சஃபையர் விடுதி
 authors:
 - ta: இஸ்மாயில்
   en: Ismail
@@ -20,11 +20,7 @@ source: கட்டுரை - காலத்தால் அழியாத F
 
 ## ஒரு கல்லூரிப் பயணத்தின் நினைவலைகள்
 
-**முகமது இஸ்மாயில்**
-
-![](r2:public/arivumalar/2026/img/articles-madras-high-court.webp)
-
-**சென்னை உயர் நீதிமன்றம்**
+![சென்னை உயர் நீதிமன்றம்](r2:public/arivumalar/2026/img/articles-madras-high-court.webp)
 
 ## நுழைவும் போராட்டமும்
 
@@ -44,9 +40,7 @@ source: கட்டுரை - காலத்தால் அழியாத F
 
 ## வளர்ச்சியும் வெற்றிகளும்
 
-![](r2:public/arivumalar/2026/img/articles-sapphire-hostel.webp)
-
-**சஃபையர் விடுதி**
+![சஃபையர் விடுதி](r2:public/arivumalar/2026/img/articles-sapphire-hostel.webp)
 
 அவர்களின் விடுதிப் பயணமே அவர்களது வளர்ச்சியின் வரைபடமாக அமைந்தது; ‘கோரல்’ விடுதியில் தொடங்கி, ‘டயமண்ட்’ விடுதியின் கலகலப்பான வராண்டாக்களைக் கடந்து, இறுதியாக ‘சஃபையர்’ (Sapphire) விடுதியில் மூத்த மாணவர்களாக அவர்கள் கோலோச்சினர்.
 

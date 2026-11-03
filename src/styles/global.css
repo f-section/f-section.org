@@ -129,11 +129,12 @@
      book is set as a book, not as a web page. Age does not decide the size here -- the
      readers are not only the ones past fifty, and those are reading smaller type
      elsewhere all day (Saran, 2026-11-02) -- so it is set at the size a Tamil book is
-     set at: the serif at 15.75px over a 38em measure, with the leading Tamil needs.
-     Everything outside the reading column stays at 18px sans. */
+     set at: the serif at 14.6px over a 38em measure, with the leading Tamil needs. That
+     is a step below the 15.75px of the first pass, which Saran read and asked to go
+     smaller still (2026-11-03). Everything outside the reading column stays at 18px. */
   .ebook {
     font-family: var(--font-serif);
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     line-height: 1.9;
     max-width: 38em;
   }
@@ -162,70 +163,65 @@
   }
   /* A picture in the middle of an article sits in the text, the way a magazine sets one
      (Saran, 2026-11-02): it takes a third of the column and the paragraph runs on beside
-     it, rather than stacking above and below and stopping the reading. They alternate
-     sides down the page, as a printed page does. The viewer still opens one full size. */
+     it. That needs a paragraph after it to do the running, so a picture the book put
+     just before a heading, a quote or the end of a piece stands on its own instead,
+     centred and larger (Saran, 2026-11-03): floated there, it was a small picture pinned
+     to the right of an empty line. Two pictures in a row stand side by side as a pair.
+     Which of the three a picture gets is decided in astro.config.mjs, because CSS cannot
+     ask what follows an element. The book's caption line is gone from the page and kept
+     as the picture's alt text (extract.py), so nothing stands between a picture and the
+     text it belongs to. The viewer still opens any of them full size. */
   .ebook a[data-lb-item] {
     display: block;
-    text-align: center;
   }
   .ebook img {
     background: var(--rule);
     width: auto;
     height: auto;
     max-width: 100%;
+    max-height: 24em;
     margin-inline: auto; /* Tailwind makes images block-level, so text-align cannot centre them */
   }
-  /* The book sets a caption as a bold line of its own under the picture, so a paragraph
-     that is nothing but bold text and follows a picture is read as that picture's
-     caption and set like one. Seven of them in this issue. */
-  .ebook p:has(> a[data-lb-item]) + p:has(> strong:only-child) {
-    margin-top: 0.5em;
-    text-align: center;
-    font-size: 0.85em;
-    line-height: 1.5;
-    color: var(--sepia);
-  }
-  .ebook p:has(> a[data-lb-item]) + p > strong:only-child {
-    font-weight: 400;
+  /* A picture whose height is what holds it keeps its full width for the auto margins,
+     so Chrome leaves it against the left edge; the paragraph centres it instead. */
+  .ebook .eb-pic {
+    display: flex;
+    justify-content: center;
+    margin-block: 1.6em;
   }
   @media (min-width: 40rem) {
-    /* The picture sits in its own paragraph, so that is what floats; it shrinks to the
-       picture, and the picture to a third of the column. A standing portrait is held by
-       its height instead, and comes out as the narrow strip a printed page would give it. */
-    .ebook p:has(> a[data-lb-item]) {
-      float: right;
+    .ebook .eb-flow {
       width: auto;
-      max-width: 13em;
-      margin: 0.4em 0 1em 1.6em;
-    }
-    .ebook p:nth-child(even of :has(> a[data-lb-item])) {
-      float: left;
-      margin: 0.4em 1.6em 1em 0;
-    }
-    /* The caption floats with its picture and clears it, so it lands underneath. The
-       picture gives up its own gap first, or a line of the article slips between them. */
-    .ebook p:has(> a[data-lb-item]):has(+ p:has(> strong:only-child)) {
-      margin-bottom: 0;
-    }
-    .ebook p:has(> a[data-lb-item]) + p:has(> strong:only-child) {
+      max-width: 15em;
+      margin: 0.3em 0 1em 1.8em;
       float: right;
-      clear: right;
-      width: auto;
-      max-width: 13em;
-      margin: 0 0 1.2em 1.6em;
     }
-    .ebook p:nth-child(even of :has(> a[data-lb-item])) + p:has(> strong:only-child) {
+    .ebook .eb-flow.eb-left {
+      margin: 0.3em 1.8em 1em 0;
       float: left;
-      clear: left;
-      margin: 0 1.6em 1.2em 0;
     }
-    .ebook img {
-      max-width: 13em;
-      max-height: 22em;
+    /* Held by its height as well, so a standing portrait comes out as the narrow strip
+       a printed page would give it rather than a wall of photograph. */
+    .ebook .eb-flow img {
+      max-width: 15em;
+      max-height: 20em;
     }
-    /* A heading, a break or the end of the article starts clear of the picture. */
+    .ebook .eb-pair {
+      width: 48%;
+      margin: 0.3em 0 1.4em;
+      float: right;
+    }
+    .ebook .eb-pair-first {
+      float: left;
+    }
+    .ebook .eb-pair img {
+      max-height: 18em;
+    }
+    /* A heading, a quote, a break or the end of the piece starts clear of a picture. */
     .ebook h2,
-    .ebook hr {
+    .ebook hr,
+    .ebook blockquote,
+    .ebook .eb-wide {
       clear: both;
     }
     .ebook::after {
@@ -237,11 +233,8 @@
   /* Narrow enough and there is no room beside a picture, so it keeps its own line and
      gives up part of the screen instead of all of it. */
   @media (max-width: 39.99rem) {
-    .ebook p:has(> a[data-lb-item]) {
-      margin-block: 1.4em;
-    }
     .ebook img {
-      max-height: 15em;
+      max-height: 16em;
     }
   }
   /* Between two poems on one page, and anywhere the book left a break. */
@@ -256,7 +249,7 @@
      red with the half after the colon pushed out to the right margin, and the author's
      name under a short rule. It stands over its own column, not the whole screen. */
   .eb-head {
-    max-width: 33.25rem; /* the reading column's 38em at 0.875rem, so it stands over its own text */
+    max-width: 30.875rem; /* the reading column's 38em at 0.8125rem, so it stands over its own text */
   }
   .eb-kicker {
     font-size: 0.72rem;

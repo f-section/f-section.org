@@ -4,6 +4,8 @@
 **Decided by:** Saran, after reading the live edition.
 **Changes** the "Look" row of [2026-10-31-arivumalar-ebook-shape.md](2026-10-31-arivumalar-ebook-shape.md),
 which said "no new fonts": the reading column now has a serif of its own.
+**Changed in turn by** [2026-11-03-arivumalar-reading-page.md](2026-11-03-arivumalar-reading-page.md):
+the size, how a picture sits, the captions and a poem's kicker were all settled a day later.
 **Affects:** DESIGN.md §10.4; `src/styles/global.css`; `src/pages/[...lang]/arivumalar/[issue]/[section].astro`;
 `scripts/arivumalar/extract.py`; `scripts/arivumalar/media.py`; R2 `public/arivumalar/2026/then/`
 

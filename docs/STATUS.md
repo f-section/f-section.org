@@ -2,7 +2,7 @@
 
 Where the project stands, and what comes next. Update this file at the end of every working session. No private links, tokens or personal details: this repo is public.
 
-_Last updated: 2026-11-02, after the second read of Arivu Malar on the web_
+_Last updated: 2026-11-03, after the third read of Arivu Malar on the web_
 
 ## Live
 - https://f-section.org (English) and https://f-section.org/ta/ (Tamil). Served by the Cloudflare Worker `f-section-site`, which deploys from `main` through Workers Builds.
@@ -238,28 +238,59 @@ Running total if approved: 94 photos of 563 across four albums.
      page and the three new profiles. `npm run check` (0 errors) and `npm run build` (122 pages)
      clean. See `docs/decisions/2026-11-02-arivumalar-reading-type.md`.
 
+### Done on 2026-11-03
+14. **Arivu Malar 2026 — the third read: the type smaller, and the pictures placed by what follows
+   them.** Saran read the staging preview and sent five more changes, on the same PR off `staging`.
+   - **14.6px** in the reading column, a step below the 15.75px of the day before. Same face, same
+     38em measure; everything outside the column still 18px.
+   - **A picture now sits according to the block that follows it.** Floating every picture only
+     works where a paragraph comes after it to run alongside; where the book put one just before a
+     heading, a pull-quote or the end of a piece — more than half of them — the float left a small
+     picture against the right margin with an empty line beside it. So a picture with a paragraph
+     after it floats, wider than before (15em); two pictures in a row stand side by side, each half
+     the column, which is what Constan's last two wanted; anything else and the picture stands on
+     its own, centred and as wide as the column. CSS cannot ask what follows an element (`:has()`
+     does not nest), so the hast plugin in `astro.config.mjs` decides it in its `after` hook and
+     writes `eb-flow` / `eb-pair` / `eb-wide` on the paragraph. Editing that file does not
+     invalidate Astro's content cache, which cost a pass: `.astro` and `node_modules/.astro` have to
+     go with it locally.
+   - **The printed caption lines are off the page**, since they stood between a picture and its
+     text. `extract.py` folds each into the picture's `alt`, which the photo viewer and a screen
+     reader read out, so the book's words are still in the file.
+   - **One author's name over a piece.** The book repeated it at the top of three pieces, under a
+     heading that already carries it; `extract.py` drops the repeat. The sign-off at the end of the
+     steel article is the book's own and stays.
+   - **`கவிதை` over every poem and nothing else.** The second read had kept a second word the print
+     carried — `நினைவஞ்சலி`, `தொகுப்பு` — and page after page those read as different kinds of
+     piece. The tribute still says who it is for in its dedication line.
+   - **`முன்` / `பின்` at the top of a reading page as well as the foot**, so a long piece does not
+     have to be scrolled to the bottom to turn the page.
+   - Seen in the headless browser at 1280 and 390px, both languages, including the dark In Memoriam
+     page. `npm run check` (0 errors), `npm run build` (122 pages) and `npm run check:links` (3,898
+     links) clean. See `docs/decisions/2026-11-03-arivumalar-reading-page.md`.
+
 
 ### Next
-14. **Arivu Malar 2026 — what is left after going live.** [PR #10](https://github.com/f-section/f-section.org/pull/10)
+15. **Arivu Malar 2026 — what is left after going live.** [PR #10](https://github.com/f-section/f-section.org/pull/10)
    was merged on 2026-11-01 and the book is on f-section.org. Still to come: the reading order,
    which Saran settles after reading it through (one `order:` list in
    `src/content/arivumalar/2026.yaml`); his eye over the 18 Tamil interface strings; his
    `photo_event` tags from `/mnt/data/f-section/review/arivumalar-tagging.html`. The three photo crops arrived on 2026-11-02 and are in.
-15. **Photo curation, remaining two albums** (deferred on 2026-10-30, picks already chosen and
+16. **Photo curation, remaining two albums** (deferred on 2026-10-30, picks already chosen and
    waiting in `/mnt/data/f-section/work/curation/PICKS-PENDING-REVIEW.md`). Contact sheets per
    event, then picks. Weighting, as Saran restated on
    2026-10-25: strongly prefer natural and candid — friends talking, walking, unaware of the
    camera — over posed shots at the lens. Posed is acceptable occasionally, not as the default.
    Start from Mohanraj's `1st Cut` (208 Canon frames, the backbone).
-16. **Two montages, by day** (deferred on 2026-10-30; Saran changed this on 2026-10-26, replacing the three themed ones
+17. **Two montages, by day** (deferred on 2026-10-30; Saran changed this on 2026-10-26, replacing the three themed ones
    agreed the day before): **Day 1** and **Day 2**. Reason: each day mixes campus, temple, meals
    and evening material, so a day-shaped cut varies the imagery, where a theme-shaped cut would
    string together many near-identical scenes. Day 3 is only departure and tails Day 2.
    Music: `masters/Nanban-En_Frienda_Pola.mp3` (3:53), a different section under each montage.
    It is a loud master (-10.6 LUFS, +0.6 dBTP) and must be normalised down for web.
-17. **Review page.** Contact sheet in `review/` for approval before any ingest.
-18. **Ingest and upload.** R2 token and `r2` remote are in place since 2026-10-26.
-19. **Open a PR** from `staging` with the album pages and the video entries.
+18. **Review page.** Contact sheet in `review/` for approval before any ingest.
+19. **Ingest and upload.** R2 token and `r2` remote are in place since 2026-10-26.
+20. **Open a PR** from `staging` with the album pages and the video entries.
 
 ### Notes worth keeping
 - The kavithai source plays **mirrored** (a `-180` display matrix plus a selfie-camera mirror);

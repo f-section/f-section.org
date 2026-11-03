@@ -18,8 +18,6 @@ authors:
 source: கதை - ஒலித்து கொல் - பாஞ்சாலை.dc.html
 ---
 
-பாஞ்சாலை நடராஜன்
-
 ![நீர்மூழ்கிக் கப்பலில் சோனார் கண்காணிப்பு](r2:public/arivumalar/2026/img/articles-sonar-console.webp)
 
 > ஆழக்கடலில் ஓடி ஒளிந்தாலும்
