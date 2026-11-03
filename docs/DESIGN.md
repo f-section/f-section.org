@@ -473,12 +473,20 @@ already as soft as they go, and reads it as grey, since a photograph of a printe
 colour cast the printed page never had.
 
 **Reading type (2026-11-02).** The reading column is the one place on the site set below the 18px
-base of rule 7: a four-thousand-word Tamil article in the screen sans at 18px is tiring to read, so
-the book is set as a book — Noto Serif Tamil (self-hosted from @fontsource, like the rest) at 17px
-over a 36em measure, with the leading Tamil script needs. Everything outside the column, the whole
-rest of the site included, stays at 18px in Noto Sans Tamil. A picture inside an article is capped
-at about two-thirds of the column and centred (21em tall, 16em on a phone): at the full measure one
-filled a phone screen and stopped the reading, and the viewer still opens it full size.
+base of rule 7, and it is set at the size a Tamil book is set at: Noto Serif Tamil (self-hosted from
+@fontsource, like the rest) at 15.75px over a 38em measure, with the leading Tamil script needs.
+Age does not decide this one — the readers are not only the ones past fifty, and those are reading
+smaller type everywhere else all day (Saran, 2026-11-02). Everything outside the column, the whole
+rest of the site included, stays at 18px in Noto Sans Tamil, rule 7 unchanged.
+
+A picture inside an article sits **in** the text, the way a magazine sets one (2026-11-02): its
+paragraph floats, so it takes about a third of the column and the article runs on beside it, and the
+pictures alternate sides down the page. A standing portrait is held by its height instead of its
+width and comes out as the narrow strip a printed page would give it. Below 40rem there is no room
+beside a picture, so it keeps its own line, centred, at 15em tall. The viewer still opens one full
+size. A paragraph that is nothing but bold text and follows a picture is that picture's caption —
+seven of them in this issue — and is set as one, floated under the picture on a wide screen and
+centred under it on a phone.
 
 The heading of a reading page follows the printed book (2026-11-02): the kind of piece above in
 small letterspaced capitals, the title in `ink-red` at 1.35–1.6rem with the half after a colon

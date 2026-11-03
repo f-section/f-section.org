@@ -207,13 +207,18 @@ Running total if approved: 94 photos of 563 across four albums.
 13. **Arivu Malar 2026 — the second read: the type, the pictures and the headings.** Saran read the
    live book and sent five more changes, all in one PR off `staging`. The through-line this time is
    that the web edition still looked like a website, not like a book.
-   - **The reading column is set as a book now.** Noto Serif Tamil at 17px over a 36em measure,
-     where it was the screen sans at 18px: a four-thousand-word Tamil article was tiring to read.
-     This one column is the site's only exception to the 18px base of rule 7 — everything else,
+   - **The reading column is set as a book now.** Noto Serif Tamil at 15.75px over a 38em measure,
+     where it was the screen sans at 18px. The first pass stopped at 17px, reasoning from rule 7
+     that readers past fifty need the larger type; Saran's answer was that age should not decide it
+     — the book is not read only by the class of '96, and they read smaller type everywhere else
+     all day. This one column is the site's only exception to the 18px base; everything else,
      including the issue and index pages, is untouched. One number in `global.css` moves it.
-   - **A picture inside an article** is capped at about two-thirds of the column and centred (21em
-     tall, 16em on a phone). At the full measure one filled a phone screen and stopped the reading;
-     the viewer still opens it full size.
+   - **A picture inside an article sits in the text**, the way a magazine sets one: its paragraph
+     floats, so it takes about a third of the column and the article runs on beside it, and they
+     alternate sides down the page. A standing portrait is held by its height instead of its width
+     and comes out as a narrow strip. On a phone there is no room beside one, so it keeps its own
+     line. A paragraph of nothing but bold text after a picture is that picture's caption — seven
+     in this issue — and is set as one, under the picture.
    - **The headings follow the printed book**: the kind of piece above in small letterspaced
      capitals, the title in red with the half after a colon pushed out to the right margin, and the
      author's name under a short red rule. Tamil has no italic face, so the rule, the colour and the

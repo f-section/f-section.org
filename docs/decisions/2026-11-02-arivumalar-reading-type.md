@@ -14,7 +14,8 @@ printed book put in; the pictures inside articles made smaller, because they wer
 reading; the text itself made smaller and set in a face that reads like a Tamil book, with
 [tamilsurangam.in](https://www.tamilsurangam.in/literatures/kambar/index.html) as the size he reads
 comfortably; the headings set the way the printed book sets them; and `கவிதை` over every poem, the
-way the stories say `கதை`.
+way the stories say `கதை`. Then, on the first pass: the type smaller still, and the pictures set
+inline with the text rather than stacked above and below it.
 
 ## Decided
 
@@ -23,16 +24,25 @@ and tamil subsets. The same family as the body face, so the two sit together, an
 Tamil book is set in. The four subset files are 12–16 KB each and are fetched only on a page that
 draws them, so the album pages carry nothing new.
 
-**The size.** 17px over a 36em measure — about 35 Tamil characters a line — with the leading Tamil
-script needs. The reference page sets its Tamil at 12px in whatever face the reader's system has;
-that is too small for readers who are mostly past fifty, and rule 7 puts the site's base at 18px.
-17px in a serif reads smaller than 18px in the sans and keeps the rule's intent. This column is the
-only exception on the site: everything outside it stays at 18px in Noto Sans Tamil. It is one number
-in `global.css` if Saran wants it a step smaller or larger.
+**The size.** 15.75px over a 38em measure, with the leading Tamil script needs. The first pass set
+it at 17px, reasoning from rule 7 that readers past fifty need the larger type; Saran's answer was
+that age should not decide it — the book is not read only by the class of '96, and they read smaller
+type everywhere else all day. So it is set at the size a book is set at, which is also close to what
+his reference page does. This column is the only exception on the site: everything outside it stays
+at 18px in Noto Sans Tamil, and rule 7 is unchanged for the rest. It is one number in `global.css`.
 
-**Pictures in an article** are capped at about two-thirds of the column and centred — 23em wide,
-21em tall, 16em tall on a phone — in either orientation, and the viewer still opens one full size. A
-picture in the middle of an article is a glance, not a stop.
+**Pictures sit in the text, as a magazine sets them** (Saran, 2026-11-02). The picture's own
+paragraph floats, so it takes about a third of the column and the article runs on beside it, and
+they alternate sides down the page. A standing portrait is held by its height rather than its width,
+so it comes out as the narrow strip a printed page would give it. A heading or a break starts clear
+of the picture. Below 40rem there is no room beside one, so it keeps its own line, centred, 15em
+tall. The viewer still opens one full size.
+
+**Captions.** The book sets a caption as a bold line under the picture, and the export keeps it as a
+paragraph of nothing but bold text. Such a paragraph, when it follows a picture, is read as that
+picture's caption and set like one — small, sepia, unbolded, floated under the picture on a wide
+screen and centred under it on a phone. Seven of them in this issue; nothing else in the book
+matches that shape, so no body text is caught by it.
 
 **The heading** follows the print: the kind of piece above in small letterspaced capitals, the title
 in `ink-red` with the half after a colon pushed out to the right margin, the author's name under a
