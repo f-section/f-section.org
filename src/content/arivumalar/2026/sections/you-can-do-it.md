@@ -7,8 +7,8 @@ byline: மோகன் சுகுமார்
 title:
   ta: உன்னால் முடியும் தம்பி!
 photos:
-- key: public/arivumalar/2026/img/articles-mohan-stage-award.webp
-  source: assets/articles/mohan-stage-award.jpeg
+- key: public/arivumalar/2026/img/unnal-mudiyum-thambi-picture.webp
+  source: crops/Unnal-mudiyum-thambi-picture.jpg
   alt: ''
 authors:
 - ta: மோகன் சுகுமார்
@@ -48,7 +48,7 @@ source: கதை - உன்னால் முடியும் தம்ப�
 
 > பத்து ஆண்டுகளுக்குப் பிறகு...
 
-![](r2:public/arivumalar/2026/img/articles-mohan-stage-award.webp)
+![](r2:public/arivumalar/2026/img/unnal-mudiyum-thambi-picture.webp)
 
 ஒரு பெரிய தொழில்நுட்ப மாநாட்டில், அந்த மூன்று நண்பர்களும் மேடையில் கம்பீரமாக நின்று கொண்டிருந்தார்கள். அவர்கள் உருவாக்கிய நிறுவனம் இன்று பல நாடுகளில் வெற்றிகரமாகச் செயல்பட்டு வருகிறது.
 

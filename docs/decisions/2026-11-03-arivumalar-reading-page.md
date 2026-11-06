@@ -4,6 +4,8 @@
 **Decided by:** Saran, after reading the staging preview of [2026-11-02](2026-11-02-arivumalar-reading-type.md).
 **Changes** that note: the type is smaller again, the printed captions are off the page, and a
 poem's kicker no longer keeps a second word.
+**Changed in turn by** [2026-11-05-arivumalar-fourth-read.md](2026-11-05-arivumalar-fourth-read.md):
+the tribute keeps `நினைவஞ்சலி`, and the nav at the top of a page names the pages it leads to.
 **Affects:** DESIGN.md §10.4; `src/styles/global.css`; `astro.config.mjs`;
 `src/components/ebook/Reader.astro`; `src/i18n/*.json`; `scripts/arivumalar/extract.py`
 

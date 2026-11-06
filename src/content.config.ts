@@ -180,7 +180,6 @@ const arivumalarSections = defineCollection({
     across: z.array(z.object({ n: z.number().int(), answer: z.string(), clue: z.string() })).default([]),
     down: z.array(z.object({ n: z.number().int(), answer: z.string(), clue: z.string() })).default([]),
     answers: z.array(z.object({ n: z.number().int(), text: z.string() })).default([]),
-    answer_photo: ebookPhoto.optional(),
     // Humour.
     jokes: z
       .array(

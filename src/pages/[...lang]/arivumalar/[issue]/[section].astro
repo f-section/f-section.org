@@ -89,7 +89,7 @@ const by = lang === 'en' && data.authors.length > 0 ? authorsOf(section, lang) :
           <Crossword lang={lang} grid={data.grid} numbers={data.numbers} across={data.across} down={data.down} />
         )}
         {data.type === 'spot-six' && (
-          <SpotSix lang={lang} photos={data.photos} answers={data.answers} answerPhoto={data.answer_photo} />
+          <SpotSix lang={lang} photos={data.photos} answers={data.answers} />
         )}
         {data.type === 'humour' && <Humour jokes={data.jokes} />}
         {(data.type === 'photos' || data.type === 'scans') && <PhotoSpread photos={data.photos} then={then} />}

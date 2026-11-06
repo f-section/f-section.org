@@ -50,11 +50,6 @@
     "alt": "சென்னை உயர் நீதிமன்றம்"
   },
   {
-    "key": "public/arivumalar/2026/img/articles-mohan-stage-award.webp",
-    "source": "assets/articles/mohan-stage-award.jpeg",
-    "alt": ""
-  },
-  {
     "key": "public/arivumalar/2026/img/articles-old-cover-1995.webp",
     "source": "assets/articles/old-cover-1995.jpg",
     "alt": "அறிவு மலர், 100வது நாள் — 1995 அட்டை",
@@ -222,11 +217,6 @@
     "alt": "படம் அ"
   },
   {
-    "key": "public/arivumalar/2026/img/games-spot6-b-crop.webp",
-    "source": "assets/games/spot6-b-crop.png",
-    "alt": "படம் ஆ — வேறுபாடுகள் குறிக்கப்பட்டவை"
-  },
-  {
     "key": "public/arivumalar/2026/img/games-spot6-b.webp",
     "source": "assets/games/spot6-b.png",
     "alt": "படம் ஆ"
@@ -259,6 +249,11 @@
   {
     "key": "public/arivumalar/2026/img/reunion-6.webp",
     "source": "assets/reunion/6.jpg",
+    "alt": ""
+  },
+  {
+    "key": "public/arivumalar/2026/img/unnal-mudiyum-thambi-picture.webp",
+    "source": "crops/Unnal-mudiyum-thambi-picture.jpg",
     "alt": ""
   },
   {

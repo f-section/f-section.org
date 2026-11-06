@@ -182,11 +182,14 @@ def main(argv: list[str] | None = None) -> int:
 
     photos = json.loads(MANIFEST.read_text(encoding="utf-8"))
     # (r2 key, source file, how to convert it)
+    # A `crops/` source is one of Saran's own, beside the export. What it is made into
+    # is read from its key, not its source: most of them are 1996 portraits, but the
+    # colour award picture is an ordinary photograph (2026-11-05).
     jobs: list[tuple[str, Path, object]] = [
         (
             p["key"],
             (CROPS if p["source"].startswith(CROP_SRC) else DESIGN) / p["source"],
-            portrait if p["source"].startswith((THEN_SRC, CROP_SRC)) else convert,
+            portrait if p["key"].startswith(f"{PREFIX}/then/") else convert,
         )
         for p in photos
     ]

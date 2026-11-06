@@ -2,12 +2,12 @@
 
 Where the project stands, and what comes next. Update this file at the end of every working session. No private links, tokens or personal details: this repo is public.
 
-_Last updated: 2026-11-03, after the third read of Arivu Malar on the web_
+_Last updated: 2026-11-05, after the fourth read of Arivu Malar on the web_
 
 ## Live
 - https://f-section.org (English) and https://f-section.org/ta/ (Tamil). Served by the Cloudflare Worker `f-section-site`, which deploys from `main` through Workers Builds.
 - Staging preview: https://staging-f-section-site.asaravanan75.workers.dev
-- Media: R2 bucket `f-section-media`, served at https://media.f-section.org. About 196.8 MiB of the 10 GB free tier across 237 objects: the link-preview image, two videos with posters, the first two 30th reunion albums, and Arivu Malar 2026 (71 pictures and the printed book, uploaded 2026-10-31). Twenty-four of those objects are no longer referenced — three photos dropped from Arivu Malar on 2026-10-30, three thumbnails they belonged to, the seventeen 1200px `அன்று` scans the thumbnails replaced, and மோகன் சுகுமார்'s first thumbnail, replaced on 2026-11-02 by his crop from the printed book; nothing is deleted from R2 without Saran's explicit yes.
+- Media: R2 bucket `f-section-media`, served at https://media.f-section.org. About 196.9 MiB of the 10 GB free tier across 238 objects: the link-preview image, two videos with posters, the first two 30th reunion albums, and Arivu Malar 2026 (72 pictures and the printed book, uploaded 2026-10-31 and 2026-11-05). Twenty-six of those objects are no longer referenced — three photos dropped from Arivu Malar on 2026-10-30, three thumbnails they belonged to, the seventeen 1200px `அன்று` scans the thumbnails replaced, மோகன் சுகுமார்'s first thumbnail, replaced on 2026-11-02 by his crop from the printed book, and, from 2026-11-05, the black-and-white award picture and the marked-up answer picture of ஆறு வித்தியாசங்கள்; nothing is deleted from R2 without Saran's explicit yes.
 - Pages: Home, About, Gallery (by era, with the first two real 30th reunion albums), Videos, Reunions, Arivu Malar.
 - minnaham has a headless Chromium since 2026-11-01, for looking at a built page rather than reading
   its HTML: Playwright in `/mnt/data/f-section/tools/browser/` (outside the repo, so it adds no
@@ -270,27 +270,52 @@ Running total if approved: 94 photos of 563 across four albums.
      links) clean. See `docs/decisions/2026-11-03-arivumalar-reading-page.md`.
 
 
+### Done on 2026-11-05
+15. **Arivu Malar 2026 — the fourth read: the pages named, the order changed, a picture in colour.**
+   Saran read the issue through on staging and sent eight changes, on the same PR off `staging`.
+   - **`நினைவஞ்சலி` back over the tribute**, and over that page alone:
+     `கவிதை · நினைவஞ்சலி · அறிவு மலர் 2026`. `தொகுப்பு` over the collected poems stays gone.
+   - **The nav at the top of a page names the page it leads to**, the same as the foot, instead of
+     `முன்` / `பின்` on their own.
+   - **குமாரவேல்'s `மாறாத மனிதர்கள்` and `என் கவிதைக்கு வயதாகவில்லை` changed places**, 6 and 19 in
+     the reading order.
+   - **His two short poems have two titles**, `நிழல்கள்` and `நீயிருக்கும் வகுப்பறை`, on a page
+     named after the first; the thematic break between them is gone.
+   - **`ஒலித்து கொல்` opens with its words.** Its picture drops below the first paragraph, where it
+     floats into the text at 15em instead of standing the width of the column.
+   - **`ஆறு வித்தியாசங்கள்` answers in words alone**, still behind the விடைகள் button; the book's
+     marked-up third picture is off the page, and `answer_photo` is gone from the schema.
+   - **The award picture in `உன்னால் முடியும் தம்பி` in colour**, from Saran's own original beside
+     the export, under a key of its own. One new object uploaded to R2 with
+     `rclone copyto --immutable`; nothing existing was touched.
+   - **The closing notes of `வரிசையில் என்ன உள்ளது` are links**, to three addresses Saran gave; each
+     line is shortened to its description, since the link carries the address.
+   - Seen in the headless browser at 1280 and 390px. `npm run check` (0 errors), `npm run build`
+     (122 pages) and `npm run check:links` (3,898 links) clean, and `extract.py --verify` reports no
+     text lost. See `docs/decisions/2026-11-05-arivumalar-fourth-read.md`.
+
+
 ### Next
-15. **Arivu Malar 2026 — what is left after going live.** [PR #10](https://github.com/f-section/f-section.org/pull/10)
+16. **Arivu Malar 2026 — what is left after going live.** [PR #10](https://github.com/f-section/f-section.org/pull/10)
    was merged on 2026-11-01 and the book is on f-section.org. Still to come: the reading order,
    which Saran settles after reading it through (one `order:` list in
-   `src/content/arivumalar/2026.yaml`); his eye over the 18 Tamil interface strings; his
+   `src/content/arivumalar/2026.yaml`); his eye over the 19 Tamil interface strings; his
    `photo_event` tags from `/mnt/data/f-section/review/arivumalar-tagging.html`. The three photo crops arrived on 2026-11-02 and are in.
-16. **Photo curation, remaining two albums** (deferred on 2026-10-30, picks already chosen and
+17. **Photo curation, remaining two albums** (deferred on 2026-10-30, picks already chosen and
    waiting in `/mnt/data/f-section/work/curation/PICKS-PENDING-REVIEW.md`). Contact sheets per
    event, then picks. Weighting, as Saran restated on
    2026-10-25: strongly prefer natural and candid — friends talking, walking, unaware of the
    camera — over posed shots at the lens. Posed is acceptable occasionally, not as the default.
    Start from Mohanraj's `1st Cut` (208 Canon frames, the backbone).
-17. **Two montages, by day** (deferred on 2026-10-30; Saran changed this on 2026-10-26, replacing the three themed ones
+18. **Two montages, by day** (deferred on 2026-10-30; Saran changed this on 2026-10-26, replacing the three themed ones
    agreed the day before): **Day 1** and **Day 2**. Reason: each day mixes campus, temple, meals
    and evening material, so a day-shaped cut varies the imagery, where a theme-shaped cut would
    string together many near-identical scenes. Day 3 is only departure and tails Day 2.
    Music: `masters/Nanban-En_Frienda_Pola.mp3` (3:53), a different section under each montage.
    It is a loud master (-10.6 LUFS, +0.6 dBTP) and must be normalised down for web.
-18. **Review page.** Contact sheet in `review/` for approval before any ingest.
-19. **Ingest and upload.** R2 token and `r2` remote are in place since 2026-10-26.
-20. **Open a PR** from `staging` with the album pages and the video entries.
+19. **Review page.** Contact sheet in `review/` for approval before any ingest.
+20. **Ingest and upload.** R2 token and `r2` remote are in place since 2026-10-26.
+21. **Open a PR** from `staging` with the album pages and the video entries.
 
 ### Notes worth keeping
 - The kavithai source plays **mirrored** (a `-180` display matrix plus a selfie-camera mirror);

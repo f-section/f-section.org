@@ -383,6 +383,8 @@ class Sec:
     take: tuple[int, ...] = ()  # keep only these text blocks of the region, in this order
     dark: bool = False
     page: bool = True  # False: read for what it feeds, but not written as a reading page
+    lead_text: bool = False  # a picture at the head of the piece moves below its first words
+    headings: tuple[str, ...] = ()  # a title over each part, where the page holds more than one
 
 
 POEMS = "கவிதைகள்.dc.html"
@@ -395,7 +397,8 @@ SECTIONS = (
     Sec("f-section-timeless", "கட்டுரை - காலத்தால் அழியாத F பிரிவு - இஸ்மாயில்.dc.html", "article", ("இஸ்மாயில்",)),
     Sec("natpu", POEMS, "poem", ("மோகன்சுகுமார்",), pages=(1,)),
     Sec("memories-that-never-fade", "நினைவலைகள் - பரிணீதா.dc.html", "memoir", ("பரிணீதா",)),
-    Sec("unchanging-people", POEMS, "poem", ("குமாரவேல்",), pages=(5,)),
+    # Kumaravel's two poems changed places (Saran, 2026-11-05).
+    Sec("my-poem-has-not-aged", POEMS, "poem", ("குமாரவேல்",), pages=(3, 4)),
     Sec("tamil-in-ai", "கட்டுரை - செயற்கை நுண்ணறிவில் தமிழ் - சரவணன்.dc.html", "article", ("சரவணன்",)),
     Sec("thavam", POEMS, "poem", ("குமாரவேல்",), pages=(6,)),
     Sec("from-the-sea-to-life", "கடலிலிருந்து வாழ்க்கைக்கு - கான்ஸ்டன்.dc.html", "memoir", ("கான்ஸ்டன்",)),
@@ -407,9 +410,10 @@ SECTIONS = (
         pages=(4,),
         start="கவிதைகள்",
         take=(0, 1),
-        title="நிழல்கள் · நீயிருக்கும் வகுப்பறை",
+        title="நிழல்கள்",
+        headings=("நிழல்கள்", "நீயிருக்கும் வகுப்பறை"),
     ),
-    Sec("olithu-kol", "கதை - ஒலித்து கொல் - பாஞ்சாலை.dc.html", "story", ("பாஞ்சாலை",)),
+    Sec("olithu-kol", "கதை - ஒலித்து கொல் - பாஞ்சாலை.dc.html", "story", ("பாஞ்சாலை",), lead_text=True),
     Sec("spot-six", SPOT, "spot-six", title="ஆறு வித்தியாசங்களைக் கண்டுபிடி", stop="கவிதை"),
     Sec("you-can-do-it", "கதை - உன்னால் முடியும் தம்பி - மோகன் சுகுமார்.dc.html", "story", ("மோகன்சுகுமார்",)),
     Sec("breathing-distance", SPOT, "poem", ("குமாரவேல்",), pages=(2,), start="கவிதை", stop="விளையாட்டு · விடைகள்"),
@@ -417,7 +421,7 @@ SECTIONS = (
     Sec("aval", POEMS, "poem", ("கலைச்செழியன்",), pages=(2,)),
     Sec("crossword", "குறுக்கெழுத்துப் போட்டி.dc.html", "crossword"),
     Sec("why-this-alphabet-order", "கட்டுரை - வரிசையில் என்ன உள்ளது - சரவணன்.dc.html", "article", ("சரவணன்",)),
-    Sec("my-poem-has-not-aged", POEMS, "poem", ("குமாரவேல்",), pages=(3, 4)),
+    Sec("unchanging-people", POEMS, "poem", ("குமாரவேல்",), pages=(5,)),
     Sec("indian-steel-industry", "கட்டுரை - இந்தியாவின் எஃகு தொழில் - செந்தமிழ்ச் செல்வன்.dc.html", "article", ("செந்தமிழ்ச் செல்வன்",)),
     Sec("whatsapp-group", POEMS, "poem", ("குமாரவேல்",), pages=(7,)),
     Sec("humour", "நகைச்சுவை(யா).dc.html", "humour"),
@@ -463,16 +467,25 @@ def then_key(src: str) -> str:
 def flat_key(src: str) -> str:
     """`assets/family/old/constan.png` -> `public/arivumalar/2026/img/family-old-constan.webp`"""
     stem = re.sub(r"\.[a-z]+$", "", src, flags=re.I)
-    stem = re.sub(r"^(assets|uploads)/", "", stem)
+    stem = re.sub(r"^(assets|uploads|crops)/", "", stem)
     slug = re.sub(r"[^a-zA-Z0-9]+", "-", stem).strip("-").lower()
     return f"public/arivumalar/2026/img/{slug}.webp"
+
+
+# The printed book carried the award picture in உன்னால் முடியும் தம்பி in black and
+# white, which is how the design export scanned it; Saran has the colour original, and
+# it reads far better on screen (2026-11-05). It sits beside the export, like the three
+# 1996 crops, and takes a key of its own, so the export is untouched and nothing in R2
+# is overwritten.
+SWAPS = {"assets/articles/mohan-stage-award.jpeg": "crops/Unnal-mudiyum-thambi-picture.jpg"}
 
 
 def md_image(b: Block) -> tuple[dict, str]:
     """A photo in the body. The `r2:` scheme keeps Astro's image pipeline out of it:
     the page turns it into a media.f-section.org URL when it renders."""
-    key = flat_key(b.src)
-    return {"key": key, "source": b.src, "alt": b.alt}, f"![{b.alt}](r2:{key})"
+    src = SWAPS.get(b.src, b.src)
+    key = flat_key(src)
+    return {"key": key, "source": src, "alt": b.alt}, f"![{b.alt}](r2:{key})"
 
 
 def md_lines(text: str) -> str:
@@ -633,8 +646,11 @@ def write_poem(sec: Sec, pages: list[list[Block]]) -> tuple[dict, str]:
         meta["photos"] = photos
     if sec.dark:
         meta["dark"] = True
-    # Two short poems on one page: a thematic break between them, no inner heading,
-    # because the second poem's first line is also its title (Saran, 2026-10-31).
+    # Two short poems on one page, each under its own title (Saran, 2026-11-05). The
+    # first pass parted them with a thematic break and no heading, reading the second
+    # poem's first line as its title; they are two poems, and the page now says so.
+    if sec.headings and len(body) == len(sec.headings):
+        return meta, "\n\n".join(f"## {h}\n\n{part}" for h, part in zip(sec.headings, body))
     joiner = "\n\n***\n\n" if len(sec.take) > 1 else "\n\n"
     return meta, joiner.join(body)
 
@@ -726,11 +742,11 @@ def write_spot_six(sec: Sec, pages: list[list[Block]]) -> tuple[dict, str]:
             elif is_sage_note(b):
                 meta["note"] = b.text
             elif b.kind == "image":
-                entry = {"key": flat_key(b.src), "source": b.src, "alt": b.alt}
-                if "crop" in b.src:
-                    meta["answer_photo"] = entry
-                else:
-                    meta["photos"].append(entry)
+                # The book marks the six on a third copy of the picture; online the
+                # answers are read, not spotted, so only the two pictures of the puzzle
+                # itself are kept (Saran, 2026-11-05).
+                if "crop" not in b.src:
+                    meta["photos"].append({"key": flat_key(b.src), "source": b.src, "alt": b.alt})
             elif b.kind == "text" and (m := re.match(r"^(\d+)(.+)$", b.text, re.S)):
                 meta["answers"].append({"n": int(m.group(1)), "text": m.group(2)})
     meta = {"title": {"ta": sec.title or title}, **meta}
@@ -886,13 +902,17 @@ def person_file(p: dict, path: Path) -> dict:
 # pages one after another, those read as different kinds of piece (Saran, 2026-11-03).
 KINDS = {"poem": "கவிதை", "story": "கதை", "article": "கட்டுரை", "memoir": "கட்டுரை"}
 ISSUE_KICKER = "அறிவு மலர் 2026"
+# One page keeps the second word the print gave it (Saran, 2026-11-05): the tribute is
+# a tribute before it is a poem, and the line should say so.
+KEEP_PRINTED = {"the-addressless": "நினைவஞ்சலி"}
 
 
-def kicker_for(kind: str, printed: str) -> str:
-    word = KINDS.get(kind)
+def kicker_for(sec: "Sec", printed: str) -> str:
+    word = KINDS.get(sec.type)
     if not word:
         return printed  # the puzzles and the picture spreads keep the book's own line
-    return f"{word} · {ISSUE_KICKER}"
+    kept = KEEP_PRINTED.get(sec.slug)
+    return f"{word} · {kept} · {ISSUE_KICKER}" if kept else f"{word} · {ISSUE_KICKER}"
 
 
 # The reading page carries the pictures alone, without the line the book printed under
@@ -904,8 +924,21 @@ def kicker_for(kind: str, printed: str) -> str:
 CAPTION = re.compile(r"\*\*([^*\n]+)\*\*")
 BARE_IMAGE = re.compile(r"!\[\]\(r2:(.+)\)\Z")
 
+# The closing notes of வரிசையில் என்ன உள்ளது name where each source may be read, and on
+# the page they are links (Saran, 2026-11-05, his own addresses, in the order the notes
+# stand). The printed line gives the Tamil description and then the address in words;
+# the link carries the address, so the description alone is left to read.
+NOTES_HEAD = "**குறிப்புகள்**"
+NOTE_LINKS = {
+    "why-this-alphabet-order": (
+        "https://tamilnation.org/literature/grammar/mp100a",
+        "https://www.tamilvu.org/courses-degree-c021-c0211-html-c0211ind-15681",
+        "https://www.tamilvu.org/courses-degree-c021-c0212-html-c0212ind-15898",
+    ),
+}
 
-def tidy_body(body: str, meta: dict) -> str:
+
+def tidy_body(body: str, meta: dict, sec: "Sec") -> str:
     photos = meta.get("photos") or []
     names = [a["ta"] for a in meta.get("authors") or []]
     out: list[str] = []
@@ -926,6 +959,21 @@ def tidy_body(body: str, meta: dict) -> str:
             if any(name and name in bare for name in names):
                 continue
         out.append(block)
+    # A piece reads better opening with its own words than with a picture (Saran,
+    # 2026-11-05): the picture drops below the first paragraph of prose, where a
+    # paragraph follows it and it is set smaller, floated into the text.
+    links = NOTE_LINKS.get(sec.slug)
+    if links:
+        head = next((i for i, b in enumerate(out) if b.strip() == NOTES_HEAD), None)
+        if head is None:
+            raise SystemExit(f"{sec.slug}: the notes the links belong to are not there")
+        for n, url in enumerate(links, start=1):
+            note = out[head + n].split(" · ")[0].strip()
+            out[head + n] = f"[{note}]({url})"
+    if sec.lead_text and out and out[0].startswith("!["):
+        picture = out.pop(0)
+        plain = next((i for i, b in enumerate(out) if not b.startswith((">", "#", "!["))), len(out) - 1)
+        out.insert(plain + 1, picture)
     return "\n\n".join(out)
 
 
@@ -976,11 +1024,11 @@ def build(src: Path) -> tuple[dict[str, tuple[dict, str]], list[dict], list[dict
             "authors": [name_pair(a) for a in sec.authors],
             "source": f"{sec.source}" + (f" · pages {','.join(map(str, sec.pages))}" if sec.pages else ""),
         }
-        kick = kicker_for(sec.type, full.get("kicker", ""))
+        kick = kicker_for(sec, full.get("kicker", ""))
         if kick:
             full["kicker"] = kick
         if body and sec.type in ("article", "memoir", "story"):
-            body = tidy_body(body, full)
+            body = tidy_body(body, full, sec)
         if sec.type == "quotes":
             quotes_meta = full
         if not sec.page:
@@ -988,9 +1036,6 @@ def build(src: Path) -> tuple[dict[str, tuple[dict, str]], list[dict], list[dict
         sections[sec.slug] = (full, body)
         for p in full.get("photos", []) or []:
             photos.append(p)
-        for key in ("answer_photo",):
-            if full.get(key):
-                photos.append(full[key])
 
     # Each person's closing quote comes off the சொல்ல மறந்த கதை spread.
     by_name = {q["by"]: q["text"] for q in quotes_meta.get("quotes", [])}
@@ -1107,6 +1152,15 @@ DROPPED = {
     "ஆறு வித்தியாசங்கள்": "the answers' own page heading, not needed once they are inline",
     "குறுக்கெழுத்துப் போட்டி — விடைகள்": "same, for the crossword",
     "சொல்ல மறந்த கதை": "now the heading above each person's own closing quote (ebook.untold_story)",
+    # The byline the book repeated at the head of a piece, under a heading that already
+    # carries the name (Saran, 2026-11-03).
+    "லெப்டினன்ட் கமாண்டர் (ஓய்வு) கான்ஸ்டன்": "the heading above it names him",
+    "பாஞ்சாலை நடராஜன்": "the heading above it names her",
+    # A closing note of வரிசையில் என்ன உள்ளது: the address it ends with is now the
+    # link under the words, so the line itself is shorter (Saran, 2026-11-05).
+    "மதுரை தமிழ் இலக்கிய மின்தொகுப்புத் திட்டம்: தொல்காப்பியம் – எழுத்ததிகாரம் · tamilnation.org/literature/grammar/mp100a": "its address now hangs on the link, not in the line",
+    "நச்சினார்க்கினியர் உரை – தொல்காப்பியம் – எழுத்ததிகாரம், பாகம் 1 · projectmadurai.org/pm_etexts/utf8/pmuni0516_01.html": "its address now hangs on the link, not in the line",
+    "நச்சினார்க்கினியர் உரை – தொல்காப்பியம் – எழுத்ததிகாரம், பாகம் 2 · projectmadurai.org/pm_etexts/utf8/pmuni0516_02.html": "its address now hangs on the link, not in the line",
 }
 
 
