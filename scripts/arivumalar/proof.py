@@ -176,8 +176,6 @@ def section_html(n: int, slug: str, m: dict, body: str) -> str:
         if m.get("answers"):
             items = "".join(f'<li value="{a["n"]}">{esc(a["text"])}</li>' for a in m["answers"])
             bits.append(f'<h3>விடைகள்</h3><ol>{items}</ol>')
-            if m.get("answer_photo"):
-                bits.append(photo_marker(m["answer_photo"]["source"], m["answer_photo"].get("alt", "")))
         if m.get("note") and m["type"] == "poem":
             bits.append(f'<p class="note">{esc(m["note"])}</p>')
     cls = "sheet dark" if m.get("dark") else "sheet"

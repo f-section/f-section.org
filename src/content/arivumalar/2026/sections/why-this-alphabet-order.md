@@ -81,8 +81,8 @@ source: கட்டுரை - வரிசையில் என்ன உள�
 
 **குறிப்புகள்**
 
-மதுரை தமிழ் இலக்கிய மின்தொகுப்புத் திட்டம்: தொல்காப்பியம் – எழுத்ததிகாரம் · tamilnation.org/literature/grammar/mp100a
+[மதுரை தமிழ் இலக்கிய மின்தொகுப்புத் திட்டம்: தொல்காப்பியம் – எழுத்ததிகாரம்](https://tamilnation.org/literature/grammar/mp100a)
 
-நச்சினார்க்கினியர் உரை – தொல்காப்பியம் – எழுத்ததிகாரம், பாகம் 1 · projectmadurai.org/pm_etexts/utf8/pmuni0516_01.html
+[நச்சினார்க்கினியர் உரை – தொல்காப்பியம் – எழுத்ததிகாரம், பாகம் 1](https://www.tamilvu.org/courses-degree-c021-c0211-html-c0211ind-15681)
 
-நச்சினார்க்கினியர் உரை – தொல்காப்பியம் – எழுத்ததிகாரம், பாகம் 2 · projectmadurai.org/pm_etexts/utf8/pmuni0516_02.html
+[நச்சினார்க்கினியர் உரை – தொல்காப்பியம் – எழுத்ததிகாரம், பாகம் 2](https://www.tamilvu.org/courses-degree-c021-c0212-html-c0212ind-15898)

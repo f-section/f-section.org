@@ -26,10 +26,6 @@ answers:
   text: அடையாள அட்டை இல்லை
 kicker: விளையாட்டு · அறிவு மலர் 2026
 note: இரு படங்களுக்கும் இடையே ஆறு வேறுபாடுகள் மறைந்துள்ளன.
-answer_photo:
-  key: public/arivumalar/2026/img/games-spot6-b-crop.webp
-  source: assets/games/spot6-b-crop.png
-  alt: படம் ஆ — வேறுபாடுகள் குறிக்கப்பட்டவை
 authors: []
 source: வித்தியாசங்களைக் கண்டுபிடி.dc.html
 ---

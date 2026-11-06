@@ -419,7 +419,10 @@ order: [inside-cover-1995, …]  # the web reading order, as section slugs
 Tamil body is Markdown, verbatim from the Claude Design export; a trailing `\` keeps a printed line
 break, and `![alt](r2:public/…)` is a photo in R2. `type` picks the layout — `article · memoir ·
 story · poem · humour · photos · scans · profiles · crossword · spot-six`. Puzzles carry
-their grid, clues and answers as data, so they can become interactive later.
+their grid, clues and answers as data, so they can become interactive later. ஆறு வித்தியாசங்கள்
+shows the two pictures and keeps its answers in words behind the விடைகள் button (Saran,
+2026-11-05); the book marks the six on a third copy of the picture, and online they are read rather
+than spotted.
 
 `authors` is a list of `taPair`s: the Tamil name the book printed, and the Latin spelling the site
 already uses in that person's URL and photo file names. Everything else on these pages stays Tamil
@@ -427,7 +430,10 @@ in both languages (2026-10-31) — it is a Tamil magazine, and an English page o
 different book. Only the names change.
 
 A poem that filled half a printed page can share a web page with another: the two short ones off
-குமாரவேல்'s profile sit on one, separated by a `***` break (2026-10-31).
+குமாரவேல்'s profile sit on one (2026-10-31), each under its own title — `நிழல்கள்` and
+`நீயிருக்கும் வகுப்பறை` (Saran, 2026-11-05). The page is named for the first. The first pass parted
+them with a thematic break and no heading, reading the second poem's first line as its title; they
+are two poems, and `headings` on the section in `extract.py` is where the titles are set.
 
 **People:** `src/content/arivumalar/<issue-id>/people/<slug>.yaml`, one per person in
 `அன்றும் இன்றும்`: first name only (rule 14), `printed_name` as the book printed it, the labelled
@@ -466,7 +472,11 @@ monochrome already, so the tone work reads the brightness only and leaves any co
 Three of the nineteen never had a 1996 portrait in the design export; Saran cropped them out of the
 printed book himself (2026-11-02), and மோகன் சுகுமார்'s crop replaces the export's own scan of him.
 They live beside the export, in `incoming/crops/`, so the export stays exactly as Claude Design
-wrote it, and `THEN_CROPS` in `extract.py` is the list. A crop is 105–158px wide, so the pass stops
+wrote it, and `THEN_CROPS` in `extract.py` is the list. The same folder holds the colour original of
+the award picture in `உன்னால் முடியும் தம்பி`, which the printed book carried in black and white
+(Saran, 2026-11-05); `SWAPS` in `extract.py` puts it in place of the export's scan, under a key of
+its own so nothing in R2 is overwritten. What a picture is made into is read from its key, not its
+source: only the `then/` keys go through the portrait pass. A crop is 105–158px wide, so the pass stops
 the frame at twice the crop rather than pulling it to 320 and inventing detail that is not there —
 the page draws it at 112–128px either way — softens nothing and sharpens less, because its dots are
 already as soft as they go, and reads it as grey, since a photograph of a printed page carries a
@@ -490,15 +500,20 @@ floated there it was a small picture pinned to the right of an empty line. Two p
 stand side by side, each half the column. Below 40rem every picture keeps its own line, centred, at
 16em tall. The viewer still opens one full size.
 
+A piece opens with its own words, not with a picture: where the book put one at the head of a
+piece it drops below the first paragraph, where there is text for it to float into (Saran,
+2026-11-05, of `ஒலித்து கொல்`). `lead_text` on the section in `extract.py` moves it.
+
 CSS cannot ask what follows an element — `:has()` does not nest — so the hast plugin in
 `astro.config.mjs` decides it and writes `eb-flow` / `eb-pair` / `eb-wide` on the picture's
 paragraph. The book's caption line under a picture is gone from the page (Saran, 2026-11-03): it
 stood between a picture and the text it belonged to. `extract.py` keeps the words as the picture's
 `alt`, which is what the viewer and a screen reader read out, so nothing printed is lost.
 
-Both ends of a reading page turn to the next one (2026-11-03): `முன்` and `பின்` as two short
-labels above the heading, and the same pair with the titles they lead to at the foot. A long piece
-otherwise meant scrolling to the bottom to turn the page. The book printed the author's name again
+Both ends of a reading page turn to the next one (2026-11-03), each naming the page it leads to:
+`முன்` and `பின்` over the title of that page, above the heading and again at the foot. A long piece
+otherwise meant scrolling to the bottom to turn the page, and a label on its own said which way but
+not where to (Saran, 2026-11-05). The book printed the author's name again
 at the top of some pieces, under the heading that already carries it; only one name stands over a
 piece now, and `extract.py` drops the repeat.
 
@@ -513,9 +528,10 @@ page keeps the printed byline with its role or city.
 Every prose page says what kind of piece it is, in the book's own word — `கவிதை · கதை · கட்டுரை`,
 then the issue's name (2026-11-02). The print put one over most of the prose and nothing over the
 poems; `kicker_for()` in `extract.py` fills the gaps. It is the same word on every page of a kind
-and nothing else (Saran, 2026-11-03): the first pass kept a second word the print carried —
-`நினைவஞ்சலி` over the tribute, `தொகுப்பு` over the collected poems — and read one after another
-those looked like different kinds of piece. The puzzles and the picture spreads keep the line the
+(Saran, 2026-11-03): the first pass kept a second word the print carried over two of them, and read
+one after another those looked like different kinds of piece. `தொகுப்பு` is gone for good; the
+tribute keeps `நினைவஞ்சலி` after `கவிதை` (Saran, 2026-11-05), because it is a tribute before it is
+a poem. `KEEP_PRINTED` in `extract.py` is that one exception. The puzzles and the picture spreads keep the line the
 book gave them.
 
 **Pictures:** `scripts/arivumalar/media.py` writes one WebP copy of each (1600px, quality 80) into
@@ -523,6 +539,13 @@ a tree that mirrors the R2 keys, and records every size in `src/lib/ebook-img.js
 plugin in `astro.config.mjs` turns each `r2:` picture in the Markdown into its real address at that
 recorded size, wrapped in the gallery's own `a[data-lb-item]` link, so the photo viewer picks it up
 and nothing jumps while the page loads.
+
+Where a piece ends by naming where its sources may be read, those closing notes are links (Saran,
+2026-11-05, of `வரிசையில் என்ன உள்ளது`, whose addresses are his). The printed line gives the
+description and then the address in words; on the page the link carries the address, so the
+description alone is left to read. `NOTE_LINKS` in `extract.py` holds them, in the order the notes
+stand, and the lines they shorten are listed in `DROPPED` so `--verify` still accounts for every
+word of the book.
 
 Titles here use `taPair` (Tamil required, English optional), because the magazine has no English
 titles. `words()` in `src/lib/arivumalar.ts` is what reads one: the Tamil unless an English
